@@ -1,0 +1,13 @@
+.navbar {
+    background-color: black !important;
+    position: fixed;
+    width: 100%;
+    z-index: 222;
+}
+
+.navbarlink{
+ color: #ff5a1f !important;
+}
+.navbarlink:hover{
+ color: #b43403 !important;
+}

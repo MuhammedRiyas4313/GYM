@@ -1,0 +1,7 @@
+.outer{
+   background-image: url('../../../assets/clientLogin/logincover.jpg');
+}
+
+.form-data{
+  box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 1.5) !important;
+}
