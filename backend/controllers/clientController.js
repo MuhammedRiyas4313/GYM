@@ -11,9 +11,6 @@ const clientLogin = async (req, res) => {
     if (!oldUser)
       return res.json({ status: "User doesn't exist" });
 
-    // if (oldUser.isVerified === false)
-    //   return res.json({ message: "User is not verified" });
-
     if (oldUser.isBlocked === true)
       return res.json({ status: "User is blocked" });
 

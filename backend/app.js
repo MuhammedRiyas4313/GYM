@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
+const bodyParser = require('body-parser');
 
 
 const clientRouter = require('./routes/client');
@@ -19,9 +20,11 @@ const corsOptions = {
   optionSuccessStatus: 200,
 };
 
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 mongoDB()

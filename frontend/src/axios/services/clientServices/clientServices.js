@@ -8,7 +8,7 @@ import { axiosClientInstance } from '../../axios';
       },
     };
     try {
-      const response = await axiosClientInstance.post('/clientregister', value, config);
+      const response = await axiosClientInstance.post('/register', value, config);
       return response.data;
     } catch (error) {
       console.log(error);
@@ -18,7 +18,7 @@ import { axiosClientInstance } from '../../axios';
 
   export const ClientLogin = async ( values ) => {
     try {
-      const response = await axiosClientInstance.post('/clientlogin',values)
+      const response = await axiosClientInstance.post('/login',values)
       return response;
     } catch (error) {
       console.log('error in client login......')

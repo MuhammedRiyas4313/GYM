@@ -4,7 +4,7 @@ import './hero.css'
 function Hero() {
 
   return (
-    <div className='herocontainer '>
+    <div className='herocontainer'>
       <div className="">
       
 

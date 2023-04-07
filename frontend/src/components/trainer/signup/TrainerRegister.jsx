@@ -1,29 +1,56 @@
 import React, { useState } from 'react'
 import { useFormik } from 'formik';
 import { Label, Radio } from 'flowbite-react'
-import { userSchema } from '../../../validations/clientSignupValidation';
-import { clientRegister } from '../../../axios/services/clientServices/clientServices';
+import { trainerSchema } from '../../../validations/trainerSignupValidation';
+import { trainerRegister } from '../../../axios/services/trainerServices/trainerService';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import './ClientRegister.css'
+import './TrainerRegister.css'
 
-function ClientRegister() {
+function TrainerRegister() {
 
   const navigate = useNavigate()
 
-  async function onSubmit(){
-    console.log(values)
-    console.log('register client....form submit')
-    const response = await clientRegister(values);
-    console.log(response)
-    if (response.status) {
+  const [filef, setFilef] = useState([]);
+  const [fileb, setFileb] = useState([]);
+
+  const onSubmit = async (values) => {
+    const response = await trainerRegister({ values, file1: filef, file2: fileb });
+    console.log(response);
+    if (response.status === 'Successfully created Account') {
       toast.success(response.status)
-      navigate('/clientlogin');
-    } else {
-      toast.error(response.error)
+      navigate('/login');
+    } else if (response.status) {
+      navigate('/trainerLogin');
+    }
+    console.log(response)
+  };
+
+  const handleImage1 = (e) => {
+    const file = e.target.files[0];
+    setFileToBase(file);
+  }
+
+  const setFileToBase = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setFilef(reader.result);
     }
   }
 
+  const handleImage2 = (e) => {
+    const file = e.target.files[0];
+    setFileToBase2(file);
+  }
+
+  const setFileToBase2 = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setFileb(reader.result);
+    }
+  }
 
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -37,10 +64,13 @@ function ClientRegister() {
         phone: '',
         password: '',
         cpassword: '',
-        weight: '',
-        height: '',
+        coursecharge: '',
+        coursename: '',
+        link: '',
+        profile:null,
+        certificate: null
       },
-      validationSchema: userSchema,
+      validationSchema: trainerSchema,
       onSubmit,
     });
 
@@ -51,7 +81,7 @@ function ClientRegister() {
       
 
       <div className="border-b border-gray-900/10 pb-12">
-        <h1 className="text-base font-semibold leading-7 text-gray-900">Trainer Registration</h1>
+        <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">Trainer Registration</h1>
         <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
 
         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -110,47 +140,10 @@ function ClientRegister() {
               { errors.phone && touched.phone && <p className="text-red-600">{errors.phone}</p>}
             </div>
           </div>
-          <div className="sm:col-span-3">
-            <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
-              Height
-            </label>
-            <div className="mt-2">
-              <input
-                type="number"
-                name="height"
-                value={values.height}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                id="last-name"
-                autoComplete="family-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              { errors.height && touched.height && <p className="text-red-600">{errors.height}</p>}
-            </div>
-          </div>
-          <div className="sm:col-span-3">
-            <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
-              Weight
-            </label>
-            <div className="mt-2">
-              <input
-                type="number"
-                name="weight"
-                value={values.weight}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                id="last-name"
-                autoComplete="family-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-              { errors.weight && touched.weight && <p className="text-red-600">{errors.weight}</p>}
-            </div>
-          </div>
         <fieldset
           className="flex flex-row gap-4"
           id="radio"
           name="gender"
-          value={values.gender}
           onChange={handleChange}
           onBlur={handleBlur}
         >
@@ -226,6 +219,24 @@ function ClientRegister() {
           </div>
           <div className="sm:col-span-3">
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                type="email"
+                autoComplete="email"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+              { errors.email && touched.email && <p className="text-red-600">{errors.email}</p>}
+            </div>
+          </div>
+          <div className="sm:col-span-3">
+            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
               Confirm Password
             </label>
             <div className="mt-2">
@@ -241,19 +252,37 @@ function ClientRegister() {
               { errors.cpassword && touched.cpassword && <p className="text-red-600">{errors.cpassword}</p>}
             </div>
           </div>
+          
           <div className="sm:col-span-3">
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
+              ProfilePhoto
             </label>
             <div className="mt-2">
               <input
-                id="email"
-                name="email"
-                value={values.email}
+                type="file"
+                id="filef"
+                onChange={handleImage1}
+                required
+                accept="image/*"
+                autoComplete="off"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+              { errors.profile && touched.profile && <p className="text-red-600">{errors.profile}</p>}
+            </div>
+          </div>
+          <div className="sm:col-span-3">
+            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+              Course Name
+            </label>
+            <div className="mt-2">
+              <input
+                id="coursename"
+                name="coursename"
+                value={values.coursename}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                type="email"
-                autoComplete="email"
+                type="text"
+                autoComplete="off"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
               { errors.email && touched.email && <p className="text-red-600">{errors.email}</p>}
@@ -261,38 +290,55 @@ function ClientRegister() {
           </div>
           <div className="sm:col-span-3">
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
+              Course Charge / Month
             </label>
             <div className="mt-2">
               <input
-                id="email"
-                name="email"
-                value={values.email}
+                id="coursefee"
+                name="coursecharge"
+                value={values.coursecharge}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                type="email"
-                autoComplete="email"
+                type="number"
+                autoComplete="off"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-              { errors.email && touched.email && <p className="text-red-600">{errors.email}</p>}
+              { errors.coursecharge && touched.coursecharge && <p className="text-red-600">{errors.coursecharge}</p>}
             </div>
           </div>
           <div className="sm:col-span-3">
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
+              Certificate
             </label>
             <div className="mt-2">
               <input
-                id="email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
+                type="file"
+                id="fileb"
+                required
+                accept=".pdf"
+                onChange={handleImage2}
                 onBlur={handleBlur}
-                type="email"
-                autoComplete="email"
+                autoComplete="off"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
-              { errors.email && touched.email && <p className="text-red-600">{errors.email}</p>}
+            </div>
+          </div>
+          <div className="sm:col-span-3">
+            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+            Upload Video Link <br></br>(Paste a link to your youtube video introducing yourself and training a client.)
+            </label>
+            <div className="mt-2">
+              <input
+                id="link"
+                name="link"
+                value={values.link}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                type="text"
+                autoComplete="off"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+              { errors.link && touched.link && <p className="text-red-600">{errors.link}</p>}
             </div>
           </div>
         </div>
@@ -315,5 +361,5 @@ function ClientRegister() {
   )
 }
 
-export default ClientRegister;
+export default TrainerRegister;
 

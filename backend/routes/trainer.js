@@ -1,9 +1,8 @@
 const Router = require('express');
 var router = Router();
+const { trainerRegister } = require('../controllers/trainerController')
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('Trainer route');
-});
+router.post('/register', trainerRegister );
 
 module.exports =  router;
