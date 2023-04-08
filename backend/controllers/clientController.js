@@ -34,6 +34,33 @@ const clientLogin = async (req, res) => {
   }
 };
 
+const clientLoginWithGoogle = async (req, res) => {
+  console.log(req.body,"client login calling with google.......");
+  try {
+    const { email, password } = req.body;
+    const oldUser = await User.findOne({ email });
+    console.log(oldUser,'olduser.....')
+    if (!oldUser)
+      return res.json({ status: "User doesn't exist" });
+
+    if (oldUser.isBlocked === true)
+      return res.json({ status: "User is blocked" });
+
+    const toke = jwt.sign(
+      { name: oldUser.fname, email: oldUser.email, id: oldUser._id },
+      "ClientTokenSecret",
+      { expiresIn: "5h" }
+    );
+
+    res
+      .status(200)
+      .json({ token: toke, status: "Login success", user: oldUser });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+    console.log(error);
+  }
+};
+
 const clientRegister = async (req, res) => {
 
   console.log(req.body, "values from the signup form ........");
@@ -72,4 +99,5 @@ const clientRegister = async (req, res) => {
 module.exports = {
   clientLogin,
   clientRegister,
+  clientLoginWithGoogle
 };

@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
 const bodyParser = require('body-parser');
-
+const path = require('path')
 
 const clientRouter = require('./routes/client');
 const trainerRouter = require('./routes/trainer');
@@ -34,8 +34,6 @@ app.use(cors(corsOptions))
 app.use('/', clientRouter);
 app.use('/trainer', trainerRouter);
 app.use('/admin', adminRouter);
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

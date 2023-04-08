@@ -2,11 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import './Signin.css'
 import { ClientLogin } from '../../axios/services/clientServices/clientServices';
+import { TrainerLogin } from '../../axios/services/trainerServices/trainerService';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { userSchema } from '../../validations/clientLoginValidation';
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../../redux/userSlice';
+import { trainerLogin } from '../../redux/trainerSlice';
 import { toast } from 'react-toastify';
 import { gapi } from 'gapi-script'
 import GoogleButton from '../../assets/googleLogin/GoogleButton';
@@ -32,17 +34,34 @@ function Signin() {
     async function onSubmit (){
     
         console.log('clientlogin called')
-        const response = await ClientLogin(values)
-        console.log(response,'response in login ......')
-        console.log(response.data.token,'token in login ......')
-        console.log(response.data.user,'user in login ......')
-
-        if(response.data.status === 'Login success'){
-            dispatch(userLogin({token:response.data.token , user: response.data.user}))
-            toast.success(response.data.status)
-            navigate('/');
-        }else{
-            toast.error(response.data.status)
+       
+        if(loginPerson === 'user'){
+            console.log('user login called')
+            const response = await ClientLogin(values)
+            console.log(response,'response in user login ......')
+            console.log(response.data.token,'user token in login ......')
+            console.log(response.data.user,'user in login ......')
+            if(response.data.status === 'Login success'){
+                dispatch(userLogin({token:response.data.token , user: response.data.user}))
+                toast.success(response.data.status)
+                navigate('/');
+            }else{
+                toast.error(response.data.status)
+            }
+        }else if(loginPerson === 'trainer'){
+            console.log('trainer login called')
+            const response = await TrainerLogin(values)
+            console.log(response.status,'status  response in trainer login ......')
+            console.log(response.token,'trainer token in login ......')
+            console.log(response.trainer,'trainer in login ......')
+            if(response?.status === 'Login success'){
+                console.log('trainer login success')
+                dispatch(trainerLogin({token:response.token , trainer: response.trainer}))
+                toast.success(response.status)
+                navigate('/');
+            }else{
+                toast.error(response.status)
+            }
         }
 
     }
@@ -111,7 +130,7 @@ function Signin() {
                         Forget Password?
                     </a>
                     <div className="mt-6">
-                        <button type='submit' className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-orange-500 rounded-md hover:bg-orange-800 focus:outline-none focus:bg-purple-600">
+                        <button type='submit' className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-orange-500 rounded-md hover:bg-orange-800 focus:outline-none focus:bg-orange-700">
                             Login
                         </button>
                     </div>
@@ -120,7 +139,7 @@ function Signin() {
                     <div className="absolute px-5 bg-white">Or</div>
                 </div>
                 <div className="flex mt-4 gap-x-2 items-center justify-center">
-                    <GoogleButton />
+                    <GoogleButton  loginPerson={loginPerson} />
                 </div>
 
                 <p className="mt-8 text-xs font-light text-center text-gray-700">

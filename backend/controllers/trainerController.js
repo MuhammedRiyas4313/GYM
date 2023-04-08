@@ -53,4 +53,71 @@ const trainerRegister = async (req, res) => {
     }
 };
 
-module.exports = { trainerRegister } 
+
+const trainerLogin = async (req, res) => {
+    console.log(req.body,"Trainer login calling.......");
+    try {
+      const { email, password } = req.body;
+      const oldTrainer = await Trainer.findOne({ email });
+      console.log(oldTrainer,'oldTrainer.....')
+      if (!oldTrainer)
+        return res.json({ status: "Trainer doesn't exist" });
+  
+      if (oldTrainer.isBlocked === true)
+        return res.json({ status: "Trainer is blocked" });
+  
+      const isPasswordCorrect = await bcrypt.compare(password, oldTrainer.password);
+  
+      if (!isPasswordCorrect)
+        return res.json({ status: "Invalid Credentials" });
+  
+      const toke = jwt.sign(
+        { name: oldTrainer.fname, email: oldTrainer.email, id: oldTrainer._id },
+        "ClientTokenSecret",
+        { expiresIn: "5h" }
+      );
+  
+      res
+        .status(200)
+        .json({ token: toke, status: "Login success", trainer: oldTrainer });
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+      console.log(error);
+    }
+  };
+
+const trainerLoginWithGoogle = async (req,res) => {
+    console.log('login with google...trainer')
+
+    try {
+      const { email, password } = req.body;
+      const oldTrainer = await Trainer.findOne({ email });
+      console.log(oldTrainer,'oldTrainer.....')
+      if (!oldTrainer)
+        return res.json({ status: "Trainer doesn't exist" });
+  
+      if (oldTrainer.isBlocked === true)
+        return res.json({ status: "Trainer is blocked" });
+  
+      const toke = jwt.sign(
+        { name: oldTrainer.fname, email: oldTrainer.email, id: oldTrainer._id },
+        "ClientTokenSecret",
+        { expiresIn: "5h" }
+      );
+  
+      res
+        .status(200)
+        .json({ token: toke, status: "Login success", trainer: oldTrainer });
+    } catch (error) {
+      res.status(500).json({ message: "Something went wrong" });
+      console.log(error);
+    }
+
+  }
+
+
+module.exports = {
+     trainerRegister ,
+     trainerLogin,
+     trainerLoginWithGoogle
+    } 

@@ -1,30 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Navbar } from 'flowbite-react'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogout } from '../../redux/userSlice';
+import { trainerLogout } from '../../redux/trainerSlice';
 import  './Header.css'
 
 
 function NavBar() {
 
   const [ logoutConfirm , setLogoutConfirm ] = useState(false)
+  const [ loged ,setLoged ] = useState('')
   const dispatch = useDispatch()
-  const {user, token} = useSelector((state)=> state.reducer.user)
 
-  console.log(user,'user from the toolkit store ')
-  console.log(token,'token from the toolkit store ')
+  useEffect(()=>{
+    console.log(Trainer.trainer,'in the use effect trainer 22222222222')
+    if(Trainer.trainer){
+      console.log(Trainer.trainer,'in the use effect trainer')
+      setLoged(Trainer.trainer)
+    }
+    else if(User){ 
+      setLoged(User.user)
+    } else{
+      setLoged('')
+    }
+  
+
+  })
+
+  const User = useSelector((state)=> state.userReducer.user)
+  const Trainer = useSelector((state)=> state.trainerReducer.trainer)
+  console.log(Trainer?.trainer,'trainer' ,Trainer?.token,'trainer token....')
+  console.log(User?.user,'User' ,User?.token,'user token....')
+  console.log(loged,'loged in ;;;;;;;;')
 
   function logout (){
-   console.log('user logout ')
-   setLogoutConfirm(true)
-   dispatch(userLogout())
+    if(Trainer.trainer){
+      console.log('user logout ')
+      setLogoutConfirm(true)
+      dispatch(trainerLogout())
+    }else if(User){
+        console.log('user logout ')
+        setLogoutConfirm(true)
+        dispatch(userLogout())
+      }
   }
  
 
   return (
-    
-  
+
   <Navbar className='navbar p-10'>
   <Link to="/">
   <Navbar.Brand href="">
@@ -36,13 +60,17 @@ function NavBar() {
   </Navbar.Brand>
   </Link>
   <div className="flex md:order-2 ">
-  {user && token && <p className='flex ml-5 mr-5 text-white items-center uppercase'>{user.fname}</p>}
-  { user && token ?  
-    <Button className='bg-orange-500 hover:bg-orange-700' onClick={logout}>
+  {loged &&  <Link to=''>
+    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-orange-600 uppercase'>
+      {loged.fname}
+    </Button>
+ </Link>}
+  {loged ?  
+    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-orange-600 uppercase' onClick={logout}>
       Logout
     </Button>
       : <Link to="/login">
-    <Button className='bg-orange-500 hover:bg-orange-700'>
+    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-orange-600 uppercase'>
       Login
     </Button>
  </Link>} 

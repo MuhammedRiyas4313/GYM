@@ -17,8 +17,27 @@ import { axiosClientInstance } from '../../axios';
   };
 
   export const ClientLogin = async ( values ) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
     try {
-      const response = await axiosClientInstance.post('/login',values)
+      const response = await axiosClientInstance.post('/login',values,config)
+      return response;
+    } catch (error) {
+      console.log('error in client login......')
+    }
+  }
+
+  export const ClientLoginWithGoogle = async ( values ) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosClientInstance.post('/loginwithgoogle',values,config)
       return response;
     } catch (error) {
       console.log('error in client login......')
