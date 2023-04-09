@@ -45,6 +45,10 @@ function Signin() {
                 dispatch(userLogin({token:response.data.token , user: response.data.user}))
                 toast.success(response.data.status)
                 navigate('/');
+            }else if(response?.data.status === 'User is not verified') { 
+                toast.error(response.data.status)
+                toast.error('OTP has been sent to your registered email')
+                navigate('/verification')
             }else{
                 toast.error(response.data.status)
             }
@@ -59,7 +63,7 @@ function Signin() {
                 dispatch(trainerLogin({token:response.token , trainer: response.trainer}))
                 toast.success(response.status)
                 navigate('/');
-            }else{
+            }else {
                 toast.error(response.status)
             }
         }

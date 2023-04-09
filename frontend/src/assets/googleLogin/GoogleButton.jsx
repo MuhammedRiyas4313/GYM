@@ -7,6 +7,8 @@ import { trainerLogin } from '../../redux/trainerSlice';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+// import * as dotenv from 'dotenv'
+// dotenv.config()
 
 const CLIENT_ID = "397923314388-o5r9e2q99aj8mnmfgflm4b4c8lgnru65.apps.googleusercontent.com";
 const CLIENT_PASSWORD = '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';

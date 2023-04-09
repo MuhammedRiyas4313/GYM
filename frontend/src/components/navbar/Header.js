@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLogout } from '../../redux/userSlice';
 import { trainerLogout } from '../../redux/trainerSlice';
+import Modal from './Modal';
 import  './Header.css'
 
 
 function NavBar() {
 
-  const [ logoutConfirm , setLogoutConfirm ] = useState(false)
+
+  const [ logoutModalShow , setlogoutModalShow ] = useState(false)
   const [ loged ,setLoged ] = useState('')
   const dispatch = useDispatch()
 
@@ -35,21 +37,31 @@ function NavBar() {
   console.log(loged,'loged in ;;;;;;;;')
 
   function logout (){
-    if(Trainer.trainer){
-      console.log('user logout ')
-      setLogoutConfirm(true)
-      dispatch(trainerLogout())
-    }else if(User){
-        console.log('user logout ')
-        setLogoutConfirm(true)
-        dispatch(userLogout())
-      }
+    setlogoutModalShow(true)
+  }
+
+  function LogoutConfirmed(status){
+    
+    if(status){
+        if(Trainer.trainer){
+          console.log('user logout ')
+          dispatch(trainerLogout())
+        }else if(User){
+            console.log('user logout ')
+            dispatch(userLogout())
+        }  
+    }
   }
  
 
   return (
-
+  
   <Navbar className='navbar p-10'>
+    {logoutModalShow ? 
+    <Modal
+    LogoutConfirmed = {LogoutConfirmed}
+    setlogoutModalShow = {setlogoutModalShow}
+     /> : ''}
   <Link to="/">
   <Navbar.Brand href="">
     <img
@@ -61,16 +73,16 @@ function NavBar() {
   </Link>
   <div className="flex md:order-2 ">
   {loged &&  <Link to=''>
-    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-orange-600 uppercase'>
+    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-black uppercase'>
       {loged.fname}
     </Button>
  </Link>}
   {loged ?  
-    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-orange-600 uppercase' onClick={logout}>
+    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-black uppercase' onClick={logout}>
       Logout
     </Button>
       : <Link to="/login">
-    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-orange-600 uppercase'>
+    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-black uppercase'>
       Login
     </Button>
  </Link>} 
