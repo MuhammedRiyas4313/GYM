@@ -43,3 +43,30 @@ import { axiosClientInstance } from '../../axios';
       console.log('error in client login......')
     }
   }
+
+  export const ClientOtpConfirmation = async (values,id) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosClientInstance.post(`/verifyotp?userId=${id}`,values,config)
+      return response;
+    } catch (error) {
+      console.log('error in client login......')
+    }
+  }
+  export const ClientResendOtp = async (values,id) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosClientInstance.post(`/resendotp?userId=${id}`,values,config)
+      return response;
+    } catch (error) {
+      console.log('error in resend otp ......')
+    }
+  }

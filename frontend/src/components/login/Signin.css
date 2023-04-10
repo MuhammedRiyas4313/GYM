@@ -5,3 +5,8 @@
 .form-data{
   box-shadow: 10px 10px 10px 10px rgba(0, 0, 0, 1.5) !important;
 }
+
+.spinnerouter{
+  background-color: black;
+  height: 100vh;
+}

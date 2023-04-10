@@ -73,16 +73,16 @@ function NavBar() {
   </Link>
   <div className="flex md:order-2 ">
   {loged &&  <Link to=''>
-    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-black uppercase'>
+    <Button className='bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase'>
       {loged.fname}
     </Button>
  </Link>}
   {loged ?  
-    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-black uppercase' onClick={logout}>
+    <Button className='bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase' onClick={logout}>
       Logout
     </Button>
       : <Link to="/login">
-    <Button className='bg-white hover:bg-orange-500 mr-5 hover:text-white text-black uppercase'>
+    <Button className='bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase'>
       Login
     </Button>
  </Link>} 

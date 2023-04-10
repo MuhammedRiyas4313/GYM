@@ -1,0 +1,27 @@
+.choseus-section {
+    background: #0a0a0a;
+    padding-bottom: 70px;
+}
+
+.cs-item {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+
+.section-title {
+    margin-bottom: 45px;
+    text-align: center;
+}
+
+.section-title span {
+    font-size: 16px;
+    color: #cfcfcf;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+
+.cardcontainer{
+    background-color: black !important;
+}

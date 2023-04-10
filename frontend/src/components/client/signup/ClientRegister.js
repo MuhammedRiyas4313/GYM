@@ -16,11 +16,11 @@ function ClientRegister() {
     console.log('register client....form submit')
     const response = await clientRegister(values);
     console.log(response)
-    if (response.status) {
+    if (response.status === "New account Created successfully") {
       toast.success(response.status)
       navigate('/login');
     } else {
-      toast.error(response.error)
+      toast.error(response.status)
     }
   }
 
