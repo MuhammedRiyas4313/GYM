@@ -91,7 +91,7 @@ const clientRegister = async (req, res) => {
   try {
     const oldUser = await User.findOne({ email });
 
-    if (oldUser ?? oldUser !== null) {
+    if (oldUser !== null) {
       return res.json({ status: "User already exists !" });
     }
 

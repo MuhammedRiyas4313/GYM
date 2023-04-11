@@ -9,6 +9,11 @@ import TrainerRegister from './pages/trainer/signup/Register';
 import AdminLogin from './pages/admin/login/login';
 import OtpVerfication from './pages/client/otpverification/OtpVerfication';
 import Dashboard from './pages/admin/dashboard/Dashboard';
+import Trainers from './pages/admin/trainers/Trainers';
+import Users from './pages/admin/users/Users';
+import Message from './pages/admin/message/Message';
+import Notification from './pages/admin/notification/Notification';
+import Transaction from './pages/admin/transaction/Transaction';
 
 function App() {
   return (
@@ -21,7 +26,12 @@ function App() {
           <Route path="/verification/:id" element={<OtpVerfication />} />
           <Route path="/trainerregister" element={<TrainerRegister />} />
           <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/trainers" element={<Trainers />} />
+          <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/messages" element={<Message />} />
+          <Route path="/admin/notifications" element={<Notification />} />
+          <Route path="/admin/transactions" element={<Transaction />} />
         </Routes>
     </div>
   );

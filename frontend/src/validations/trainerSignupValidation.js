@@ -34,18 +34,7 @@ export const trainerSchema = yup.object().shape({
       .string()
       .oneOf([yup.ref('password'), null], 'Password must match')
       .required('Required'),
-    coursename: yup
-      .string()
-      .min(1)
-      .max(20)
-      .matches(/^[a-zA-Z]+$/, 'Only alphabets are allowed')
-      .required('Required'),
     dob: yup.date().required('Required'),
-    coursecharge: yup
-      .number('Rupees in number')
-      .positive()
-      .integer()
-      .required('Required'),
     link: yup
       .string()
       .matches(link, 'Please paste a valid youtube link here')

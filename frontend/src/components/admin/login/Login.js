@@ -24,7 +24,7 @@ function Login() {
         if(response.data.status === 'Login success'){
             dispatch(userLogin({token:response.data.token , user: response.data.user}))
             toast.success(response.data.status)
-            navigate('/');
+            navigate('/admin/dashboard');
         }else{
             toast.error(response.data.status)
         }
