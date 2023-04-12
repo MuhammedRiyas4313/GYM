@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import avatar1 from "../../../assets/images/avatars/1.jpg";
-
+import { getClients } from "../../../axios/services/adminServices/adminServices";
 function UsersList() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    getClients().then((res) => {
+      console.log(res.data, "users list.....");
+      setUsers(res.data);
+    });
+  }, []);
+
+  function formateDate(date) {
+    const formatDate = new Date(date);
+    const formated = `${formatDate.getDate()}-${
+      formatDate.getMonth() + 1
+    }-${formatDate.getFullYear()}`;
+    console.log("formate date is calling.....");
+    return formated;
+  }
+
+  function viewDetails() {
+    console.log("view details");
+  }
+
+  function blockStatus() {
+    console.log("block user and unblock");
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between p-4 bg-gray-900 dark:bg-gray-900 md:ml-64">
@@ -50,10 +76,10 @@ function UsersList() {
                 Joined
               </th>
               <th scope="col" className="px-6 py-3">
-                Course Name
+                Gender
               </th>
               <th scope="col" className="px-6 py-3">
-                Charge/month
+                Verification Status
               </th>
               <th scope="col" className="px-6 py-3">
                 Status
@@ -61,44 +87,115 @@ function UsersList() {
               <th scope="col" className="px-6 py-3">
                 Action
               </th>
+              <th scope="col" className="px-6 py-3">
+                View Details
+              </th>
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src={avatar1}
-                  alt="Jese image"
-                ></img>
-                <div className="pl-3">
-                  <div className="text-base font-semibold">Neil Sims</div>
-                  <div className="font-normal text-gray-500">
-                    neil.sims@flowbite.com
-                  </div>
-                </div>
-              </th>
-              <td className="px-6 py-4">React Developer</td>
-              <td className="px-6 py-4">React Developer</td>
-              <td className="px-6 py-4">React Developer</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                  Online
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
+            {users ? (
+              users.map((val) => {
+                return (
+                  <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th
+                      scope="row"
+                      className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                        <svg
+                          class="absolute w-12 h-12 text-gray-400 -left-1"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div className="pl-3">
+                        <div className="text-base font-semibold">
+                          {val.fname}
+                        </div>
+                        <div className="font-normal text-gray-500">
+                          {val.email}
+                        </div>
+                      </div>
+                    </th>
+                    <td className="px-6 py-4">{formateDate(val.createdAt)}</td>
+                    <td className="px-6 py-4">{val.gender}</td>
+                    <td className=" text-center">
+                      {val.isVerified ? (
+                        <div>
+                          <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
+                            Verified
+                          </span>
+                        </div>
+                      ) : (
+                        <div>
+                          <span class="bg-red-500 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-800">
+                            Not Verified
+                          </span>
+                        </div>
+                      )}
+                    </td>
+                    <td className=" text-center">
+                      {!val.isBlocked ? (
+                        <div>
+                          <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
+                            Active
+                          </span>
+                        </div>
+                      ) : (
+                        <div>
+                          <span class="bg-red-500 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-800">
+                            Blocked
+                          </span>
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      {val.isBlocked ? (
+                        <button
+                          type="button"
+                          className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                          onClick={() => {
+                            blockStatus(val.isBlocked, val._id);
+                          }}
+                        >
+                          Unblock
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                          onClick={() => {
+                            blockStatus(val.isBlocked, val._id);
+                          }}
+                        >
+                          Block
+                        </button>
+                      )}
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          viewDetails(val._id);
+                        }}
+                        class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0"
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <div></div>
+            )}
           </tbody>
         </table>
       </div>
@@ -107,4 +204,3 @@ function UsersList() {
 }
 
 export default UsersList;
-

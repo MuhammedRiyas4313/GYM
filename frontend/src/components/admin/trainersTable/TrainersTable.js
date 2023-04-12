@@ -3,11 +3,13 @@ import avatar1 from "../../../assets/images/avatars/1.jpg";
 import { axiosAdminInstance } from "../../../axios/axios";
 import { getTrainers,changeBlockStatus } from "../../../axios/services/adminServices/adminServices";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function TrainersTable() {
 
   const [trainersList, setTrainersList] = useState([]);
   const [trainerBlockStatus, setTrainerBlockStatus] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
    getTrainers().then((response)=>{
@@ -22,6 +24,18 @@ function TrainersTable() {
     toast.success(response.data.message)
     setTrainerBlockStatus(!trainerBlockStatus)
 
+  }
+
+  function viewDetails(trainerId){
+    console.log(trainerId,'view details trainer ')
+    navigate('/admin/trainerdetails', { state: { trainerId: trainerId } });
+  }
+
+  function formateDate(date){
+    const formatDate = new Date(date)
+    const formated = `${formatDate.getDate()}-${formatDate.getMonth() + 1}-${formatDate.getFullYear()}`
+    console.log('formate date is calling.....')
+    return formated
   }
 
   return (
@@ -111,7 +125,7 @@ function TrainersTable() {
                         </div>
                       </div>
                     </th>
-                    <td className="px-6 py-4">{val.createdAt}</td>
+                    <td className="px-6 py-4">{formateDate(val.createdAt)}</td>
                     <td className="px-6 py-4">{val.gender}</td>
                     <td className=" text-center">
                       {val.isVerified ? (
@@ -163,12 +177,7 @@ function TrainersTable() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      <a
-                        href="#"
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                      >
-                        View Details
-                      </a>
+                    <button type="button" onClick={()=>{viewDetails(val._id)}} class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0">View Details</button>
                     </td>
                   </tr>
                 );

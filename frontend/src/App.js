@@ -14,6 +14,8 @@ import Users from './pages/admin/users/Users';
 import Message from './pages/admin/message/Message';
 import Notification from './pages/admin/notification/Notification';
 import Transaction from './pages/admin/transaction/Transaction';
+import TrainerDetail from './pages/admin/trainerDetails/TrainerDetails';
+import Success from './pages/trainer/signup/Success';
 
 function App() {
   return (
@@ -25,6 +27,7 @@ function App() {
           <Route path="/clientregister" element={<ClientRegister />} />
           <Route path="/verification/:id" element={<OtpVerfication />} />
           <Route path="/trainerregister" element={<TrainerRegister />} />
+          <Route path="/trainersignupsuccess" element={<Success />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/trainers" element={<Trainers />} />
@@ -32,6 +35,7 @@ function App() {
           <Route path="/admin/messages" element={<Message />} />
           <Route path="/admin/notifications" element={<Notification />} />
           <Route path="/admin/transactions" element={<Transaction />} />
+          <Route path="/admin/trainerdetails" element={<TrainerDetail />} />
         </Routes>
     </div>
   );

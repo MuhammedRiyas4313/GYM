@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
 import avatar1 from "../../../assets/images/avatars/1.jpg";
 import { getNotifications } from "../../../axios/services/adminServices/adminServices";
-import { useLocation ,Link } from "react-router-dom";
+import { useLocation ,Link, useNavigate } from "react-router-dom";
 
 function Notifications() {
 
+    const navigate = useNavigate()
 
-    const location = useLocation()
     const [trainersToVerify, setTrainersToVerify] = useState([])
+
+    function viewDetails(trainerId){
+      console.log(trainerId,'view details trainer ')
+      navigate('/admin/trainerdetails', { state: { trainerId: trainerId } });
+    }
+
+    function formateDate(date){
+      const formatDate = new Date(date)
+      const formated = `${formatDate.getDate()}-${formatDate.getMonth() + 1}-${formatDate.getFullYear()}`
+      console.log('formate date is calling.....')
+      return formated
+    }
 
     useEffect(()=>{
         getNotifications().then((res)=>{
@@ -97,7 +109,7 @@ function Notifications() {
                     </div>
                   </div>
                 </th>
-                <td className="px-6 py-4">{val.createdAt}</td>
+                <td className="px-6 py-4">{formateDate(val.createdAt)}</td>
                 <td className="px-6 py-4">{val.gender}</td>
                 <td className="px-6 py-4">{val.phone}</td>
                 <td className=" text-center">
@@ -116,11 +128,7 @@ function Notifications() {
                       )}
                     </td>
                 <td className="px-6 py-4">
-                  <Link to='/trainer'
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    View Details
-                  </Link>
+                   <button type="button" onClick={()=>{viewDetails(val._id)}} class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0">View Details</button>
                 </td>
               </tr>)
             }):<div></div>}

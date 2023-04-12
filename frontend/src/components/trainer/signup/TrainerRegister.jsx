@@ -6,9 +6,13 @@ import { trainerRegister } from "../../../axios/services/trainerServices/trainer
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Loading from "../../loadingSpinner/Loading";
+import SuccessModal from "./SuccessModal";
 import "./TrainerRegister.css";
 
 function TrainerRegister() {
+
+  const [successModal , setSuccessModal] = useState(false)
+
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
 
@@ -26,7 +30,7 @@ function TrainerRegister() {
     if (response.status === "Successfully created Account") {
       setLoader(false);
       toast.success(response.status);
-      navigate("/login");
+      navigate("/trainersignupsuccess");
     } else if (response.status) {
       setLoader(false);
       toast.error(response.status);
@@ -84,6 +88,7 @@ function TrainerRegister() {
       { loader ? (
         <div className='spinnerouter bg-black flex justify-center align-middle'><Loading /></div>
       ) : (
+        
         <div className="signupouter md:pl-64 md:pr-64 p-5 ">
           <form
             className="signupform md:p-20 p-5 mt-20"
@@ -353,7 +358,6 @@ function TrainerRegister() {
                 </div>
               </div>
             </div>
-
             <div className="mt-6 flex items-center justify-end gap-x-6">
               <button
                 type="button"

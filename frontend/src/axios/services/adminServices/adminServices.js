@@ -61,3 +61,49 @@ export const getNotifications = async () => {
     }
   }
 
+export const getTrainerDetails = async (trainerId) => {
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+    try {
+      const response = await axiosAdminInstance.get(`/trainerdetails?trainerId=${trainerId}`,config)
+      return response;
+    } catch (error) {
+      console.log('error in client login......')
+    }
+  }
+
+export const verifyTrainer = async (trainerId) => {
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+    try {
+      const response = await axiosAdminInstance.patch(`/verifytrainer?trainerId=${trainerId}`,config)
+      return response;
+    } catch (error) {
+      console.log('error in client login......')
+    }
+  }
+
+
+export const getClients = async () => {
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+    try {
+      const response = await axiosAdminInstance.get('/clients',config)
+      return response;
+    } catch (error) {
+      console.log('error in client login......')
+    }
+  }
+

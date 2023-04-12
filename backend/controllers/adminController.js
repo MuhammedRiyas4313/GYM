@@ -1,6 +1,18 @@
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
 const Admin = require("../models/admin");
 const Trainer = require("../models/trainer");
+const User = require('../models/user')
+
+
+let transporter = nodemailer.createTransport({
+    // true for 465, false for other ports
+    service: "gmail",
+    auth: {
+      user: process.env.NODEMAILER_AUTHER, // generated ethereal user
+      pass: process.env.NODEMAILER_AUTHER_PASSWORD, // generated ethereal password
+    },
+  });
 
 
 
@@ -57,9 +69,55 @@ const notifications = async (req,res) => {
 
 }
 
+const trainerDetails = async (req,res) => {
+    console.log('trainerDetails is calling.....')
+    const { trainerId } = req.query
+
+    const getDetails = await Trainer.findOne({_id:trainerId})
+    console.log(getDetails,'trainer details from the data base......')
+    res.json(getDetails)
+}
+
+const verifyTrainer = async (req,res) => {
+    const { trainerId } = req.query
+     console.log('verify Trainer........')
+     const updatedTrainer = await Trainer.findOneAndUpdate({_id:trainerId},{isVerified:true},{ new: true })
+
+     console.log(updatedTrainer,'vrified trainer')
+     const mailOptions = {
+        from: "gymtrainersonline@gmail.com", // sender address
+        to: updatedTrainer.email, // list of receivers
+        subject: "GYM Fitness Center Account Verification", // Subject line
+        html: `<p>Congratulations! Your account has been successfully verified.</p><p>You can now access all the features and services available to our members..</p><p>Thank you for choosing our platform!</p>`,
+      };
+  
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("error", error);
+          res.json({ status: "Email not send" });
+        } else {
+          console.log(info, "info from otpmailer");
+          res.json({
+            status: 'Verification email has been sent',
+            message: `Verification Email has been sent to ${info.accepted[0]} !`,
+            data:updatedTrainer ,
+          });
+        }
+      });
+}
+
+const clientList = async (req,res) => {
+    console.log('client list calling....')
+    const usersList = await User.find({})
+    res.json(usersList);
+}
+
 module.exports = {
     adminLogin,
     trainersList,
     trainerBlockstatus,
-    notifications
+    notifications,
+    trainerDetails,
+    verifyTrainer,
+    clientList
 }
