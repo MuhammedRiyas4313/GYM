@@ -16,6 +16,8 @@ import Notification from './pages/admin/notification/Notification';
 import Transaction from './pages/admin/transaction/Transaction';
 import TrainerDetail from './pages/admin/trainerDetails/TrainerDetails';
 import Success from './pages/trainer/signup/Success';
+import UserDetail from './pages/admin/userDetails/UserDetail';
+import Profile from './pages/trainer/Profile/Profile';
 
 function App() {
   return (
@@ -28,14 +30,16 @@ function App() {
           <Route path="/verification/:id" element={<OtpVerfication />} />
           <Route path="/trainerregister" element={<TrainerRegister />} />
           <Route path="/trainersignupsuccess" element={<Success />} />
+          <Route path="/trainerprofile" element={<Profile />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/trainers" element={<Trainers />} />
+          <Route path="/admin/trainerdetails" element={<TrainerDetail />} />
           <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/userdetails" element={<UserDetail />} />
           <Route path="/admin/messages" element={<Message />} />
           <Route path="/admin/notifications" element={<Notification />} />
           <Route path="/admin/transactions" element={<Transaction />} />
-          <Route path="/admin/trainerdetails" element={<TrainerDetail />} />
         </Routes>
     </div>
   );

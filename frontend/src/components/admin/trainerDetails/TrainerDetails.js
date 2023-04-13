@@ -180,7 +180,7 @@ function TrainerDetails() {
                   <div className="px-4 py-2 font-semibold">Email.</div>
                   <div className="px-4 py-2">
                     <a
-                      className="text-blue-800"
+                      className="text-blue-800 break-words"
                       href="mailto:jane@example.com"
                     >
                       {trainerDetails.email}

@@ -65,6 +65,7 @@ const clientLoginWithGoogle = async (req, res) => {
 
       if (oldUser.isBlocked === true)
         return res.json({ status: "User is blocked" });
+        
       const toke = jwt.sign(
         { name: oldUser.fname, email: oldUser.email, id: oldUser._id },
         "ClientTokenSecret",

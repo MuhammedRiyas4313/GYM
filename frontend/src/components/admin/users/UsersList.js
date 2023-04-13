@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import avatar1 from "../../../assets/images/avatars/1.jpg";
 import { getClients } from "../../../axios/services/adminServices/adminServices";
+import { useNavigate } from "react-router-dom";
+
 function UsersList() {
+
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     getClients().then((res) => {
@@ -20,8 +24,10 @@ function UsersList() {
     return formated;
   }
 
-  function viewDetails() {
-    console.log("view details");
+  function viewDetails(userId) {
+    console.log("user view details");
+    console.log(userId,'view details trainer ')
+    navigate('/admin/userdetails', { state: { userId: userId } });
   }
 
   function blockStatus() {

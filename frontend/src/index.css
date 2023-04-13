@@ -13,3 +13,5 @@ body::-webkit-scrollbar {
       margin: 0;
     }
   }
+
+  input {-webkit-appearance: none !important; box-shadow: none ; }

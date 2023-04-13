@@ -8,7 +8,8 @@ const {
   notifications,
   trainerDetails,
   verifyTrainer,
-  clientList
+  clientList,
+  clientDetails
 } = require("../controllers/adminController");
 const { verify } = require("jsonwebtoken");
 
@@ -20,5 +21,6 @@ router.get("/notifications", notifications);
 router.get("/trainerdetails", trainerDetails);
 router.patch("/verifytrainer", verifyTrainer);
 router.get("/clients", clientList);
+router.get("/clientdetails", clientDetails);
 
 module.exports = router;

@@ -30,7 +30,11 @@ export const trainerRegister = async (value) => {
     }
   };
 
-  export const TrainerLoginWithGoogle = async (value) => {
+  export const TrainerLoginWithGoogle = async (email) => {
+
+   const value = {
+      email
+    }
   
     const config = {
       headers: {

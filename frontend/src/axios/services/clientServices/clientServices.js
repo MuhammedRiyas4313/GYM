@@ -30,7 +30,11 @@ import { axiosClientInstance } from '../../axios';
     }
   }
 
-  export const ClientLoginWithGoogle = async ( values ) => {
+  export const ClientLoginWithGoogle = async ( email ) => {
+
+    const values = {
+      email
+    }
     const config = {
       headers: {
         'Content-Type': 'application/json',

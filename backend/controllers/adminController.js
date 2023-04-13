@@ -88,7 +88,14 @@ const verifyTrainer = async (req,res) => {
         from: "gymtrainersonline@gmail.com", // sender address
         to: updatedTrainer.email, // list of receivers
         subject: "GYM Fitness Center Account Verification", // Subject line
-        html: `<p>Congratulations! Your account has been successfully verified.</p><p>You can now access all the features and services available to our members..</p><p>Thank you for choosing our platform!</p>`,
+        html: `<p>Hello ${updatedTrainer.fname},</p>
+
+        <p>We are pleased to inform you that your account has been successfully verified.</p> <p>You can now log in and access all the features and benefits of our platform.</p>
+        
+        <p>Thank you for your patience during the verification process.</p>
+        
+        <p>Best regards,</p>
+        <p>GYM TRAINERS MANAGEMENT TEAM</p>`,
       };
   
       transporter.sendMail(mailOptions, (error, info) => {
@@ -112,6 +119,13 @@ const clientList = async (req,res) => {
     res.json(usersList);
 }
 
+const clientDetails = async (req,res)=>{
+    const { userId } = req.query;
+    const getDetails = await User.findOne({_id:userId})
+    console.log(getDetails,'user details from the data base......')
+    res.json(getDetails)
+}
+
 module.exports = {
     adminLogin,
     trainersList,
@@ -119,5 +133,6 @@ module.exports = {
     notifications,
     trainerDetails,
     verifyTrainer,
-    clientList
+    clientList,
+    clientDetails
 }

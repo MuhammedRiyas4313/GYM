@@ -13,23 +13,23 @@ function NavBar() {
   const [loged, setLoged] = useState("");
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    console.log(Trainer.trainer, "in the use effect trainer 22222222222");
-    if (Trainer.trainer) {
-      console.log(Trainer.trainer, "in the use effect trainer");
-      setLoged(Trainer.trainer);
-    } else if (User) {
-      setLoged(User.user);
-    } else {
-      setLoged("");
-    }
-  });
-
   const User = useSelector((state) => state.userReducer.user);
   const Trainer = useSelector((state) => state.trainerReducer.trainer);
-  console.log(Trainer?.trainer, "trainer", Trainer?.token, "trainer token....");
-  console.log(User?.user, "User", User?.token, "user token....");
-  console.log(loged, "loged in ;;;;;;;;");
+
+  useEffect(() => {
+   logedPerson()
+  });
+
+  function logedPerson(){
+  if (Trainer?.trainer) {
+    console.log(Trainer, "in the use effect trainer");
+    setLoged(Trainer.trainer);
+  } else if (User) {
+    setLoged(User.user);
+  } else {
+    setLoged("");
+  }
+  }
 
   function logout() {
     setlogoutModalShow(true);
@@ -37,8 +37,8 @@ function NavBar() {
 
   function LogoutConfirmed(status) {
     if (status) {
-      if (Trainer.trainer) {
-        console.log("user logout ");
+      if (Trainer?.trainer) {
+        console.log("trainer logout ");
         dispatch(trainerLogout());
       } else if (User) {
         console.log("user logout ");

@@ -107,3 +107,17 @@ export const getClients = async () => {
     }
   }
 
+  export const getUserDetails = async (userId) => {
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+      try {
+        const response = await axiosAdminInstance.get(`/clientdetails?userId=${userId}`,config)
+        return response;
+      } catch (error) {
+        console.log('error in client login......')
+      }
+    }

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Sidebar } from "flowbite-react";
-import Header from "../navbar/Header";
 import {
   HiChartPie,
   HiViewBoards,
@@ -12,33 +11,13 @@ import {
 } from "react-icons/hi";
 
 import Logo from "../../../assets/logo/logo.png";
-import "./SideBar.css";
 import { Link } from "react-router-dom";
+import "./SideBar.css";
 
 function SideBar() {
-  const [activePage, setActivePage] = useState("");
 
-  function activateTab() {
-    const currentUrl = window.location.href;
-    const url = currentUrl;
-    const lastSegment = url.split("/").pop();
-    setActivePage(lastSegment)
-    console.log(activePage, "activating tab");
-    activePage.current.className =
-      "flex items-center p-2 text-gray-900 rounded-lg dark:text-white bg-gray-100 dark:hover:bg-gray-700";
-  }
 
-  useEffect(() => {
-    
-    activateTab()
-  });
-
-  const trainers = useRef();
-  const users = useRef();
-  const notifications = useRef();
-  const dashboard = useRef();
-  const transactions = useRef();
-  const messages = useRef();
+ 
 
   return (
     <div className="bg-gray-800">
@@ -84,7 +63,7 @@ function SideBar() {
             <li>
               <Link
                 to="/admin/dashboard"
-                ref={dashboard}
+                
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -103,7 +82,6 @@ function SideBar() {
             <li>
               <Link
                 to="/admin/trainers"
-                ref={trainers}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -126,7 +104,6 @@ function SideBar() {
             <li>
               <Link
                 to="/admin/users"
-                ref={users}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -150,7 +127,6 @@ function SideBar() {
             <li>
               <Link
                 to="/admin/transactions"
-                ref={transactions}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -174,7 +150,6 @@ function SideBar() {
             <li>
               <Link
                 to="/admin/messages"
-                ref={messages}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
@@ -198,7 +173,6 @@ function SideBar() {
             <li>
               <Link
                 to="/admin/notifications"
-                ref={notifications}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <svg
