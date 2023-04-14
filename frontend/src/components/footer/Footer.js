@@ -5,7 +5,7 @@ import './Footer.css'
 function FooterComponent() {
   return (
 <Footer className='footer'>
-  <div className="border-none w-full">
+  <div className="border-t-2 border-gray-700 w-full">
     <div className="grid w-full grid-cols-2 gap-8 py-8 px-6 md:grid-cols-4">
       <div>
         <Footer.Title title="Company" />

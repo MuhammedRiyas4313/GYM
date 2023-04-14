@@ -18,6 +18,7 @@ import TrainerDetail from './pages/admin/trainerDetails/TrainerDetails';
 import Success from './pages/trainer/signup/Success';
 import UserDetail from './pages/admin/userDetails/UserDetail';
 import Profile from './pages/trainer/Profile/Profile';
+import Course from './pages/admin/courses/Course';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="/trainerregister" element={<TrainerRegister />} />
           <Route path="/trainersignupsuccess" element={<Success />} />
           <Route path="/trainerprofile" element={<Profile />} />
+          
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/trainers" element={<Trainers />} />
@@ -40,6 +42,7 @@ function App() {
           <Route path="/admin/messages" element={<Message />} />
           <Route path="/admin/notifications" element={<Notification />} />
           <Route path="/admin/transactions" element={<Transaction />} />
+          <Route path="/admin/courses" element={<Course />} />
         </Routes>
     </div>
   );

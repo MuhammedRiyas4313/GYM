@@ -1,13 +1,153 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import "./TrainerProfile.css";
 
 function TrianerProfile() {
+  const [option, setOption] = useState(false);
+
+  function options() {
+    setOption((state) => !state);
+    console.log(option, "option status....");
+  }
+
+  useEffect(() => {
+    console.log("close dropdown");
+  }, [option]);
+
+  function courses(){
+    console.log('courses calling')
+  }
+
   return (
-    <div>
-      <div className="container mx-auto  md:pt-24  md:p-10 ">
+    <div className="bg-white">
+      <div className=" md:pt-24 pt-16  md:p-10 ">
         <div className="md:flex no-wrap md:-mx-2 ">
-          <div className="w-full md:w-3/12 md:mx-2 md:mb-2">
-            <div className="bg-white p-3">
-              <div className="image overflow-hidden flex align-middle justify-center">
+          <div className=" w-full md:mx-2 md:mb-2">
+            <div className="profileside bg-gray-400 p-5">
+              <div className="flex justify-end p-5 bg-transparent mb-3">
+                <div>
+                  <label tabIndex={0} className="btn m-1 btn-circle p-2 bg-orange-500">
+                    <svg
+                      className="fill-current text-white"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 48 48"
+                      enable-background="new 0 0 48 48"
+                      id="Layer_1"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <g id="Layer_3">
+                        <path
+                            className="fill-current text-white"
+                          d="M0,1.499v36h12.031V48l14.906-10.501H48v-36H0z M44,33.499H26.906L16,41.125v-3.75v-3.876H4v-28h40V33.499z   "
+                          fill="#241F20"
+                        />
+                      </g>
+                    </svg>
+                  </label>
+                </div>
+                <div>
+                  <label
+                    tabIndex={0}
+                    className="btn m-1 btn-circle swap swap-rotate bg-orange-500"
+                  >
+                    <svg
+                      width="32"
+                      height="32"
+                      viewBox="-1.5 0 34 34"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <title>notification</title>
+                      <desc>Created with Sketch.</desc>
+                      <g
+                        id="icons"
+                        stroke="none"
+                        stroke-width="1"
+                        fill="none"
+                        fill-rule="evenodd"
+                      >
+                        <g
+                          id="ui-gambling-website-lined-icnos-casinoshunter"
+                          transform="translate(-85.000000, -283.000000)"
+                          fill="#252528"
+                          fill-rule="nonzero"
+                        >
+                          <g
+                            id="square-filled"
+                            transform="translate(50.000000, 120.000000)"
+                          >
+                            <path
+                              className="fill-current text-white"
+                              d="M50.5,163 C52.3058348,163 53.792246,164.367615 53.9799976,166.123608 C55.2509455,164.813386 57.0304845,164 59,164 C62.8659932,164 66,167.134007 66,171 C66,174.170639 63.8919961,176.848928 61.0010432,177.709811 L61,186 L61.5,186 C63.4329966,186 65,187.567003 65,189.5 C65,191.432997 63.4329966,193 61.5,193 L55.6583461,193.000686 C54.8344797,195.330712 52.6121813,197 50,197 C47.3878187,197 45.1655203,195.330712 44.3416539,193.000686 L38.5,193 C36.5670034,193 35,191.432997 35,189.5 C35,187.567003 36.5670034,186 38.5,186 L39,186 L39,177 C39,172.336021 41.9026613,168.349994 46.0000384,166.749866 L46,166.5 C46,164.631437 47.4642776,163.104874 49.3079648,163.005179 L49.5,163 L50.5,163 Z M53.4642293,193.001109 L46.5357707,193.001109 C47.2275472,194.1961 48.5198932,195 50,195 C51.4801068,195 52.7724528,194.1961 53.4642293,193.001109 Z M61.5,188 L38.5,188 C37.6715729,188 37,188.671573 37,189.5 C37,190.328427 37.6715729,191 38.5,191 L61.5,191 C62.3284271,191 63,190.328427 63,189.5 C63,188.671573 62.3284271,188 61.5,188 Z M50,168 C45.1181973,168 41.1442086,171.886814 41.0038371,176.734638 L41,177 L41,186 L59,186 L59,178 L59,178 C55.1340068,178 52,174.865993 52,171 C52,170.065184 52.1832441,169.173167 52.5157721,168.357909 C51.7995338,168.148099 51.0448716,168.026408 50.2653623,168.003837 L50,168 Z M59,166 C56.2385763,166 54,168.238576 54,171 C54,173.761424 56.2385763,176 59,176 C61.7614237,176 64,173.761424 64,171 C64,168.238576 61.7614237,166 59,166 Z M50.5,165 L49.5,165 C48.7830092,165 48.1835122,165.503051 48.0352024,166.175458 C48.6737492,166.059923 49.3298767,166 50,166 C50.6701233,166 51.3262508,166.059923 51.9633166,166.174703 C51.8164878,165.503051 51.2169908,165 50.5,165 Z"
+                              id="notification"
+                            ></path>
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  </label>
+                </div>
+                <div className="dropdown dropdown-end">
+                  <label
+                    tabIndex={0}
+                    className="btn m-1 btn-circle swap swap-rotate bg-orange-500"
+                  >
+                    <input
+                      type="checkbox"
+                      className="hidden"
+                      onClick={options}
+                    />
+
+                    <svg
+                      className="swap-off fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 512 512"
+                    >
+                      <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                    </svg>
+
+                    <svg
+                      className="swap-on fill-current"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="32"
+                      height="32"
+                      viewBox="0 0 512 512"
+                    >
+                      <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+                    </svg>
+                  </label>
+                  {option ? (
+                    <div className="dropdown mt-10">
+                      <ul
+                        tabIndex={0}
+                        className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                      >
+                        <li onClick={courses}>
+                          <a>Courses</a>
+                        </li>
+                        <li>
+                          <a>Clients</a>
+                        </li>
+                        <li>
+                          <a>Edit Profile</a>
+                        </li>
+                        <li>
+                          <a>Add course</a>
+                        </li>
+                        <li>
+                          <a>My wallet</a>
+                        </li>
+                      </ul>
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                </div>
+              </div>
+              <div className="image overflow-hidden flex align-middle justify-center ">
                 <div class="relative w-36 h-36 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 flex align-middle justify-center">
                   <svg
                     class="absolute w-36 h-40 text-gray-400 -left-1"
@@ -23,19 +163,53 @@ function TrianerProfile() {
                   </svg>
                 </div>
               </div>
-              <h1 className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase">
-                Trainer
-              </h1>
-              <h3 className="text-gray-600 font-lg text-semibold leading-6">
-                User at GYM FITNESS Company Inc.
-              </h3>
-              <p className="text-sm text-gray-500 hover:text-gray-600 leading-6 p-5">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Reprehenderit, eligendi dolorum sequi illum qui unde aspernatur
-                non deserunt
-              </p>
-              <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
+              <div className="flex justify-center">
+              <ul className=" bg-gray-200 text-gray-600 hover:text-gray-700 hover:shadow  rounded shadow-sm md:w-1/3 md:p-10">
+              <li className="flex justify-between items-center py-3">
+                <div className="w-full flex justify-between">
+                <p>Rating</p>
+                <div className="rating">
+                  <input
+                    type=""
+                    name="rating-2"
+                    className="mask mask-star-2 bg-orange-400"
+                  />
+                  <input
+                    type=""
+                    name="rating-2"
+                    className="mask mask-star-2 bg-orange-400"
+                  />
+                  <input
+                    type=""
+                    name="rating-2"
+                    className="mask mask-star-2 bg-orange-400"
+                  />
+                  <input
+                    type=""
+                    name="rating-2"
+                    className="mask mask-star-2 bg-orange-400"
+                  />
+                  <input
+                    type=""
+                    name="rating-2"
+                    className="mask mask-star-2 bg-orange-400"
+                  />
+                </div>
+              </div>
+                </li>
+              <li className="flex items-center py-3">
+                  <span>Name</span>
+                  <span className="ml-auto">Trainer</span>
+                </li>
                 <li className="flex items-center py-3">
+                  <span>Email</span>
+                  <span className="ml-auto">Trainer</span>
+                </li>
+                <li className="flex items-center py-3">
+                  <span>Phone</span>
+                  <span className="ml-auto">Trainer</span>
+                </li>
+                {/* <li className="flex items-center py-3">
                   <span>Status</span>
                   <span className="ml-auto">
                     {true ? (
@@ -48,195 +222,26 @@ function TrianerProfile() {
                       </span>
                     )}
                   </span>
+                </li> */}
+                <li className="flex items-center py-3">
+                  <span>Designation</span>
+                  <span className="ml-auto">Trainer</span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Member since</span>
                   <span className="ml-auto">10-04-2023</span>
                 </li>
+                <li className="flex items-center py-3">
+                  <span>Active Courses</span>
+                  <span className="ml-auto">04</span>
+                </li>
+                <li className="flex items-center py-3">
+                  <span>Active Clients</span>
+                  <span className="ml-auto">15</span>
+                </li>
               </ul>
-            </div>
-          </div>
-          <div className="w-full md:w-9/12 mx-2 h-64">
-            <div className="bg-white p-3 shadow-sm rounded-sm md:p-10">
-              <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
-                <span clas="text-green-500">
-                  <svg
-                    className="h-5"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                    />
-                  </svg>
-                </span>
-                <span className="tracking-wide">About</span>
-              </div>
-              <div className="text-gray-700">
-                <div className="grid md:grid-cols-2 text-sm">
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">First Name</div>
-                    <div className="px-4 py-2">Trainer</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Last Name</div>
-                    <div className="px-4 py-2">New</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Gender</div>
-                    <div className="px-4 py-2">Male</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Contact No.</div>
-                    <div className="px-4 py-2">9574875481</div>
-                  </div>
-                  {/* <div className="grid grid-cols-2">
-                            <div className="px-4 py-2 font-semibold">Current Address</div>
-                            <div className="px-4 py-2">Beech Creek, PA, Pennsylvania</div>
-                        </div>
-                        <div className="grid grid-cols-2">
-                            <div className="px-4 py-2 font-semibold">Permanant Address</div>
-                            <div className="px-4 py-2">Arlington Heights, IL, Illinois</div>
-                        </div> */}
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Birthday</div>
-                    <div className="px-4 py-2">12-02-2000</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Email.</div>
-                    <div className="px-4 py-2 overflow-hidden">
-                      <a
-                        className="text-blue-800 break-words"
-                        href="mailto:jane@example.com"
-                      >
-                        jane@example.com
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              {/* <button
-                    className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Show
-                    Full Information</button> */}
-            </div>
-
-            <div className="my-4"></div>
-
-            <div class="bg-white p-3 shadow-sm rounded-sm">
-              <div className="tablecontainer overflow-x-auto shadow-md">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 bg-gray-500">
-                  <thead className="text-xs text-white uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                      <th scope="col" className="px-6 py-3">
-                        Course Name
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Start
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        End
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Trainer Name
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Payment Status
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        Fee/month
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        View Details
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                      <th
-                        scope="row"
-                        className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-                      >
-                        {/* <img
-                        className="w-10 h-10 rounded-full"
-                        src={userDetails.profile}
-                        alt="Jese image"
-                      ></img> */}
-                        <div className="pl-3">
-                          <div className="text-base font-semibold">
-                            Body Gaining
-                          </div>
-                          {/* <div className="font-normal text-gray-500">
-                          {userDetails.email}
-                        </div> */}
-                        </div>
-                      </th>
-                      <td className="px-6 py-4">08-04-2023</td>
-                      <td className="px-6 py-4">08-05-2023</td>
-                      <td className=" text-center">jhon wick</td>
-                      <td className=" text-center">
-                        {true ? (
-                          <div>
-                            <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
-                              Completed
-                            </span>
-                          </div>
-                        ) : (
-                          <div>
-                            <span class="bg-red-500 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-800">
-                              Blocked
-                            </span>
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-6 py-4">
-                        {/* {userDetails.isBlocked ? (
-                    <button
-                      type="button"
-                      className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                    >
-                      Unblock
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                    >
-                      Block
-                    </button>
-                  )} */}
-                        1200/-
-                      </td>
-                      <td className="px-6 py-4">
-                        <button
-                          type="button"
-                          class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0"
-                        >
-                          View Details
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
             </div>
-
-            {/* {!userDetails.isVerified ? (
-                <button
-                  onClick={verificationTrainer}
-                  className="block w-full text-white text-sm font-semibold rounded-lg hover:bg-blue-900 focus:outline-none focus:shadow-outline focus:bg-blue-600 bg-blue-600 hover:shadow-xs p-3 my-4"
-                >
-                  Verify Trainer
-                </button>
-              ) : (
-                <button className="block w-full text-white text-sm font-semibold rounded-lg  focus:outline-none focus:shadow-outline  bg-green-700  p-3 my-4 disabled:">
-                  Verified Trainer
-                </button>
-              )} */}
           </div>
         </div>
       </div>

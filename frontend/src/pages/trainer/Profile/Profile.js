@@ -1,14 +1,12 @@
 import React from 'react'
 import TrianerProfile from '../../../components/trainer/trainerProfile/TrianerProfile'
 import NavBar from '../../../components/navbar/Header'
-import FooterComponent from '../../../components/footer/Footer'
 
 function Profile() {
   return (
-    <div>
+    <div className='bg-white'>
       <NavBar />
       <TrianerProfile />
-      {/* <FooterComponent /> */}
     </div>
   )
 }
