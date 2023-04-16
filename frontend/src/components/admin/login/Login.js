@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { adminSchema } from '../../../validations/adminLoginValidation';
 import { useDispatch } from 'react-redux';
-import { userLogin } from '../../../redux/userSlice';
+import { adminLogin } from '../../../redux/adminSlice';
 import { toast } from 'react-toastify';
 
 function Login() {
@@ -17,12 +17,14 @@ function Login() {
     
         console.log(values,'adminlogin called')
         const response = await AdminLogin(values)
-        console.log(response,'response in login ......')
-        console.log(response,'token in login ......')
-        console.log(response.data,'user in login ......')
+        console.log(response,'response ......')
+        console.log(response.data.token,'token......')
+        console.log(response.data.status,'status ......')
+        console.log(response.data.admin,'admin ......')
 
         if(response.data.status === 'Login success'){
-            dispatch(userLogin({token:response.data.token , user: response.data.user}))
+            console.log(response.data.status,'status in if condition......')
+            dispatch(adminLogin({token:response.data.token , admin: response.data.admin}))
             toast.success(response.data.status)
             navigate('/admin/dashboard');
         }else{

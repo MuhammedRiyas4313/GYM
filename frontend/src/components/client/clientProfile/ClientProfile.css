@@ -2,11 +2,3 @@
     height: 70vh !important;
     background-image: url('../../../assets/clientLogin/breadcrumb-bg.jpg');
 }
-
-.details{
-    z-index: -999999;
-}
-
-.dropdown{
-    position: absolute !important ;
-}

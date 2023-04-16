@@ -74,3 +74,18 @@ import { axiosClientInstance } from '../../axios';
       console.log('error in resend otp ......')
     }
   }
+
+  export const getUserDetails = async (userId) => {
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+      try {
+        const response = await axiosClientInstance.get(`/details?userId=${userId}`,config)
+        return response;
+      } catch (error) {
+        console.log('error in getUserdetails......')
+      }
+  }

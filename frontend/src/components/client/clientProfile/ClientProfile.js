@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import "./TrainerProfile.css";
-import { getTrainerDetails } from "../../../axios/services/trainerServices/trainerService";
-import { Link, useLocation } from "react-router-dom";
+import "./ClientProfile.css";
+import { getUserDetails } from "../../../axios/services/clientServices/clientServices";
+import { useLocation } from "react-router-dom";
+import userAvatar from '../../../assets/images/profileLogo.png'
 
-function TrianerProfile() {
+function ClientProfile() {
   const location = useLocation();
-  const trainerId = location.state?.trainerId;
+  const userId = location.state?.userId;
 
   const [option, setOption] = useState(false);
-  const [trainerDetails, setTrainerDetails] = useState({});
+  const [userDetails, setUserDetails] = useState({});
 
   function options() {
     setOption((state) => !state);
@@ -20,7 +21,6 @@ function TrianerProfile() {
     const formated = `${formatDate.getDate()}-${
       formatDate.getMonth() + 1
     }-${formatDate.getFullYear()}`;
-    console.log("formate date is calling.....");
     return formated;
   }
 
@@ -29,14 +29,14 @@ function TrianerProfile() {
   }, [option]);
 
   useEffect(() => {
-    getTrainerDetails(trainerId).then((res) => {
-      console.log(res.data, "response from the backend");
-      setTrainerDetails(res.data);
+    getUserDetails(userId).then((res) => {
+      console.log(res.data, "user details response from the backend");
+      setUserDetails(res.data);
     });
   }, []);
 
-  function courses() {
-    console.log("courses calling");
+  function updataProfile() {
+    console.log("updataProfile calling");
   }
 
   return (
@@ -49,7 +49,7 @@ function TrianerProfile() {
               <div className="image overflow-hidden flex flex-wrap align-middle justify-center ">
                 <div className="w-full flex flex-wrap align-middle justify-center">
                   <div class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600  object-cover ">
-                    <img src={trainerDetails.profile} alt="trainer profile" />
+                    <img src={userAvatar} alt="trainer profile" />
                   </div>
                 </div>
                 <div className="flex w-full md:w-1/3 justify-between">
@@ -186,17 +186,8 @@ function TrianerProfile() {
                             tabIndex={0}
                             className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
                           >
-                            <li onClick={courses}>
-                              <a>Courses</a>
-                            </li>
-                            <li>
-                              <a>Clients</a>
-                            </li>
-                            <li>
+                            <li onClick={updataProfile}>
                               <a>Edit Profile</a>
-                            </li>
-                            <li>
-                              <Link to='/trainer/addcourse'>Add course</Link>
                             </li>
                             <li>
                               <a>My wallet</a>
@@ -217,16 +208,16 @@ function TrianerProfile() {
                   <li className="flex items-center py-3">
                     <span>Name</span>
                     <span className="ml-auto font-bold uppercase">
-                      {trainerDetails.fname}
+                      {userDetails.fname}
                     </span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Email</span>
-                    <span className="ml-auto">{trainerDetails.email}</span>
+                    <span className="ml-auto">{userDetails.email}</span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Phone</span>
-                    <span className="ml-auto">{trainerDetails.phone}</span>
+                    <span className="ml-auto">{userDetails.phone}</span>
                   </li>
                   {/* <li className="flex items-center py-3">
                   <span>Status</span>
@@ -249,7 +240,7 @@ function TrianerProfile() {
                   <li className="flex items-center py-3">
                     <span>Member since</span>
                     <span className="ml-auto">
-                      {formateDate(trainerDetails.createdAt)}
+                      {formateDate(userDetails.createdAt)}
                     </span>
                   </li>
                   {/* <li className="flex items-center py-3">
@@ -270,4 +261,4 @@ function TrianerProfile() {
   );
 }
 
-export default TrianerProfile;
+export default ClientProfile;

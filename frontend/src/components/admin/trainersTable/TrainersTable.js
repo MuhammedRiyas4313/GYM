@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import avatar1 from "../../../assets/images/avatars/1.jpg";
-import { axiosAdminInstance } from "../../../axios/axios";
 import { getTrainers,changeBlockStatus } from "../../../axios/services/adminServices/adminServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";

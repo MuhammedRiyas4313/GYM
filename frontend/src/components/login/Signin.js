@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ClientLogin } from "../../axios/services/clientServices/clientServices";
 import { TrainerLogin } from "../../axios/services/trainerServices/trainerService";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,14 +9,10 @@ import { userLogin } from "../../redux/userSlice";
 import { trainerLogin } from "../../redux/trainerSlice";
 import { toast } from "react-toastify";
 import Loading from "../loadingSpinner/Loading";
-import GoogleButton from "../../assets/googleLogin/GoogleButtonUser";
 import TrainerVerificationModal from "./TrainerVerificationModal";
-import "./Signin.css";
 import GoogleButtonUser from "../../assets/googleLogin/GoogleButtonUser";
 import GoogleButtonTrainer from "../../assets/googleLogin/GoogleButtonTrainer";
-
-const CLIENT_ID =
-  "397923314388-o5r9e2q99aj8mnmfgflm4b4c8lgnru65.apps.googleusercontent.com";
+import "./Signin.css";
 
 function Signin() {
     

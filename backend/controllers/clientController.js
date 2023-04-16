@@ -227,10 +227,19 @@ const clientResendOTP = async (req,res)=>{
 
 }
 
+const clientDetails = async (req,res) => {
+  const { userId } = req.query
+
+    const getDetails = await User.findOne({_id:userId})
+    console.log(getDetails,'user details from the data base......')
+    res.json(getDetails)
+}
+
 module.exports = {
   clientLogin,
   clientRegister,
   clientLoginWithGoogle,
   clientVerifyOTP,
-  clientResendOTP
+  clientResendOTP,
+  clientDetails
 };

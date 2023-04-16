@@ -4,7 +4,8 @@ const {
     
     trainerRegister,
     trainerLogin,
-    trainerLoginWithGoogle
+    trainerLoginWithGoogle,
+    trainerDetails
                    
 } = require('../controllers/trainerController')
 
@@ -12,5 +13,6 @@ const {
 router.post('/register', trainerRegister );
 router.post('/login', trainerLogin );
 router.post('/loginwithgoogle', trainerLoginWithGoogle );
+router.get('/trainerdetails', trainerDetails );
 
 module.exports =  router;

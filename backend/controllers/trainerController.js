@@ -119,8 +119,18 @@ const trainerLoginWithGoogle = async (req, res) => {
   }
 };
 
+const trainerDetails = async (req,res) => {
+  console.log('trainer details..trainer route')
+  const { trainerId } = req.query
+
+    const getDetails = await Trainer.findOne({_id:trainerId})
+    console.log(getDetails,'trainer details from the data base......')
+    res.json(getDetails)
+}
+
 module.exports = {
   trainerRegister,
   trainerLogin,
   trainerLoginWithGoogle,
+  trainerDetails
 };

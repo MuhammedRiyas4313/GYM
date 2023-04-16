@@ -13,33 +13,70 @@ import {
 import Logo from "../../../assets/logo/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import "./SideBar.css";
+import { useDispatch } from "react-redux";
+import { adminLogout } from "../../../redux/adminSlice";
+import LogoutConfoModal from "./LogoutConfoModal";
 
 function SideBar() {
+
   const [sideShow, setSideShow] = useState(true);
-  const [screenSize, setScreenSize] = useState(window.innerWidth);
+  const [modalShow, setModalShow] = useState(false);
+
+  const location = useLocation();
+  const dispatch = useDispatch();
 
   function sideShowUpdater() {
     setSideShow((state) => !state);
     console.log("side show ", sideShow);
   }
 
-  window.addEventListener("resize", () => {
-    if (window.innerWidth > 759) {
-      setSideShow(true);
-    } else {
-      setSideShow(false);
-    }
-  });
+  // window.addEventListener("resize", () => {
+  //   if (window.innerWidth > 759) {
+  //     setSideShow(true);
+  //   } else {
+  //     setSideShow(false);
+  //   }
+  // });
 
-  const location = useLocation();
+  console.log('side bar is rendering.......')
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 759) {
+        setSideShow(true);
+      } else {
+        setSideShow(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  
 
   function isActive(path) {
     return location.pathname === path;
   }
-  
+
+  function logout() {
+    setModalShow(true);
+  }
+
+  function LogoutConfirmed(status) {
+    if (status) {
+     dispatch(adminLogout())
+    }
+  }
+
 
   return (
     <div>
+      {modalShow ? 
+      <LogoutConfoModal
+       setModalShow = {setModalShow}
+       LogoutConfirmed = {LogoutConfirmed}
+      /> : <div></div>}
       <div className="flex md:hidden justify-between p-2 md:p-0 bg-gray-800">
         <a href="" className="flex items-center p-5 justify-center">
           <img src={Logo} className="h-6 sm:h-7" alt="Logo" />
@@ -83,7 +120,12 @@ function SideBar() {
                 <li>
                   <Link
                     to="/admin/dashboard"
-                    className={` ${isActive("/admin/dashboard") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}                  >
+                    className={` ${
+                      isActive("/admin/dashboard")
+                        ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50"
+                        : "hover:bg-slate-300 flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"
+                    }`}
+                  >
                     <svg
                       aria-hidden="true"
                       className="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -100,7 +142,12 @@ function SideBar() {
                 <li>
                   <Link
                     to="/admin/trainers"
-                    className={` ${isActive("/admin/trainers") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}                  >
+                    className={` ${
+                      isActive("/admin/trainers")
+                        ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50"
+                        : "hover:bg-slate-300 flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"
+                    }`}
+                  >
                     <svg
                       aria-hidden="true"
                       className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -121,8 +168,11 @@ function SideBar() {
                 <li className="">
                   <Link
                     to="/admin/users"
-                    className={` ${isActive("/admin/users") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}
-                    // className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white dark:hover:bg-gray-700 active:bg-white"
+                    className={` ${
+                      isActive("/admin/users")
+                        ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50"
+                        : "hover:bg-slate-300 flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"
+                    }`}
                   >
                     <svg
                       aria-hidden="true"
@@ -145,7 +195,11 @@ function SideBar() {
                 <li>
                   <Link
                     to="/admin/transactions"
-                    className={` ${isActive("/admin/transactions") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}
+                    className={` ${
+                      isActive("/admin/transactions")
+                        ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50"
+                        : "hover:bg-slate-300 flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"
+                    }`}
                   >
                     <svg
                       aria-hidden="true"
@@ -168,7 +222,12 @@ function SideBar() {
                 <li>
                   <Link
                     to="/admin/messages"
-                    className={` ${isActive("/admin/messages") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}                  >
+                    className={` ${
+                      isActive("/admin/messages")
+                        ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50"
+                        : "hover:bg-slate-300 flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"
+                    }`}
+                  >
                     <svg
                       aria-hidden="true"
                       className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -190,7 +249,12 @@ function SideBar() {
                 <li>
                   <Link
                     to="/admin/courses"
-                    className={` ${isActive("/admin/courses") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}                  >
+                    className={` ${
+                      isActive("/admin/courses")
+                        ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50"
+                        : " hover:bg-slate-300 flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"
+                    }`}
+                  >
                     <svg
                       aria-hidden="true"
                       className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -212,7 +276,12 @@ function SideBar() {
                 <li>
                   <Link
                     to="/admin/notifications"
-                    className={` ${isActive("/admin/notifications") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}                  >
+                    className={` ${
+                      isActive("/admin/notifications")
+                        ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50"
+                        : "hover:bg-slate-300 flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"
+                    }`}
+                  >
                     <svg
                       aria-hidden="true"
                       className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -231,10 +300,8 @@ function SideBar() {
                     </span>
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    to="/admin/dashboard"
-                    className={` ${isActive("/admin/dashboard") ? "flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 bg-gray-50" : "flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700"}`}                  >
+                <li onClick={logout}>
+                  <Link className="flex items-center p-2 text-white rounded-lg dark:text-white dark:hover:bg-gray-700 hover:bg-slate-300">
                     <svg
                       aria-hidden="true"
                       className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -249,7 +316,7 @@ function SideBar() {
                       ></path>
                     </svg>
                     <span className="flex-1 ml-3 whitespace-nowrap text-gray-500">
-                      Sign Up
+                      Sign Out
                     </span>
                   </Link>
                 </li>
