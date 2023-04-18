@@ -21,6 +21,8 @@ import Profile from './pages/trainer/Profile/Profile';
 import Course from './pages/admin/courses/Course';
 import ClienProfile from './pages/client/Profile/Profile'
 import AddCourses from './pages/trainer/AddCourse/AddCourses';
+import CourseList from './pages/courses/CourseList';
+import CourseDetail from './pages/courseDetails/CourseDetail';
 
 function App() {
   return (
@@ -32,6 +34,9 @@ function App() {
           <Route path="/login" element={<ClientLogin />} />
           <Route path="/clientregister" element={<ClientRegister />} />
           <Route path="/client/profile" element={<ClienProfile />} />
+
+          <Route path="/courses" element={<CourseList />} />
+          <Route path="/course/details" element={<CourseDetail />} />
 
 
           <Route path="/verification/:id" element={<OtpVerfication />} />

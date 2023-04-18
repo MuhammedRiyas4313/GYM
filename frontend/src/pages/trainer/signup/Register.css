@@ -1,0 +1,14 @@
+.spinnerouter{
+    background-color: transparent !important;
+    position: fixed;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+    z-index: 99999 !important;
+    /* background-image: url('../../../assets/signup/fee54690963240994bf2b3c6342bc89a.jpg'); */
+}
+.signuppageouter{
+    position: relative;
+}

@@ -89,3 +89,18 @@ import { axiosClientInstance } from '../../axios';
         console.log('error in getUserdetails......')
       }
   }
+
+  export const getCourses = async () => {
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+      try {
+        const response = await axiosClientInstance.get(`/courses`,config)
+        return response;
+      } catch (error) {
+        console.log('error in getCourses......')
+      }
+  }

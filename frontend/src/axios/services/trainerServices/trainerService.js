@@ -64,3 +64,18 @@ export const trainerRegister = async (value) => {
       }
   }
 
+
+  export const addCourse = async (value) => {
+  console.log('add course api')
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.post('/addcourse', value, config);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };

@@ -5,22 +5,20 @@ import { trainerSchema } from "../../../validations/trainerSignupValidation";
 import { trainerRegister } from "../../../axios/services/trainerServices/trainerService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Loading from "../../loadingSpinner/Loading";
-import SuccessModal from "./SuccessModal";
 import "./TrainerRegister.css";
 
-function TrainerRegister() {
+function TrainerRegister(props) {
 
   const [successModal , setSuccessModal] = useState(false)
 
   const navigate = useNavigate();
-  const [loader, setLoader] = useState(false);
+
 
   const [filef, setFilef] = useState([]);
   const [fileb, setFileb] = useState([]);
 
   const onSubmit = async (values) => {
-    setLoader(true);
+    props.setLoader(true);
     const response = await trainerRegister({
       values,
       file1: filef,
@@ -28,11 +26,11 @@ function TrainerRegister() {
     });
     console.log(response);
     if (response.status === "Successfully created Account") {
-      setLoader(false);
+      props.setLoader(false);
       toast.success(response.status);
       navigate("/trainersignupsuccess");
     } else if (response.status) {
-      setLoader(false);
+      props.setLoader(false);
       toast.error(response.status);
     }
     console.log(response);
@@ -84,10 +82,8 @@ function TrainerRegister() {
     });
 
   return (
-    <div>
-      { loader ? (
-        <div className='spinnerouter bg-black flex justify-center align-middle'><Loading /></div>
-      ) : (
+    <div className="signuppageouter">
+     
         
         <div className="signupouter md:pl-64 md:pr-64 p-5 ">
           <form
@@ -115,7 +111,6 @@ function TrainerRegister() {
                       <input
                         type="text"
                         name="fname"
-                        id="first-name"
                         value={values.fname}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -374,7 +369,6 @@ function TrainerRegister() {
             </div>
           </form>
         </div>
-      )}
     </div>
   );
 }

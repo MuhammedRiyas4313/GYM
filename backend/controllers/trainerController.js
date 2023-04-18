@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const Trainer = require("../models/trainer");
+const Course = require("../models/course");
 const cloudinary = require("cloudinary").v2;
 const bcrypt = require("bcrypt");
 
@@ -41,7 +42,6 @@ const trainerRegister = async (req, res) => {
       email: values.email,
       phone: values.phone,
       password: hashedPassword,
-      coursecharge: values.charge,
       profile: file1.url,
       certificate: file2.url,
       link: values.link,
@@ -128,9 +128,53 @@ const trainerDetails = async (req,res) => {
     res.json(getDetails)
 }
 
+const addCourse = async (req,res) => {
+  console.log('add course is calling.....')
+
+  const Image1 = req.body.file1;
+  const Image2 = req.body.file2;
+  const intVideo = req.body.filev;
+  const values = req.body.values
+  const trainerId = req.body.trainerId
+
+  const cover1  = await cloudinary.uploader.upload(Image1, {
+    folder: "CourseCover",
+  });
+
+  const cover2  = await cloudinary.uploader.upload(Image2, {
+    folder: "CourseCover",
+  });
+
+  const introVideo  = await cloudinary.uploader.upload(intVideo, {
+    folder: "CourseIntro",
+    resource_type: "video",
+    chunk_size: 6000000,
+  });
+
+  // console.log(cover1,'cover 1')
+  // console.log(cover2, 'cover 2')
+  // console.log(introVideo, 'intro video')
+  
+
+  await Course.create({
+    coursename: values.coursename,
+    trainerId: trainerId,
+    timing: values.timing,
+    charge: values.charge,
+    description: values.description,
+    cover1: cover1.secure_url,
+    cover2: cover2.secure_url,
+    introVideo: introVideo.secure_url
+  });
+
+  res.json({status : 'Course added successfully'})
+
+}
+
 module.exports = {
   trainerRegister,
   trainerLogin,
   trainerLoginWithGoogle,
-  trainerDetails
+  trainerDetails,
+  addCourse
 };

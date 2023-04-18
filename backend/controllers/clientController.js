@@ -4,6 +4,7 @@ require("dotenv").config();
 const nodemailer = require("nodemailer");
 const User = require("../models/user");
 const Otp = require("../models/otp");
+const Course = require("../models/course");
 
 let transporter = nodemailer.createTransport({
   // true for 465, false for other ports
@@ -235,11 +236,19 @@ const clientDetails = async (req,res) => {
     res.json(getDetails)
 }
 
+const courses = async(req,res) => {
+   console.log('courses get calling.....')
+   const getCourses = await Course.find({}).populate('trainerId')
+   console.log(getCourses,'getCourses')
+   res.json(getCourses)
+}
+
 module.exports = {
   clientLogin,
   clientRegister,
   clientLoginWithGoogle,
   clientVerifyOTP,
   clientResendOTP,
-  clientDetails
+  clientDetails,
+  courses
 };

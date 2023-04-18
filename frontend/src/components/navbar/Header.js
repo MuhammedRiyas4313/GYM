@@ -128,7 +128,7 @@ function NavBar() {
             Home
           </Navbar.Link>
         </Link>
-        <Navbar.Link href="/" className="navbarlink">
+        <Navbar.Link href="/courses" className="navbarlink">
           Courses
         </Navbar.Link>
         <Navbar.Link href="/" className="navbarlink">

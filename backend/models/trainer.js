@@ -65,13 +65,6 @@ const TrainerSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    coursecharge: {
-        type: Number,
-        trim: true
-    },
-    availableSlots: [{
-        type: String,
-    }],
     wallet: {
         type: Number,
         trim: true
