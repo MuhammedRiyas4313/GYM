@@ -5,6 +5,7 @@ const nodemailer = require("nodemailer");
 const User = require("../models/user");
 const Otp = require("../models/otp");
 const Course = require("../models/course");
+const Trainer = require("../models/trainer");
 
 let transporter = nodemailer.createTransport({
   // true for 465, false for other ports
@@ -58,26 +59,23 @@ const clientLoginWithGoogle = async (req, res) => {
     const { email, password } = req.body;
     const oldUser = await User.findOne({ email });
 
-    if (oldUser.isVerified === false){
+    if (oldUser.isVerified === false) {
       sendOtpVerification(oldUser, res);
       console.log(oldUser, "olduser.....");
-    }else{
+    } else {
       if (!oldUser) return res.json({ status: "User doesn't exist" });
 
       if (oldUser.isBlocked === true)
         return res.json({ status: "User is blocked" });
-        
+
       const toke = jwt.sign(
         { name: oldUser.fname, email: oldUser.email, id: oldUser._id },
         "ClientTokenSecret",
         { expiresIn: "5h" }
       );
-  
+
       res.json({ token: toke, status: "Login success", user: oldUser });
-
     }
-
-    
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
     console.log(error);
@@ -149,7 +147,7 @@ const sendOtpVerification = async (result, res) => {
       } else {
         console.log(info, "info from otpmailer");
         res.json({
-          status: 'User is not verified',
+          status: "User is not verified",
           message: `Verification OTP has been sent to ${info.accepted[0]} !`,
           data: {
             userId: result._id,
@@ -168,80 +166,96 @@ const clientVerifyOTP = async (req, res) => {
     const userId = req.query.userId;
     let { otp1, otp2, otp3, otp4 } = req.body;
     const otp = "" + otp1 + otp2 + otp3 + otp4;
-    console.log(otp,'concatenated otp ....')
+    console.log(otp, "concatenated otp ....");
     if (!userId || !otp) {
       res.json({ message: "Empty otp details are not allowed" });
-      console.log('otp empty')
+      console.log("otp empty");
     } else {
       const userOTPVerificationRecords = await Otp.find({ userId });
       if (userOTPVerificationRecords.length <= 0) {
-        console.log('no records')
+        console.log("no records");
         //no records found
-        res
-          .json({
-            message:
-              "Account record doesn't exist or has been verified already. Please sign up or log in",
-          });
+        res.json({
+          message:
+            "Account record doesn't exist or has been verified already. Please sign up or log in",
+        });
       } else {
         //user otp record exists
-        const { expiresAt } = userOTPVerificationRecords[userOTPVerificationRecords.length-1];
-        const hashedOTP = userOTPVerificationRecords[userOTPVerificationRecords.length-1].otp;
-        console.log(hashedOTP,'0 th otp.....')
-        console.log(otp,'hashed password')
+        const { expiresAt } =
+          userOTPVerificationRecords[userOTPVerificationRecords.length - 1];
+        const hashedOTP =
+          userOTPVerificationRecords[userOTPVerificationRecords.length - 1].otp;
+        console.log(hashedOTP, "0 th otp.....");
+        console.log(otp, "hashed password");
         if (expiresAt < Date.now()) {
-          console.log('otp expired')
+          console.log("otp expired");
           //user otp record has expired
           await Otp.deleteMany({ userId });
           res.json({ status: "OTP has expired. Please request again." });
         } else {
           const validOTP = await bcrypt.compare(otp, hashedOTP);
-          console.log(validOTP,'comparison')
+          console.log(validOTP, "comparison");
           if (!validOTP) {
-            console.log('otp not valid')
+            console.log("otp not valid");
             //supllied otp is wrong
             res.json({ status: "Invalid OTP passed. Check your inbox." });
           } else {
             //success
-            console.log('otp confirmed')
+            console.log("otp confirmed");
             await User.updateOne({ _id: userId }, { isVerified: true });
             await Otp.deleteMany({ userId });
-            res.json({status: "User email verified successfully",});
+            res.json({ status: "User email verified successfully" });
           }
         }
       }
     }
   } catch (error) {
-    console.log(error,'error in the verifiction catch block');
+    console.log(error, "error in the verifiction catch block");
     res.json({ status: "Unable to verify" });
   }
 };
 
-const clientResendOTP = async (req,res)=>{
-
+const clientResendOTP = async (req, res) => {
   const userId = req.query.userId;
-  const oldUser = await User.findOne({ _id:userId });
-  console.log(oldUser,'user find from resend otp...')
-  sendOtpVerification(oldUser,res)
-  
+  const oldUser = await User.findOne({ _id: userId });
+  console.log(oldUser, "user find from resend otp...");
+  sendOtpVerification(oldUser, res);
+
   // const userOTPVerificationRecords = await Otp.find({ userId });
   // if(userOTPVerificationRecords.length )
+};
 
-}
+const clientDetails = async (req, res) => {
+  const { userId } = req.query;
 
-const clientDetails = async (req,res) => {
-  const { userId } = req.query
+  const getDetails = await User.findOne({ _id: userId });
+  console.log(getDetails, "user details from the data base......");
+  res.json(getDetails);
+};
 
-    const getDetails = await User.findOne({_id:userId})
-    console.log(getDetails,'user details from the data base......')
-    res.json(getDetails)
-}
+const courses = async (req, res) => {
+  console.log("courses get calling.....");
+  const getCourses = await Course.find({}).populate("trainerId");
+  console.log(getCourses, "getCourses");
+  res.json(getCourses);
+};
 
-const courses = async(req,res) => {
-   console.log('courses get calling.....')
-   const getCourses = await Course.find({}).populate('trainerId')
-   console.log(getCourses,'getCourses')
-   res.json(getCourses)
-}
+const courseDetails = async (req, res) => {
+  console.log("courseDetails is calling......");
+
+  const { courseId } = req.query;
+
+  const getDetails = await Course.findOne({ _id: courseId }).populate('trainerId');
+  console.log(getDetails, "course details from the data base......");
+  res.json(getDetails);
+};
+
+const trainers = async (req, res) => {
+  console.log("trainers get calling.....");
+  const getTrainers = await Trainer.find({})
+  console.log(getTrainers, "getTrainers");
+  res.json(getTrainers);
+};
 
 module.exports = {
   clientLogin,
@@ -250,5 +264,7 @@ module.exports = {
   clientVerifyOTP,
   clientResendOTP,
   clientDetails,
-  courses
+  courses,
+  courseDetails,
+  trainers
 };

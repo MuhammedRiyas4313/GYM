@@ -23,6 +23,7 @@ import ClienProfile from './pages/client/Profile/Profile'
 import AddCourses from './pages/trainer/AddCourse/AddCourses';
 import CourseList from './pages/courses/CourseList';
 import CourseDetail from './pages/courseDetails/CourseDetail';
+import TrainersList from './pages/trainers/TrainersList';
 
 function App() {
   return (
@@ -37,6 +38,8 @@ function App() {
 
           <Route path="/courses" element={<CourseList />} />
           <Route path="/course/details" element={<CourseDetail />} />
+          <Route path="/trainers" element={<TrainersList />} />
+          <Route path="/trainers/details" element={<CourseDetail />} />
 
 
           <Route path="/verification/:id" element={<OtpVerfication />} />

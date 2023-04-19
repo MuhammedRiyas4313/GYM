@@ -15,8 +15,5 @@ export const courseSchema = yup.object().shape({
 description: yup
     .string()
     .min(2, "Description must be at least 2 characters")
-    .required("Required"),
-timing: yup
-    .string()
-    .required("Required"),
+    .required("Required")
 });

@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 function Courses() {
 
   const [courseList, setCourseList] = useState([]);
+  const [mouseOver , setMouseOver] = useState('')
+  const [courseCover , setCourseCover] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -21,6 +23,16 @@ function Courses() {
     navigate("/course/details", { state: { courseId: courseId } });
   }
 
+  function changeCover1(val){
+    setMouseOver(val)
+    setCourseCover(true)
+  }
+
+  function changeCover2(val){
+    setMouseOver(val)
+    setCourseCover(false)
+  }
+
   return (
     <div className="bg-black w-full h-full">
       <CourseHero />
@@ -30,17 +42,17 @@ function Courses() {
         </div>
       </div>
       <div className="flex flex-wrap">
-        {courseList?.map((val) => {
+        { courseList?.map((val) => {
           return (
-            <section className="choseus-section spad  flex flex-wrap">
-              <div className="card card-compact bg-base-100 md:w-4-12 shadow-xl mx-5 my-5 border flex flex-wrap ">
+            <section className="choseus-section spad  flex flex-wrap cursor-pointer mx-auto" >
+              <div className="card card-compact bg-base-100 md:w-4-12 shadow-xl mx-5 my-5 border flex flex-wrap" onMouseOver={()=>changeCover1(val._id)} onMouseLeave={()=>changeCover2(val._id)}>
                 <figure>
-                  <img src={val.cover1} alt="Shoes" className="w-80 h-56" />
+                  <img src={ courseCover && mouseOver === val._id ? val.cover2 : val.cover1 } alt="Shoes" className="w-80 h-56" />
                 </figure>
-                <div className="card-body bg-black">
+                <div className="card-body bg-black flex items-center">
                   <h2 className="text-white card-title">{val.coursename}</h2>
                   <p className="text-white">Trainer : {val.trainerId.fname}</p>
-                  <p className="text-white">Time : {val.timing}</p>
+                  <p className="text-white">Fee : {val.charge} ₹</p>
                   <div className="card-actions justify-end">
                     <button
                       className="btn btn-primary"

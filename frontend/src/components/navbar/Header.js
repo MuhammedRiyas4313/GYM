@@ -8,11 +8,9 @@ import Modal from "./Modal";
 import "./Header.css";
 
 function NavBar() {
-
   const [logoutModalShow, setlogoutModalShow] = useState(false);
   const [loged, setLoged] = useState("");
-  const [buttonHide , setButtonHide ] = useState(true)
-
+  const [buttonHide, setButtonHide] = useState(true);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -22,7 +20,7 @@ function NavBar() {
 
   function showProfile(Id) {
     console.log(Id, "show profile");
-    navigate('/trainer/profile')
+    navigate("/trainer/profile");
     if (Trainer?.trainer) {
       navigate("/trainer/profile", { state: { trainerId: Id } });
       console.log("trainer profile");
@@ -35,8 +33,7 @@ function NavBar() {
 
   useEffect(() => {
     logedPerson();
-  },[loged]);
-
+  }, [loged]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -51,7 +48,6 @@ function NavBar() {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
 
   function logedPerson() {
     if (Trainer?.trainer) {
@@ -74,15 +70,21 @@ function NavBar() {
       if (Trainer?.trainer) {
         console.log("trainer logout ");
         dispatch(trainerLogout());
-        setLoged("")
-        navigate('/login')
+        setLoged("");
+        navigate("/login");
       } else if (User.user) {
         console.log("user logout ");
         dispatch(userLogout());
-        setLoged("")
-        navigate('/login')
+        setLoged("");
+        navigate("/login");
       }
     }
+  }
+
+  function navGate(url){
+    console.log(url,'nav calling.....')
+    navigate(url)
+
   }
 
   return (
@@ -102,58 +104,67 @@ function NavBar() {
       </Link>
       <div className="flex md:order-2 ">
         {loged && (
-            <Button onClick={() => showProfile(loged._id)} className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase">
-              {loged.fname}
-            </Button>
-        )}
-         { buttonHide && <div>{loged ? (
           <Button
+            onClick={() => showProfile(loged._id)}
             className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase"
-            onClick={logout}
           >
-            Logout
+            {loged.fname}
           </Button>
-        ) : (
-          <Link to="/login">
-            <Button className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase">
-              Login
-            </Button>
-          </Link>
-        )}</div>}
+        )}
+        {buttonHide && (
+          <div>
+            {loged ? (
+              <Button
+                className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase"
+                onClick={logout}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Link to="/login">
+                <Button className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase">
+                  Login
+                </Button>
+              </Link>
+            )}
+          </div>
+        )}
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse>
-        <Link to="/">
-          <Navbar.Link href="/" className="navbarlink hover:bg-orange-500">
-            Home
-          </Navbar.Link>
-        </Link>
-        <Navbar.Link href="/courses" className="navbarlink">
+        <Navbar.Link onClick={() => navGate('/')} className="navbarlink hover:bg-orange-500 cursor-pointer">
+          Home
+        </Navbar.Link>
+        <Navbar.Link onClick={() => navGate('/courses')} className="navbarlink cursor-pointer">
           Courses
         </Navbar.Link>
-        <Navbar.Link href="/" className="navbarlink">
+        <Navbar.Link onClick={() => navGate('/trainers')} className="navbarlink cursor-pointer">
           Trainers
         </Navbar.Link>
-        <Navbar.Link href="/" className="navbarlink">
+        <Navbar.Link onClick={() => navGate('/')} className="navbarlink cursor-pointer">
           About
         </Navbar.Link>
-        <Navbar.Link href="/" className="navbarlink">
+        <Navbar.Link onClick={() => navGate('/')} className="navbarlink cursor-pointer">
           Contact
         </Navbar.Link>
-        { !buttonHide && <div>{loged ? (
-          <Button
-            className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase"
-            onClick={logout}
-          >
-            Logout
-          </Button>
-        ) : (
-          <Link to="/login">
-            <Button className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase">
-              Login
-            </Button>
-          </Link>
-        )}</div>}
+        {!buttonHide && (
+          <div>
+            {loged ? (
+              <Button
+                className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase"
+                onClick={logout}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Link to="/login">
+                <Button className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase">
+                  Login
+                </Button>
+              </Link>
+            )}
+          </div>
+        )}
       </Navbar.Collapse>
     </Navbar>
   );

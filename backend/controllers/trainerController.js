@@ -131,11 +131,13 @@ const trainerDetails = async (req,res) => {
 const addCourse = async (req,res) => {
   console.log('add course is calling.....')
 
-  const Image1 = req.body.file1;
-  const Image2 = req.body.file2;
-  const intVideo = req.body.filev;
-  const values = req.body.values
-  const trainerId = req.body.trainerId
+  try {
+
+    const Image1 = req.body.file1;
+    const Image2 = req.body.file2;
+    const intVideo = req.body.filev;
+    const values = req.body.values;
+    const trainerId = req.body.trainerId;
 
   const cover1  = await cloudinary.uploader.upload(Image1, {
     folder: "CourseCover",
@@ -151,15 +153,9 @@ const addCourse = async (req,res) => {
     chunk_size: 6000000,
   });
 
-  // console.log(cover1,'cover 1')
-  // console.log(cover2, 'cover 2')
-  // console.log(introVideo, 'intro video')
-  
-
   await Course.create({
     coursename: values.coursename,
     trainerId: trainerId,
-    timing: values.timing,
     charge: values.charge,
     description: values.description,
     cover1: cover1.secure_url,
@@ -168,6 +164,14 @@ const addCourse = async (req,res) => {
   });
 
   res.json({status : 'Course added successfully'})
+    
+  } catch (error) {
+
+    console.log(error.message)
+
+    res.json({status : `${error.message} Something wrong !`})
+
+  }
 
 }
 

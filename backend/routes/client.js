@@ -7,7 +7,9 @@ const {
   clientVerifyOTP,
   clientResendOTP,
   clientDetails,
-  courses
+  courses,
+  courseDetails,
+  trainers
 } = require("../controllers/clientController");
 /* GET home page. */
 router.post("/register", clientRegister);
@@ -17,5 +19,7 @@ router.post("/verifyotp", clientVerifyOTP);
 router.post("/resendotp", clientResendOTP);
 router.get("/details", clientDetails);
 router.get("/courses", courses);
+router.post("/course/details", courseDetails);
+router.get("/trainers", trainers);
 
 module.exports = router;

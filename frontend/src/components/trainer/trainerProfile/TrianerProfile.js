@@ -4,6 +4,7 @@ import { getTrainerDetails } from "../../../axios/services/trainerServices/train
 import { Link, useLocation } from "react-router-dom";
 
 function TrianerProfile() {
+  
   const location = useLocation();
   const trainerId = location.state?.trainerId;
 
@@ -29,7 +30,7 @@ function TrianerProfile() {
   }, [option]);
 
   useEffect(() => {
-    getTrainerDetails(trainerId).then((res) => {
+    getTrainerDetails(location.state?.trainerId).then((res) => {
       console.log(res.data, "response from the backend");
       setTrainerDetails(res.data);
     });

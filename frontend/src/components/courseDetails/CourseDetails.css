@@ -1,0 +1,10 @@
+.dropdown{
+    position: static !important;
+}
+
+.dropouter{
+    position:relative !important
+}
+.dropdownlist{
+    position: absolute !important;
+}

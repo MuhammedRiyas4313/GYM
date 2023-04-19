@@ -7,6 +7,7 @@ const CourseSchema = mongoose.Schema(
       trim: true,
       required: true,
     },
+    type:String,
     trainerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Trainer",
@@ -16,16 +17,12 @@ const CourseSchema = mongoose.Schema(
       {
         user: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Trainer",
+          ref: "user",
         },
-        paymentStatus: String,    
+        paymentStatus: String,
+        bookedSlote: String    
       },
     ],
-    timing: {
-      type: String,
-      trim: true,
-      required: true,
-    },
     charge: {
       type: Number,
       trim: true,

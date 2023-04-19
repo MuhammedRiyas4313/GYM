@@ -234,10 +234,6 @@ function ClientProfile() {
                   </span>
                 </li> */}
                   <li className="flex items-center py-3">
-                    <span>Designation</span>
-                    <span className="ml-auto">Trainer</span>
-                  </li>
-                  <li className="flex items-center py-3">
                     <span>Member since</span>
                     <span className="ml-auto">
                       {formateDate(userDetails.createdAt)}
