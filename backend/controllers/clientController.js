@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { ObjectId } = require("mongodb");
 require("dotenv").config();
 const nodemailer = require("nodemailer");
 const User = require("../models/user");
@@ -216,46 +217,99 @@ const clientVerifyOTP = async (req, res) => {
 };
 
 const clientResendOTP = async (req, res) => {
-  const userId = req.query.userId;
-  const oldUser = await User.findOne({ _id: userId });
-  console.log(oldUser, "user find from resend otp...");
-  sendOtpVerification(oldUser, res);
-
-  // const userOTPVerificationRecords = await Otp.find({ userId });
-  // if(userOTPVerificationRecords.length )
+  try {
+    const userId = req.query.userId;
+    const oldUser = await User.findOne({ _id: userId });
+    console.log(oldUser, "user find from resend otp...");
+    sendOtpVerification(oldUser, res);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getTrainerDetails client");
+  }
 };
 
 const clientDetails = async (req, res) => {
-  const { userId } = req.query;
+  try {
+    const { userId } = req.query;
 
-  const getDetails = await User.findOne({ _id: userId });
-  console.log(getDetails, "user details from the data base......");
-  res.json(getDetails);
+    const getDetails = await User.findOne({ _id: userId });
+    console.log(getDetails, "user details from the data base......");
+    res.json(getDetails);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in clientDetails client");
+  }
 };
 
 const courses = async (req, res) => {
-  console.log("courses get calling.....");
-  const getCourses = await Course.find({}).populate("trainerId");
-  console.log(getCourses, "getCourses");
-  res.json(getCourses);
+  try {
+    console.log("courses get calling.....");
+    const getCourses = await Course.find({}).populate("trainerId");
+    console.log(getCourses, "getCourses");
+    res.json(getCourses);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in courses client");
+  }
 };
 
 const courseDetails = async (req, res) => {
-  console.log("courseDetails is calling......");
+  try {
+    console.log("courseDetails is calling......");
 
-  const { courseId } = req.query;
+    const { courseId } = req.query;
 
-  const getDetails = await Course.findOne({ _id: courseId }).populate('trainerId');
-  console.log(getDetails, "course details from the data base......");
-  res.json(getDetails);
+    const getDetails = await Course.findOne({ _id: courseId }).populate(
+      "trainerId"
+    );
+    console.log(getDetails, "course details from the data base......");
+    res.json(getDetails);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in courseDetails client");
+  }
 };
 
 const trainers = async (req, res) => {
-  console.log("trainers get calling.....");
-  const getTrainers = await Trainer.find({})
-  console.log(getTrainers, "getTrainers");
-  res.json(getTrainers);
+  try {
+    console.log("trainers get calling.....");
+    const getTrainers = await Trainer.find({});
+    console.log(getTrainers, "getTrainers");
+    res.json(getTrainers);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in Trainers client");
+  }
 };
+
+const trainerDetails = async (req, res) => {
+  try {
+    const { trainerId } = req.query;
+    const getDetails = await Trainer.findOne({ _id: trainerId });
+
+    console.log("trainers details calling......");
+    res.json(getDetails);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerDetails client");
+  }
+};
+
+const trainerCourseList = async (req,res) => {
+  console.log('ind trainer course list ........')
+  try {
+
+    const { trainerId } = req.query;
+    console.log(trainerId,'trainer id from the query')
+    const getCourses = await Course.find({trainerId:new ObjectId(trainerId)})
+    console.log(getCourses,"ind trainerCourseList calling......");
+    res.json(getCourses);
+
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerDetails client");
+  }
+}
 
 module.exports = {
   clientLogin,
@@ -266,5 +320,7 @@ module.exports = {
   clientDetails,
   courses,
   courseDetails,
-  trainers
+  trainers,
+  trainerDetails,
+  trainerCourseList
 };

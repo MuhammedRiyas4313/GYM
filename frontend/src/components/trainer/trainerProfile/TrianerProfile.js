@@ -29,8 +29,11 @@ function TrianerProfile() {
     console.log("close dropdown");
   }, [option]);
 
+  console.log(trainerId,'trainerId.....')
+  console.log(location.state?.trainerId,'location.state?.trainerId.....')
+
   useEffect(() => {
-    getTrainerDetails(location.state?.trainerId).then((res) => {
+    getTrainerDetails(trainerId).then((res) => {
       console.log(res.data, "response from the backend");
       setTrainerDetails(res.data);
     });

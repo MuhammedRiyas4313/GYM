@@ -112,10 +112,10 @@ import { axiosClientInstance } from '../../axios';
       },
     };
     try {
-      const response = await axiosClientInstance.post(`/course/details?courseId=${courseId}`,config)
+      const response = await axiosClientInstance.get(`/course/details?courseId=${courseId}`,config)
       return response;
     } catch (error) {
-      console.log('error in resend otp ......')
+      console.log('error in getCourseDetails ......')
     }
   }
 
@@ -132,4 +132,32 @@ import { axiosClientInstance } from '../../axios';
       } catch (error) {
         console.log('error in getTrainers......')
       }
+  }
+
+  export const getTrainerDetails = async (trainerId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosClientInstance.get(`/trainer/details?trainerId=${trainerId}`,config)
+      return response;
+    } catch (error) {
+      console.log('error in getTrainerDetails ......')
+    }
+  }
+
+  export const getTrainerCourseList = async (trainerId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosClientInstance.get(`/trainer/courses?trainerId=${trainerId}`,config)
+      return response;
+    } catch (error) {
+      console.log('error in getTrainerDetails ......')
+    }
   }

@@ -4,20 +4,28 @@ import { getTrainers } from "../../axios/services/clientServices/clientServices"
 import { useNavigate } from "react-router-dom";
 
 function Trainers() {
-
   const [trainersList, setTrainersList] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     getTrainers().then((res) => {
-        console.log(res.data, "response from the getTrainers api");
-        setTrainersList(res.data);
-      });
-  },[]);
+      console.log(res.data, "response from the getTrainers api");
+      setTrainersList(res.data);
+    });
+  }, []);
+
+  function formateDate(date) {
+    const formatDate = new Date(date);
+    const formated = `${formatDate.getDate()}-${
+      formatDate.getMonth() + 1
+    }-${formatDate.getFullYear()}`;
+    console.log("formate date is calling.....");
+    return formated;
+  }
 
   function viewDetails(trainerId) {
     console.log(trainerId, "view details trainer ");
-    navigate("/trainers/details", { state: { trainerId: trainerId } });
+    navigate("/trainer/details", { state: { trainerId: trainerId } });
   }
 
   return (
@@ -31,16 +39,23 @@ function Trainers() {
       <div className="flex flex-wrap ">
         {trainersList?.map((val) => {
           return (
-            <section className="choseus-section spad  flex flex-wrap mx-auto">
-              <div className="card card-compact bg-base-100 md:w-4-12 shadow-xl mx-5 my-5 border flex flex-wrap ">
-                <figure className="">
-                  <img src={val.profile} alt="Shoes" className="w-80 h-80  object-cover trainerProImg" />
+            <section className="choseus-section spad  flex flex-wrap cursor-pointer mx-auto">
+              <div className="card card-compact bg-black md:w-4-12 shadow-xl mx-5 my-5 border flex flex-wrap">
+                <figure>
+                  <img
+                    src={val.profile}
+                    alt="Shoes"
+                    className="w-80 h-80 object-cover"
+                  />
                 </figure>
-                <div className="card-body bg-black">
-                  <h2 className="text-white card-title">{val.fname}</h2>
-                  <p className="text-white">Joined : </p>
-                  <p className="text-white">Time : {val.timing}</p>
-                  <div className="card-actions justify-end">
+                <div className="card-body bg-black flex items-center">
+                  <h2 className="text-white card-title uppercase">{val.fname}</h2>
+                  <p className="text-white">Rating : ⭐⭐⭐⭐⭐ </p>
+                  <p className="text-white">
+                    Member since : {formateDate(val.createdAt)}
+                  </p>
+
+                  <div className="card-actions justify-end m-3">
                     <button
                       className="btn btn-primary"
                       onClick={() => viewDetails(val._id)}

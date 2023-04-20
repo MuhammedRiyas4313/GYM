@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getCourseDetails } from "../../axios/services/clientServices/clientServices";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import "./CourseDetails.css";
 
 function CourseDetails() {
+
+  const navigate = useNavigate()
   const [courseDetails, setCourseDetails] = useState({});
   const [trainer, setTrainer] = useState({});
   const [option, setOption] = useState(false);
@@ -13,6 +15,7 @@ function CourseDetails() {
 
   function enroll (){
     console.log('enroll fn calling.....')
+    navigate('/enroll')
   }
 
   useEffect(() => {
@@ -45,7 +48,7 @@ function CourseDetails() {
             <div className="bg-gray-100 p-3">
               <div className="image overflow-hidden flex align-middle justify-center mt-10">
                 <img
-                  className="rounded w-64 h-72"
+                  className="rounded w-64 h-72 "
                   src={trainer.profile}
                   alt="Extra large avatar"
                 ></img>
@@ -70,6 +73,12 @@ function CourseDetails() {
                         </span>
                     </span>
                   </li> */}
+                <li className="flex items-center py-3">
+                  <span>Rating </span>
+                  <span className="ml-auto">
+                  ⭐⭐⭐⭐ 
+                  </span>
+                </li>
                 <li className="flex items-center py-3">
                   <span>Member since</span>
                   <span className="ml-auto">
@@ -177,10 +186,10 @@ function CourseDetails() {
                       {courseDetails.clients?.length}
                     </div>
                   </div>
-                  <div className="grid grid-cols-2">
+                  {/* <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Timing</div>
                     <div className="px-4 py-2">{courseDetails.timing}</div>
-                  </div>
+                  </div> */}
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">
                       Charge / Month
@@ -210,14 +219,14 @@ function CourseDetails() {
               <div className="mb-5 flex flex-wrap bg-gray-100 p-10 justify-around">
                 <div className="image overflow-hidden flex align-middle justify-center">
                   <img
-                    className="rounded w-96 h-56"
+                    className="rounded w-96 h-96 object-cover"
                     src={courseDetails.cover1}
                     alt="Extra large avatar"
                   ></img>
                 </div>
                 <div className="image overflow-hidden flex align-middle justify-center">
                   <img
-                    className="rounded w-96 h-56"
+                    className="rounded w-96 h-96 object-cover"
                     src={courseDetails.cover2}
                     alt="Extra large avatar"
                   ></img>

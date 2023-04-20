@@ -8,7 +8,7 @@ import { Textarea } from "@material-tailwind/react";
 import Loading from "../../loadingSpinner/Loading";
 import { addCourse } from "../../../axios/services/trainerServices/trainerService";
 
-function AddCourse() {
+function EnrollCourse() {
 
   const [successModal, setSuccessModal] = useState(false);
 
@@ -25,23 +25,23 @@ function AddCourse() {
   const onSubmit = async (values) => {
     setLoader(true);
     console.log("onsubmit working....");
-    const response = await addCourse({
-      values,
-      file1: filef,
-      file2: fileb,
-      filev: filev,
-      trainerId: trainerId.trainer._id
-    });
-    console.log(response,'this is response');
-    if (response.status === 'Course added successfully') {
-      setLoader(false);
-      toast.success(response.status);
-      navigate("/trainer/profile", { state: { trainerId: trainerId.trainer._id } });
-    } else {
-      setLoader(false);
-      toast.error(response.status);
-    }
-    console.log(response);
+    // const response = await addCourse({
+    //   values,
+    //   file1: filef,
+    //   file2: fileb,
+    //   filev: filev,
+    //   trainerId: trainerId.trainer._id
+    // });
+//     console.log(response,'this is response');
+//     if (response.status === 'Course added successfully') {
+//       setLoader(false);
+//       toast.success(response.status);
+//       navigate("/trainer/profile", { state: { trainerId: trainerId.trainer._id } });
+//     } else {
+//       setLoader(false);
+//       toast.error(response.status);
+//     }
+//     console.log(response);
   };
 
   const handleImage1 = (e) => {
@@ -262,4 +262,4 @@ function AddCourse() {
   );
 }
 
-export default AddCourse;
+export default EnrollCourse;

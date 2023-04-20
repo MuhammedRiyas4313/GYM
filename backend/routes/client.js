@@ -9,7 +9,9 @@ const {
   clientDetails,
   courses,
   courseDetails,
-  trainers
+  trainers,
+  trainerDetails,
+  trainerCourseList
 } = require("../controllers/clientController");
 /* GET home page. */
 router.post("/register", clientRegister);
@@ -19,7 +21,9 @@ router.post("/verifyotp", clientVerifyOTP);
 router.post("/resendotp", clientResendOTP);
 router.get("/details", clientDetails);
 router.get("/courses", courses);
-router.post("/course/details", courseDetails);
+router.get("/course/details", courseDetails);
 router.get("/trainers", trainers);
+router.get("/trainer/details", trainerDetails);
+router.get("/trainer/courses", trainerCourseList);
 
 module.exports = router;

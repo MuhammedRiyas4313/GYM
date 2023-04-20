@@ -113,13 +113,13 @@ function TrainerDetails() {
                   <li className="flex items-center py-3">
                     <span>Status</span>
                     <span className="ml-auto">
-                      {!trainerDetails.isBlocked ? (
+                      { trainerDetails.isVerified ? (
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
-                          Active
+                          Verified
                         </span>
                       ) : (
                         <span className="bg-red-600 py-1 px-2 rounded text-white text-sm">
-                          Blocked
+                          Not Verified
                         </span>
                       )}
                     </span>
@@ -170,27 +170,18 @@ function TrainerDetails() {
                       <div className="px-4 py-2 font-semibold">Contact No.</div>
                       <div className="px-4 py-2">{trainerDetails.phone}</div>
                     </div>
-                    {/* <div className="grid grid-cols-2">
-                            <div className="px-4 py-2 font-semibold">Current Address</div>
-                            <div className="px-4 py-2">Beech Creek, PA, Pennsylvania</div>
-                        </div>
-                        <div className="grid grid-cols-2">
-                            <div className="px-4 py-2 font-semibold">Permanant Address</div>
-                            <div className="px-4 py-2">Arlington Heights, IL, Illinois</div>
-                        </div> */}
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Email.</div>
                       <div className="px-4 py-2">
                         <a
                           className="text-blue-800 break-words"
-                          href="mailto:jane@example.com"
                         >
                           {trainerDetails.email}
                         </a>
                       </div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Birthday</div>
+                      <div className="px-4 py-2 font-semibold">Date of Birth</div>
                       <div className="px-4 py-2">{trainerDetails.dob}</div>
                     </div>
                   </div>
@@ -280,16 +271,16 @@ function TrainerDetails() {
                   </div>
                 </div>
               </div>
-              <div className="mb-10">
+              <div className="flex justify-end mb-10 p-20">
                 {!trainerDetails.isVerified ? (
                   <button
                     onClick={verificationTrainer}
-                    className="block w-full text-white text-sm font-semibold rounded-lg hover:bg-blue-900 focus:outline-none focus:shadow-outline focus:bg-blue-600 bg-blue-600 hover:shadow-xs p-3 my-4"
+                    className=" text-white text-sm font-semibold rounded-lg hover:bg-blue-900 focus:outline-none focus:shadow-outline focus:bg-blue-600 bg-blue-600 hover:shadow-xs p-3 my-4"
                   >
                     Verify Trainer
                   </button>
                 ) : (
-                  <button className="block w-full text-white text-sm font-semibold rounded-lg  focus:outline-none focus:shadow-outline  bg-green-700  p-3 my-4 disabled:">
+                  <button className=" text-white text-sm font-semibold rounded-lg  focus:outline-none focus:shadow-outline  bg-green-700  p-5 my-4 disabled:">
                     Verified Trainer
                   </button>
                 )}

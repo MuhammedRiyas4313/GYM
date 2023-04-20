@@ -24,6 +24,8 @@ import AddCourses from './pages/trainer/AddCourse/AddCourses';
 import CourseList from './pages/courses/CourseList';
 import CourseDetail from './pages/courseDetails/CourseDetail';
 import TrainersList from './pages/trainers/TrainersList';
+import TrainersDetails from './pages/trainerDetails/TrainersDetails';
+import RegisterCourse from './pages/client/joinCourse/RegisterCourse';
 
 function App() {
   return (
@@ -39,7 +41,8 @@ function App() {
           <Route path="/courses" element={<CourseList />} />
           <Route path="/course/details" element={<CourseDetail />} />
           <Route path="/trainers" element={<TrainersList />} />
-          <Route path="/trainers/details" element={<CourseDetail />} />
+          <Route path="/trainer/details" element={<TrainersDetails />} />
+          <Route path="/enroll" element={<RegisterCourse />} />
 
 
           <Route path="/verification/:id" element={<OtpVerfication />} />

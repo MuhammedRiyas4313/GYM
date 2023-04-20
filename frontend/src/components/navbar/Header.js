@@ -8,6 +8,7 @@ import Modal from "./Modal";
 import "./Header.css";
 
 function NavBar() {
+
   const [logoutModalShow, setlogoutModalShow] = useState(false);
   const [loged, setLoged] = useState("");
   const [buttonHide, setButtonHide] = useState(true);
@@ -33,21 +34,22 @@ function NavBar() {
 
   useEffect(() => {
     logedPerson();
-  }, [loged]);
+  }, [loged,buttonHide]);
 
   useEffect(() => {
     const handleResize = () => {
+      console.log(' screen resize working...')
       if (window.innerWidth > 759) {
         setButtonHide(true);
       } else {
         setButtonHide(false);
       }
     };
-    window.addEventListener("resize", handleResize);
+    window.addEventListener("scroll", handleResize);
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", handleResize);
     };
-  }, []);
+  });
 
   function logedPerson() {
     if (Trainer?.trainer) {
@@ -84,7 +86,6 @@ function NavBar() {
   function navGate(url){
     console.log(url,'nav calling.....')
     navigate(url)
-
   }
 
   return (
