@@ -1,262 +1,288 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { courseSchema } from "../../../validations/addCourseValidation";
-import { useNavigate } from "react-router-dom";
+import { enrollSchema } from "../../../validations/enrollCourseValidation";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { Textarea } from "@material-tailwind/react";
+import { Textarea } from "flowbite-react";
 import Loading from "../../loadingSpinner/Loading";
-import { addCourse } from "../../../axios/services/trainerServices/trainerService";
+import "./EnrollCourse.css";
+import {
+  enrollClient,
+  getCourseDetails,
+} from "../../../axios/services/clientServices/clientServices";
+import { Payment } from "@material-ui/icons";
+import Paypal from "./Paypal";
 
 function EnrollCourse() {
 
+  const [enrollData, setEnrollData] = useState({})
   const [successModal, setSuccessModal] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [payment, setPayment] = useState(false);
 
   const navigate = useNavigate();
-  const [loader, setLoader] = useState(false);
+  const Location = useLocation();
+  const [slotes, setSlote] = useState([]);
+  const [course, setCourse] = useState({});
 
-  const [filef, setFilef] = useState([]);
-  const [fileb, setFileb] = useState([]);
-  const [filev, setFilev] = useState([]);
+  const client = useSelector((state) => state.userReducer.user);
 
-  const trainerId = useSelector((state) => state.trainerReducer.trainer);
-  console.log(trainerId,'trainer id from the useselector')
+  const clientId = client?.user?._id;
+  const courseId = Location.state?.courseId;
+
+  function formateDate() {
+    const formatDate = new Date();
+    const formated = `${formatDate.getDate()}-${
+      formatDate.getMonth() + 1
+    }-${formatDate.getFullYear()}`;
+
+    return formated;
+  }
+
+  useEffect(() => {
+    getCourseDetails(courseId).then((res) => {
+      console.log(res.data, "getCourseDetails from the enroll compo");
+      setCourse(res.data);
+      const allSlotes = res.data.availableSlots;
+      const slotes = allSlotes.filter((val) => val.status === "free");
+      console.log(slotes, "free slotes.......");
+      setSlote(slotes);
+    });
+  }, []);
 
   const onSubmit = async (values) => {
-    setLoader(true);
-    console.log("onsubmit working....");
-    // const response = await addCourse({
-    //   values,
-    //   file1: filef,
-    //   file2: fileb,
-    //   filev: filev,
-    //   trainerId: trainerId.trainer._id
-    // });
-//     console.log(response,'this is response');
-//     if (response.status === 'Course added successfully') {
-//       setLoader(false);
-//       toast.success(response.status);
-//       navigate("/trainer/profile", { state: { trainerId: trainerId.trainer._id } });
-//     } else {
-//       setLoader(false);
-//       toast.error(response.status);
-//     }
-//     console.log(response);
-  };
-
-  const handleImage1 = (e) => {
-    const file = e.target.files[0];
-    setFileToBase(file);
-  };
-
-  const setFileToBase = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setFilef(reader.result);
+    setPayment(true);
+    console.log("onsubmit working.... enroll fn");
+    console.log(values, "values from the form");
+    const data = {
+      ...values,
+      clientId,
+      courseId,
     };
+    setEnrollData(data)
   };
 
-  const handleImage2 = (e) => {
-    const file = e.target.files[0];
-    setFileToBase2(file);
-  };
+ async function paypalpayment (paymentDetails){
 
-  const handleVideo = (e) => {
-    const file = e.target.files[0];
-    setFileToBaseV(file);
-  };
+    console.log('payment is calling..')
+    console.log(enrollData,'before payment ')
+    const data = {...enrollData,paymentDetails}
+    console.log(data,'before payment ')
 
-  const setFileToBase2 = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setFileb(reader.result);
-    };
-  };
+    const response = await enrollClient(data)
 
-  const setFileToBaseV = (file) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setFilev(reader.result);
-    };
-  };
+  }
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
-        coursename: "",
-        charge: "",
-        description: "",
+        weight: "",
+        height: "",
+        emergencycontact: "",
+        slote: "",
+        healthinfo: "",
       },
-      validationSchema: courseSchema,
+      validationSchema: enrollSchema,
       onSubmit,
     });
 
   return (
-    <div>
+    <div className="signupouter flex justify-center">
       {loader ? (
         <div className="w-full spinnerouter flex justify-center align-middle">
           <Loading />
         </div>
       ) : (
-        <div className="signupouter md:pl-64 md:pr-64 p-5 ">
-          <form
-            className="signupform md:p-20 p-5 mt-20"
-            onSubmit={handleSubmit}
-          >
-            <div className="space-y-12 ">
-              <div className="border-b border-gray-900/10 pb-12">
-                <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">
-                  New Course
-                </h1>
-                {/* <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Use a permanent address where you can receive mail.
-                </p> */}
+       <div className="w-full h-full flex justify-center items-center">
+         {!payment ? (
+            <div className="md:w-1/2 ">
+            <form
+              className="signupform p-20 pb-10 mt-20"
+              onSubmit={handleSubmit}
+            >
+              <div className="space-y-12 ">
+                <div className="border-b border-gray-900/10 pb-12">
+                  <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">
+                    Register now
+                  </h1>
+                  <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="first-name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Charge / Month &nbsp;(in rupees)
+                      </label>
+                      <div className="mt-2">
+                        <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm bg-gray-100  sm:text-sm sm:leading-6 p-2">
+                          {course.charge}&nbsp;₹
+                        </div>
+                      </div>
+                    </div>
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="first-name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Joining Date
+                      </label>
+                      <div className="mt-2">
+                        <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm bg-gray-100  sm:text-sm sm:leading-6 p-2">
+                          {formateDate()}&nbsp;
+                        </div>
+                      </div>
+                    </div>
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="first-name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Weight &nbsp;(in kg)
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="number"
+                          name="weight"
+                          value={values.weight}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          autoComplete="given-name"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                        {errors.weight && touched.weight && (
+                          <p className="text-red-600">{errors.weight}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="first-name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Height &nbsp; (in cm)
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="number"
+                          name="height"
+                          id="first-name"
+                          value={values.height}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          autoComplete="given-name"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                        {errors.height && touched.height && (
+                          <p className="text-red-600">{errors.height}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="sm:col-span-3 md:mt-3">
+                      <label
+                        htmlFor="first-name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Emergency contact information (Mobile)
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="number"
+                          name="emergencycontact"
+                          value={values.emergencycontact}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                        {errors.emergencycontact &&
+                          touched.emergencycontact && (
+                            <p className="text-red-600">
+                              {errors.emergencycontact}
+                            </p>
+                          )}
+                      </div>
+                    </div>
+                    <div className="sm:col-span-3">
+                      <label
+                        htmlFor="last-name"
+                        className="block text-sm font-medium leading-6 text-gray-900 mt-2 mb-2"
+                      >
+                        Choose Time Slotes
+                      </label>
+                      <select
+                        name="slote"
+                        value={values.slote}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className="select w-full "
+                      >
+                        <option selected>Choose Slote</option>
 
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="first-name"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Course name
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="coursename"
-                        id="course"
-                        value={values.coursename}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        autoComplete="given-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                      {/* {errors.fname && touched.fname && (
-                        <p className="text-red-600">{errors.fname}</p>
-                      )} */}
+                        {slotes.map((val) => {
+                          return <option value={val.slote}>{val.slote}</option>;
+                        })}
+                      </select>
+                      {errors.slote && touched.slote && (
+                        <p className="text-red-600">{errors.slote}</p>
+                      )}
                     </div>
-                  </div>
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="first-name"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Course fee / month
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="number"
-                        name="charge"
-                        id="first-name"
-                        value={values.charge}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        autoComplete="given-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                      {/* {errors.fname && touched.fname && (
-                        <p className="text-red-600">{errors.fname}</p>
-                      )} */}
-                    </div>
-                  </div>
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Cover Photo - 1
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="file"
-                        id="filef"
-                        onChange={handleImage1}
-                        onBlur={handleBlur}
-                        required
-                        accept="image/*"
-                        autoComplete="off"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                      {/* {errors.profile && touched.profile && (
-                        <p className="text-red-600">{errors.profile}</p>
-                      )} */}
-                    </div>
-                  </div>
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Cover Photo - 2
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="file"
-                        id="fileb"
-                        required
-                        accept="image/*"
-                        onChange={handleImage2}
-                        onBlur={handleBlur}
-                        autoComplete="off"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Upload Video ( Introduction of the course. )
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        name="video"
-                        onChange={handleVideo}
-                        onBlur={handleBlur}
-                        type="file"
-                        accept="video/*"
-                        autoComplete="off"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                      {/* {errors.link && touched.link && (
-                        <p className="text-red-600">{errors.link}</p>
-                      )} */}
-                    </div>
-                  </div>
-                  <div className="sm:col-span-3 md:mt-6">
-                    <label
-                      htmlFor="last-name"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Description
-                    </label>
-                    <div className="flex w-96 flex-col gap-6">
-                      <Textarea
-                        name="description"
-                        value={values.description}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        color="blue"
-                      />
+                    <div className="sm:col-span-3 ">
+                      <label
+                        htmlFor="last-name"
+                        className="block text-sm font-medium leading-6 text-gray-900"
+                      >
+                        Health information such as any medical conditions,
+                        injuries, or allergies
+                      </label>
+                      <div className="flex md:w-96 flex-col gap-6">
+                        <Textarea
+                          name="healthinfo"
+                          type="string"
+                          value={values.healthinfo}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          color="blue"
+                        />
+                        {errors.healthinfo && touched.healthinfo && (
+                          <p className="text-red-600">{errors.healthinfo}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="mt-6 flex items-center justify-around gap-x-6">
+                <div className="badge-warning md:p-5 rounded break-words">
+                  This will direct you to the payment option &nbsp;&nbsp;➡️
+                </div>
+                <button
+                  type="submit"
+                  className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  Confirm
+                </button>
+              </div>
+            </form>
             </div>
-            <div className="mt-6 flex items-center justify-end gap-x-6">
-              <button
-                type="submit"
-                className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Save
-              </button>
+          ) : (
+            <div className="w-full h-full">
+            <div className="flex justify-center items-center w-full h-full">
+              <form className="signupform p-24 pb-10">
+                <div className="">
+                  <div className="border-b border-gray-900/10 pb-12">
+                    <h1 className="text-base flex justify-center font-semibold leading-7 text-gray-900 md:text-3xl">
+                      Pay now
+                    </h1>
+                    <div className="mt-10 flex justify-center w-full h-full">
+                      <Paypal payment={course.charge}  paypalpayment={paypalpayment}/>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
-          </form>
         </div>
+          )}
+       </div>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogout } from "../../redux/userSlice";
 import { trainerLogout } from "../../redux/trainerSlice";
+import { motion } from 'framer-motion'
 import Modal from "./Modal";
 import "./Header.css";
 
@@ -107,23 +108,23 @@ function NavBar() {
         {loged && (
           <Button
             onClick={() => showProfile(loged._id)}
-            className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase"
+            className="bg-orange-500 font-mono hover:bg-orange-700 mr-1 md:mr-5 text-white uppercase"
           >
             {loged.fname}
           </Button>
         )}
         {buttonHide && (
-          <div>
+          <div >
             {loged ? (
               <Button
-                className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase"
+                className="bg-orange-500 font-mono hover:bg-orange-700 mr-1 md:mr-5 text-white uppercase"
                 onClick={logout}
               >
                 Logout
               </Button>
             ) : (
               <Link to="/login">
-                <Button className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase">
+                <Button className="bg-orange-500 font-mono hover:bg-orange-700 md:mr-5 text-white uppercase">
                   Login
                 </Button>
               </Link>
@@ -152,14 +153,14 @@ function NavBar() {
           <div>
             {loged ? (
               <Button
-                className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase"
+                className="bg-orange-500 font-mono hover:bg-orange-700 mr-2 md:mr-5 text-white uppercase"
                 onClick={logout}
               >
                 Logout
               </Button>
             ) : (
               <Link to="/login">
-                <Button className="bg-orange-500 hover:bg-orange-700 mr-5 text-white uppercase">
+                <Button className="bg-orange-500 font-mono hover:bg-orange-700 mr-2 md:mr-5 text-white uppercase">
                   Login
                 </Button>
               </Link>

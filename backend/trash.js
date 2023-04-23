@@ -26,3 +26,30 @@
     <option value="08:00pm-09:00pm">08:00pm-09:00pm</option>
   </select>
 </div>;
+
+
+//to find abscend days............
+
+const Attendance = require('./attendance.model');
+
+// Get number of absent days for a given employee and month
+const getAbsentDays = async (employeeId, month, year) => {
+  // Get the first and last date of the specified month
+  const firstDayOfMonth = new Date(year, month, 1);
+  const lastDayOfMonth = new Date(year, month + 1, 0);
+
+  // Query the attendance records for the specified month and employee
+  const attendanceRecords = await Attendance.find({
+    employeeId: employeeId,
+    date: {
+      $gte: firstDayOfMonth,
+      $lte: lastDayOfMonth
+    }
+  });
+
+  // Filter out the records where the employee was present
+  const absentRecords = attendanceRecords.filter(record => record.status === 'absent');
+
+  // Return the number of absent days
+  return absentRecords.length;
+}

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import './Trainers.css'
 
 
@@ -11,9 +12,9 @@ export default function TrainerHero() {
       <div className="relative isolate px-6 pt-14 lg:px-8">
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 flex justify-center align-bottom">
           
-            {/* <h1 className="text-4xl font-bold  text-orange-500 sm:text-6xl">
+            <motion.h1 animate={{scale:1}} initial={{scale:0}} className="text-6xl font-bold  text-white sm:text-6xl">
               Courses
-            </h1> */}
+            </motion.h1>
           
         </div>
       </div>

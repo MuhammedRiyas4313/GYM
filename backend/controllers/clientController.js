@@ -296,6 +296,7 @@ const trainerDetails = async (req, res) => {
 };
 
 const trainerCourseList = async (req,res) => {
+
   console.log('ind trainer course list ........')
   try {
 
@@ -309,6 +310,24 @@ const trainerCourseList = async (req,res) => {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in trainerDetails client");
   }
+
+}
+
+const enrollCLient = async (req,res) => {
+
+  console.log('enroll client is calling.........')
+  console.log(req.body,'data from the frontend enrollClient')
+  try {
+    
+    const { weight , height, emergencycontact, healthinfo, clientId, courseId, paymentDetails } = req.body
+
+    
+
+
+  } catch (error) {
+    
+  }
+
 }
 
 module.exports = {
@@ -322,5 +341,6 @@ module.exports = {
   courseDetails,
   trainers,
   trainerDetails,
-  trainerCourseList
+  trainerCourseList,
+  enrollCLient
 };

@@ -20,6 +20,8 @@ const CourseSchema = mongoose.Schema(
         },
         paymentStatus: String,
         bookedSlote: String,
+        emergencyContact:Number,
+        healthInfo:String
       },
     ],
     availableSlots: [
@@ -41,13 +43,14 @@ const CourseSchema = mongoose.Schema(
         },
         updations :[
           {
-            month: String,
+            month: Date,
             payment: {
               type: Boolean,
               default:false
             },
             weight: Number,
-            height: Number
+            height: Number,
+            paymentDetails:Object
           }
         ],
         attendance:[
@@ -86,12 +89,19 @@ const CourseSchema = mongoose.Schema(
               default:false
             },
             weight: Number,
-            height: Number
+            height: Number,
+            paymentDetails:Object
           }
         ],
         attendance:[
           {
-
+            date:Date,
+            status:{
+              type: String
+            },
+            reason:{
+              type:String
+            }
           }
         ]
       },
@@ -118,13 +128,20 @@ const CourseSchema = mongoose.Schema(
               type: Boolean,
               default:false
             },
+            paymentDetails:Object,
             weight: Number,
             height: Number
           }
         ],
         attendance:[
           {
-
+            date:Date,
+            status:{
+              type: String
+            },
+            reason:{
+              type:String
+            }
           }
         ]
       },
@@ -152,12 +169,20 @@ const CourseSchema = mongoose.Schema(
               default:false
             },
             weight: Number,
-            height: Number
+            height: Number,
+            paymentDetails:Object,
+
           }
         ],
         attendance:[
           {
-
+            date:Date,
+            status:{
+              type: String
+            },
+            reason:{
+              type:String
+            }
           }
         ],
       },
@@ -185,12 +210,20 @@ const CourseSchema = mongoose.Schema(
               default:false
             },
             weight: Number,
-            height: Number
+            height: Number,
+            paymentDetails:Object,
+
           }
         ],
         attendance:[
           {
-
+            date:Date,
+            status:{
+              type: String
+            },
+            reason:{
+              type:String
+            }
           }
         ]
       },
@@ -218,12 +251,20 @@ const CourseSchema = mongoose.Schema(
               default:false
             },
             weight: Number,
-            height: Number
+            height: Number,
+            paymentDetails:Object,
+
           }
         ],
         attendance:[
           {
-
+            date:Date,
+            status:{
+              type: String
+            },
+            reason:{
+              type:String
+            }
           }
         ]
       },

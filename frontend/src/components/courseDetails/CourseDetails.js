@@ -9,13 +9,14 @@ function CourseDetails() {
   const [courseDetails, setCourseDetails] = useState({});
   const [trainer, setTrainer] = useState({});
   const [option, setOption] = useState(false);
+  const [slote,setSlote] = useState([])
 
   const Location = useLocation();
   const courseId = Location.state?.courseId;
 
   function enroll (){
     console.log('enroll fn calling.....')
-    navigate('/enroll')
+    navigate('/enroll',{ state: { courseId: courseId } })
   }
 
   useEffect(() => {
@@ -23,6 +24,9 @@ function CourseDetails() {
       console.log(res, "res from the getcourseDetails api");
       setCourseDetails(res.data);
       setTrainer(res.data.trainerId);
+      const allSlotes = res.data.availableSlots
+      const slotes = allSlotes.filter((val)=> val.status === 'free')
+      setSlote(slotes)
     });
   }, []);
 
@@ -303,9 +307,13 @@ function CourseDetails() {
               </div>
             </div>
             <div className="flex justify-end mt-5 mb-5 bg-gray-100 p-10">
-              <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
+              {
+                slote.length === 0 ? <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" disabled>
+                No more Slotes available for this month
+              </button>:<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
                 Enroll Now
               </button>
+              }
             </div>
           </div>
         </div>

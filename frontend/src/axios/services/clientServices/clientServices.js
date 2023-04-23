@@ -161,3 +161,17 @@ import { axiosClientInstance } from '../../axios';
       console.log('error in getTrainerDetails ......')
     }
   }
+
+  export const enrollClient = async ( values ) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosClientInstance.post(`/enroll`,values,config)
+      return response;
+    } catch (error) {
+      console.log(error.message,'error in getTrainerDetails ......')
+    }
+  }

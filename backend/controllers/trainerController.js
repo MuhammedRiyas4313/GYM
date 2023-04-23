@@ -119,66 +119,93 @@ const trainerLoginWithGoogle = async (req, res) => {
   }
 };
 
-const trainerDetails = async (req,res) => {
-  console.log('trainer details..trainer route')
-  const { trainerId } = req.query
+const trainerDetails = async (req, res) => {
+  console.log("trainer details..trainer route");
+  const { trainerId } = req.query;
 
-    const getDetails = await Trainer.findOne({_id:trainerId})
-    console.log(getDetails,'trainer details from the data base......')
-    res.json(getDetails)
-}
+  const getDetails = await Trainer.findOne({ _id: trainerId });
+  console.log(getDetails, "trainer details from the data base......");
+  res.json(getDetails);
+};
 
-const addCourse = async (req,res) => {
-  console.log('add course is calling.....')
+const addCourse = async (req, res) => {
+  console.log("add course is calling.....");
 
   try {
-
     const Image1 = req.body.file1;
     const Image2 = req.body.file2;
     const intVideo = req.body.filev;
     const values = req.body.values;
     const trainerId = req.body.trainerId;
 
-  const cover1  = await cloudinary.uploader.upload(Image1, {
-    folder: "CourseCover",
-  });
+    const cover1 = await cloudinary.uploader.upload(Image1, {
+      folder: "CourseCover",
+    });
 
-  const cover2  = await cloudinary.uploader.upload(Image2, {
-    folder: "CourseCover",
-  });
+    const cover2 = await cloudinary.uploader.upload(Image2, {
+      folder: "CourseCover",
+    });
 
-  const introVideo  = await cloudinary.uploader.upload(intVideo, {
-    folder: "CourseIntro",
-    resource_type: "video",
-    chunk_size: 6000000,
-  });
+    const introVideo = await cloudinary.uploader.upload(intVideo, {
+      folder: "CourseIntro",
+      resource_type: "video",
+      chunk_size: 6000000,
+    });
 
-  await Course.create({
-    coursename: values.coursename,
-    trainerId: trainerId,
-    charge: values.charge,
-    description: values.description,
-    cover1: cover1.secure_url,
-    cover2: cover2.secure_url,
-    introVideo: introVideo.secure_url
-  });
+    await Course.create({
+      coursename: values.coursename,
+      trainerId: trainerId,
+      charge: values.charge,
+      description: values.description,
+      cover1: cover1.secure_url,
+      cover2: cover2.secure_url,
+      introVideo: introVideo.secure_url,
+      availableSlots: [
+        {
+          status: "free",
 
-  res.json({status : 'Course added successfully'})
-    
+          slote: "05:00am-06:00am",
+        },
+        {
+          status: "free",
+
+          slote: "06:30am-07:30am",
+        },
+        {
+          status: "free",
+
+          slote: "08:00am-09:00am",
+        },
+        {
+          status: "free",
+
+          slote: "05:00pm-06:00pm",
+        },
+        {
+          status: "free",
+
+          slote: "06:30pm-07:30pm",
+        },
+        {
+          status: "free",
+
+          slote: "06:30pm-07:30pm",
+        },
+      ],
+    });
+
+    res.json({ status: "Course added successfully" });
   } catch (error) {
+    console.log(error.message);
 
-    console.log(error.message)
-
-    res.json({status : `${error.message} Something wrong !`})
-
+    res.json({ status: `${error.message} Something wrong !` });
   }
-
-}
+};
 
 module.exports = {
   trainerRegister,
   trainerLogin,
   trainerLoginWithGoogle,
   trainerDetails,
-  addCourse
+  addCourse,
 };

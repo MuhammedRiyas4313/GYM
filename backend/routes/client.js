@@ -11,7 +11,8 @@ const {
   courseDetails,
   trainers,
   trainerDetails,
-  trainerCourseList
+  trainerCourseList,
+  enrollCLient
 } = require("../controllers/clientController");
 /* GET home page. */
 router.post("/register", clientRegister);
@@ -25,5 +26,6 @@ router.get("/course/details", courseDetails);
 router.get("/trainers", trainers);
 router.get("/trainer/details", trainerDetails);
 router.get("/trainer/courses", trainerCourseList);
+router.post("/enroll", enrollCLient);
 
 module.exports = router;
