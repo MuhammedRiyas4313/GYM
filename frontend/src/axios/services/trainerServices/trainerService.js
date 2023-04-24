@@ -79,3 +79,16 @@ export const trainerRegister = async (value) => {
       console.log(error);
     }
   };
+  export const getTrainerCourseList = async (trainerId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.get(`/courses?trainerId=${trainerId}`,config)
+      return response;
+    } catch (error) {
+      console.log('error in getTrainerDetails ......')
+    }
+  }

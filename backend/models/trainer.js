@@ -6,11 +6,6 @@ const TrainerSchema = mongoose.Schema({
         trim: true,
         required: true
     },
-    lname: {
-        type: String,
-        trim: true,
-        required: true
-    },
     dob: {
         type: String,
         required: true,
@@ -30,6 +25,10 @@ const TrainerSchema = mongoose.Schema({
         trim: true,
         required: true,
     },
+    courses:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course"
+    }],
     password: {
         type: String,
         trim: true,

@@ -1,15 +1,11 @@
 const mongoose = require('mongoose')
 
 const UserSchema = mongoose.Schema({
+
     fname: {
         type: String,
         trim: true,
         required: true,
-    },
-    lname: {
-        type: String,
-        trim: true,
-        required: true
     },
     dob: {
         type: String,
@@ -19,16 +15,6 @@ const UserSchema = mongoose.Schema({
         type: String,
         trim: true,
         required: true
-    },
-    weight: {
-        type: Number,
-        trim: true,
-        required: true,
-    },
-    height: {
-        type: Number,
-        trim: true,
-        required: true,
     },
     email: {
         type: String,
@@ -64,9 +50,11 @@ const UserSchema = mongoose.Schema({
         type: Number,
         trim: true
     },
-    bookedSlots: [{
-        type: Date,
-        required: true
+    courses: [{
+       course:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Course",
+       }
     }]
 }, { timestamps: true })
 

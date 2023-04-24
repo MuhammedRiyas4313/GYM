@@ -7,7 +7,10 @@ const CourseSchema = mongoose.Schema(
       trim: true,
       required: true,
     },
-    type: String,
+   status:{
+    type:String,
+    default:'Active'
+   },
     trainerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Trainer",
@@ -20,8 +23,8 @@ const CourseSchema = mongoose.Schema(
         },
         paymentStatus: String,
         bookedSlote: String,
-        emergencyContact:Number,
-        healthInfo:String
+        emergencyContact: Number,
+        healthInfo: String,
       },
     ],
     availableSlots: [
@@ -39,31 +42,31 @@ const CourseSchema = mongoose.Schema(
           ref: "user",
         },
         joined: {
-          type: Date,
+          type: String,
         },
-        updations :[
+        updations: [
           {
-            month: Date,
+            month: Number,
             payment: {
               type: Boolean,
-              default:false
+              default: false,
             },
             weight: Number,
             height: Number,
-            paymentDetails:Object
-          }
+            paymentDetails: Object,
+          },
         ],
-        attendance:[
+        attendance: [
           {
-            date:Date,
-            status:{
-              type: String
+            date: Date,
+            status: {
+              type: String,
             },
-            reason:{
-              type:String
-            }
-          }
-        ]
+            reason: {
+              type: String,
+            },
+          },
+        ],
       },
       {
         status: {
@@ -81,29 +84,29 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations :[
+        updations: [
           {
             month: String,
             payment: {
               type: Boolean,
-              default:false
+              default: false,
             },
             weight: Number,
             height: Number,
-            paymentDetails:Object
-          }
+            paymentDetails: Object,
+          },
         ],
-        attendance:[
+        attendance: [
           {
-            date:Date,
-            status:{
-              type: String
+            date: Date,
+            status: {
+              type: String,
             },
-            reason:{
-              type:String
-            }
-          }
-        ]
+            reason: {
+              type: String,
+            },
+          },
+        ],
       },
       {
         status: {
@@ -121,29 +124,29 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations :[
+        updations: [
           {
             month: String,
             payment: {
               type: Boolean,
-              default:false
+              default: false,
             },
-            paymentDetails:Object,
+            paymentDetails: Object,
             weight: Number,
-            height: Number
-          }
+            height: Number,
+          },
         ],
-        attendance:[
+        attendance: [
           {
-            date:Date,
-            status:{
-              type: String
+            date: Date,
+            status: {
+              type: String,
             },
-            reason:{
-              type:String
-            }
-          }
-        ]
+            reason: {
+              type: String,
+            },
+          },
+        ],
       },
       {
         status: {
@@ -161,29 +164,28 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations :[
+        updations: [
           {
             month: String,
             payment: {
               type: Boolean,
-              default:false
+              default: false,
             },
             weight: Number,
             height: Number,
-            paymentDetails:Object,
-
-          }
+            paymentDetails: Object,
+          },
         ],
-        attendance:[
+        attendance: [
           {
-            date:Date,
-            status:{
-              type: String
+            date: Date,
+            status: {
+              type: String,
             },
-            reason:{
-              type:String
-            }
-          }
+            reason: {
+              type: String,
+            },
+          },
         ],
       },
       {
@@ -202,30 +204,29 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations :[
+        updations: [
           {
             month: String,
             payment: {
               type: Boolean,
-              default:false
+              default: false,
             },
             weight: Number,
             height: Number,
-            paymentDetails:Object,
-
-          }
+            paymentDetails: Object,
+          },
         ],
-        attendance:[
+        attendance: [
           {
-            date:Date,
-            status:{
-              type: String
+            date: Date,
+            status: {
+              type: String,
             },
-            reason:{
-              type:String
-            }
-          }
-        ]
+            reason: {
+              type: String,
+            },
+          },
+        ],
       },
       {
         status: {
@@ -243,30 +244,29 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations :[
+        updations: [
           {
             month: String,
             payment: {
               type: Boolean,
-              default:false
+              default: false,
             },
             weight: Number,
             height: Number,
-            paymentDetails:Object,
-
-          }
+            paymentDetails: Object,
+          },
         ],
-        attendance:[
+        attendance: [
           {
-            date:Date,
-            status:{
-              type: String
+            date: Date,
+            status: {
+              type: String,
             },
-            reason:{
-              type:String
-            }
-          }
-        ]
+            reason: {
+              type: String,
+            },
+          },
+        ],
       },
     ],
     charge: {

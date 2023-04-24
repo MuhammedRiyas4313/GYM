@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Trainer = require("../models/trainer");
 const Course = require("../models/course");
+const { ObjectId } = require("mongodb");
 const cloudinary = require("cloudinary").v2;
 const bcrypt = require("bcrypt");
 
@@ -36,7 +37,6 @@ const trainerRegister = async (req, res) => {
 
     await Trainer.create({
       fname: values.fname,
-      lname: values.lname,
       dob: values.dob,
       gender: values.gender,
       email: values.email,
@@ -96,6 +96,7 @@ const trainerLoginWithGoogle = async (req, res) => {
     const { email, password } = req.body;
     const oldTrainer = await Trainer.findOne({ email });
     console.log(oldTrainer, "oldTrainer.....");
+
     if (!oldTrainer) return res.json({ status: "Trainer doesn't exist" });
 
     if (oldTrainer.isBlocked === true)
@@ -137,6 +138,10 @@ const addCourse = async (req, res) => {
     const intVideo = req.body.filev;
     const values = req.body.values;
     const trainerId = req.body.trainerId;
+
+    const existCourse = await Course.findOne({trainerId:new ObjectId(trainerId),status:'Active'})
+    console.log(existCourse,'existing course....')
+    if(existCourse) return res.json({status:'Already have a active course !'})
 
     const cover1 = await cloudinary.uploader.upload(Image1, {
       folder: "CourseCover",
@@ -189,7 +194,7 @@ const addCourse = async (req, res) => {
         {
           status: "free",
 
-          slote: "06:30pm-07:30pm",
+          slote: "08:00pm-09:00pm",
         },
       ],
     });
@@ -202,10 +207,29 @@ const addCourse = async (req, res) => {
   }
 };
 
+const trainerCourseList = async (req, res) => {
+
+  console.log("ind trainer course list ........");
+  try {
+    const { trainerId } = req.query;
+    console.log(trainerId, "trainer id from the query");
+    const getCourses = await Course.find({
+      trainerId: new ObjectId(trainerId),
+    });
+    console.log(getCourses, "ind trainerCourseList calling......");
+    res.json(getCourses);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerDetails client");
+  }
+  
+};
+
 module.exports = {
   trainerRegister,
   trainerLogin,
   trainerLoginWithGoogle,
   trainerDetails,
   addCourse,
+  trainerCourseList
 };

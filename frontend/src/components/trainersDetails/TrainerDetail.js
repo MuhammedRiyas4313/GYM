@@ -7,6 +7,7 @@ import {
 import TrainerCourseList from "./TrainerCourseList";
 
 function TrainerDetail() {
+  
   const location = useLocation();
   const trainerId = location.state?.trainerId;
 

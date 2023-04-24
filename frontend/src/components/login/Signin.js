@@ -57,7 +57,11 @@ function Signin() {
         setTrainerVerifyStatus(true);
         setLoader(false);
         console.log("trainer login success");
-      } else {
+      } else if(response?.status === "Trainer doesn't exist"){
+        console.log('trainer not exist....')
+        setLoader(false);
+        toast.error(response.status);
+      }else{
         setLoader(false);
         toast.error(response.status);
       }

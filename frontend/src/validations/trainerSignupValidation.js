@@ -10,12 +10,6 @@ export const trainerSchema = yup.object().shape({
       .max(20)
       .matches(/^[a-zA-Z]+$/, 'Only alphabets are allowed')
       .required('Required'),
-    lname: yup
-      .string()
-      .min(1)
-      .max(20)
-      .matches(/^[a-zA-Z]+$/, 'Only alphabets are allowed')
-      .required('Required'),
     dob: yup.date().required('Required'),
     gender: yup.string().required('Required'),
     email: yup.string().email('Please enter a valid email').required('Required'),

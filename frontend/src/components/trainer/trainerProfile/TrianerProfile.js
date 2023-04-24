@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./TrainerProfile.css";
 import { getTrainerDetails } from "../../../axios/services/trainerServices/trainerService";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function TrianerProfile() {
   
   const location = useLocation();
+  const navigate = useNavigate();
   const trainerId = location.state?.trainerId;
 
   const [option, setOption] = useState(false);
@@ -41,6 +42,7 @@ function TrianerProfile() {
 
   function courses() {
     console.log("courses calling");
+    navigate("/trainer/courses", { state: { trainerId: trainerId } });
   }
 
   return (
@@ -52,8 +54,8 @@ function TrianerProfile() {
               <div className="flex flex-wrap justify-between p-5 bg-transparent mb-3"></div>
               <div className="image overflow-hidden flex flex-wrap align-middle justify-center ">
                 <div className="w-full flex flex-wrap align-middle justify-center">
-                  <div class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600  object-cover ">
-                    <img src={trainerDetails.profile} alt="trainer profile" />
+                  <div class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 ">
+                    <img src={trainerDetails.profile} alt="trainer profile" className="object-cover h-full w-full"/>
                   </div>
                 </div>
                 <div className="flex w-full md:w-1/3 justify-between">

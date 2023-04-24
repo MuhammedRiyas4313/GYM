@@ -27,15 +27,16 @@ import CourseDetail from "./pages/courseDetails/CourseDetail";
 import TrainersList from "./pages/trainers/TrainersList";
 import TrainersDetails from "./pages/trainerDetails/TrainersDetails";
 import RegisterCourse from "./pages/client/joinCourse/RegisterCourse";
+import TrainerCourses from "./pages/trainer/Courses/TrainerCourses";
 
 function App() {
   const UserDetails = useSelector((state) => state.userReducer.user);
   const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
   const AdminDetails = useSelector((state) => state.adminReducer.admin);
   
-  const User = UserDetails.token
-  const Trainer = TrainerDetails.token
-  const Admin = AdminDetails.token
+  const User = UserDetails?.token
+  const Trainer = TrainerDetails?.token
+  const Admin = AdminDetails?.token
 
   console.log(User, "user from the app ");
   console.log(Trainer, "trainer from the app ");
@@ -61,6 +62,7 @@ function App() {
         <Route path="/trainersignupsuccess" element={ Trainer ? <Success /> : <ClientLogin /> } />
         <Route path="/trainer/profile" element={ Trainer ? <Profile /> : <ClientLogin /> } />
         <Route path="/trainer/addcourse" element={ Trainer ? <AddCourses /> : <ClientLogin /> } />
+        <Route path="/trainer/courses" element={ Trainer ? <TrainerCourses /> : <ClientLogin /> } />
 
         <Route path="/admin" element={ Admin ? <Dashboard />:<AdminLogin />} />
         <Route path="/admin/dashboard" element={ Admin ? <Dashboard /> : <AdminLogin /> } />

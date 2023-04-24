@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getCourseDetails } from "../../axios/services/clientServices/clientServices";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import "./CourseDetails.css";
+import { useSelector } from "react-redux";
 
 function CourseDetails() {
 
@@ -10,9 +11,15 @@ function CourseDetails() {
   const [trainer, setTrainer] = useState({});
   const [option, setOption] = useState(false);
   const [slote,setSlote] = useState([])
+  const [loged, setLoged] = useState('')
 
   const Location = useLocation();
   const courseId = Location.state?.courseId;
+
+  const User = useSelector((state) => state.userReducer.user);
+  const Trainer = useSelector((state) => state.trainerReducer.trainer);
+
+
 
   function enroll (){
     console.log('enroll fn calling.....')
@@ -28,6 +35,13 @@ function CourseDetails() {
       const slotes = allSlotes.filter((val)=> val.status === 'free')
       setSlote(slotes)
     });
+    if (Trainer?.trainer) {
+      setLoged('trainer');
+      console.log(Trainer.trainer,"trainer loged");
+    } else if (User?.user) {
+      console.log(User.user,"user loged");
+      setLoged('user');
+    }
   }, []);
 
   function options() {
@@ -122,8 +136,8 @@ function CourseDetails() {
                   </span>
                   <span className="tracking-wide">About Course</span>
                 </div>
-
-                <div className="dropouter">
+                {
+                  loged === 'user' ? <div className="dropouter">
                   <div className="dropdown dropdown-end">
                     <label
                       tabIndex={0}
@@ -170,7 +184,9 @@ function CourseDetails() {
                       <div></div>
                     )}
                   </div>
-                </div>
+                </div>:''
+                }
+                
               </div>
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
@@ -306,15 +322,17 @@ function CourseDetails() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-end mt-5 mb-5 bg-gray-100 p-10">
-              {
-                slote.length === 0 ? <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" disabled>
-                No more Slotes available for this month
-              </button>:<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
-                Enroll Now
-              </button>
-              }
-            </div>
+           {
+            loged === 'user' ?  <div className="flex justify-end mt-5 mb-5 bg-gray-100 p-10">
+            {
+              slote.length === 0 ? <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" disabled>
+              No more Slotes available for this month
+            </button>:<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
+              Enroll Now
+            </button>
+            }
+          </div>:''
+           }
           </div>
         </div>
       </div>

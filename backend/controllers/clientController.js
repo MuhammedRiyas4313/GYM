@@ -24,10 +24,11 @@ const clientLogin = async (req, res) => {
     const oldUser = await User.findOne({ email });
     console.log(oldUser, "olduser.....");
 
+    if (!oldUser) return res.json({ status: "User doesn't exist" });
+
     if (oldUser.isVerified === false) {
       sendOtpVerification(oldUser, res);
     } else {
-      if (!oldUser) return res.json({ status: "User doesn't exist" });
 
       if (oldUser.isBlocked === true)
         return res.json({ status: "User is blocked" });
@@ -60,11 +61,13 @@ const clientLoginWithGoogle = async (req, res) => {
     const { email, password } = req.body;
     const oldUser = await User.findOne({ email });
 
+
+    if (!oldUser) return res.json({ status: "User doesn't exist" });
+
     if (oldUser.isVerified === false) {
       sendOtpVerification(oldUser, res);
       console.log(oldUser, "olduser.....");
     } else {
-      if (!oldUser) return res.json({ status: "User doesn't exist" });
 
       if (oldUser.isBlocked === true)
         return res.json({ status: "User is blocked" });
@@ -87,7 +90,7 @@ const clientRegister = async (req, res) => {
   console.log(req.body, "values from the signup form ........");
   console.log("client register page  calling.......");
 
-  const { fname, lname, dob, gender, email, phone, password, weight, height } =
+  const { name, dob, gender, email, phone, password, weight, height } =
     req.body;
   try {
     const oldUser = await User.findOne({ email });
@@ -99,8 +102,7 @@ const clientRegister = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const result = await User.create({
-      fname,
-      lname,
+      name,
       dob,
       gender,
       weight,
@@ -295,40 +297,106 @@ const trainerDetails = async (req, res) => {
   }
 };
 
-const trainerCourseList = async (req,res) => {
+const trainerCourseList = async (req, res) => {
 
-  console.log('ind trainer course list ........')
+  console.log("ind trainer course list ........");
   try {
-
     const { trainerId } = req.query;
-    console.log(trainerId,'trainer id from the query')
-    const getCourses = await Course.find({trainerId:new ObjectId(trainerId)})
-    console.log(getCourses,"ind trainerCourseList calling......");
+    console.log(trainerId, "trainer id from the query");
+    const getCourses = await Course.find({
+      trainerId: new ObjectId(trainerId),
+    });
+    console.log(getCourses, "ind trainerCourseList calling......");
     res.json(getCourses);
-
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in trainerDetails client");
   }
 
-}
+};
 
-const enrollCLient = async (req,res) => {
+const enrollCLient = async (req, res) => {
 
-  console.log('enroll client is calling.........')
-  console.log(req.body,'data from the frontend enrollClient')
+  console.log("enroll client is calling.........");
+  console.log(req.body, "data from the frontend enrollClient");
+  const today = new Date()
+  const currMonth = today.getMonth()+1
+  const formattedDate = today.toISOString().slice(0, 10);
+  console.log(formattedDate,' formatedDate.......')
+  console.log(currMonth,' currentMonth.......')
+
   try {
-    
-    const { weight , height, emergencycontact, healthinfo, clientId, courseId, paymentDetails } = req.body
+    const {
+      weight,
+      height,
+      emergencycontact,
+      slote,
+      healthinfo,
+      clientId,
+      courseId,
+      paymentDetails,
+    } = req.body;
 
-    
+    const course = await Course.findOne({ _id: new ObjectId(courseId) });
+    const slotes = course.availableSlots;
+    const sloteIndex = await slotes.findIndex((obj) => obj.slote === slote);
+    const updatedCourse = await Course.updateOne(
+      {
+        $and: [{ _id:new ObjectId(courseId) }, { "availableSlots.slote": slote }],
+      },
+      {
+        $set: {
+          "availableSlots.$.status": "booked",
+          "availableSlots.$.client": clientId,
+          "availableSlots.$.joined": formattedDate,
+        },
+        $push: {
+          "availableSlots.$.updations": {
+            $each: [
+              {
+                month: currMonth,
+                payment: true,
+                weight: weight,
+                height:height,
+                paymentDetails:paymentDetails
+              },
+            ],
+            $position: 0,
+          },
+          clients: {
+            $each: [
+              {
+                user: clientId,
+                payment: true,
+                bookedSlote: slote,
+                emergencyContact:emergencycontact,
+                healthInfo:healthinfo
+              },
+            ],
+            $position: 0,
+          },
+        }
+      }
+    );
 
+    const resp = await User.updateOne({_id:new ObjectId(clientId)},{
+      $push:{
+        courses:{course:courseId}
+      }
+    })
+
+    console.log(resp,'resp of user update')
+    console.log(sloteIndex, " slote index ");
+    console.log(slotes, " course found ");
+    console.log(updatedCourse, " updateCourse ");
+
+    res.json({status:'successfully enrolled'})
 
   } catch (error) {
-    
+    res.json({status:'something wrong'})
+    console.log(error.message, "error in mongoUpdate");
   }
-
-}
+};
 
 module.exports = {
   clientLogin,
@@ -342,5 +410,5 @@ module.exports = {
   trainers,
   trainerDetails,
   trainerCourseList,
-  enrollCLient
+  enrollCLient,
 };

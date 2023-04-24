@@ -66,7 +66,6 @@ function TrainerRegister(props) {
     useFormik({
       initialValues: {
         fname: "",
-        lname: "",
         dob: "",
         gender: "",
         email: "",
@@ -82,12 +81,12 @@ function TrainerRegister(props) {
     });
 
   return (
-    <div className="signuppageouter">
+    <div className="">
      
         
-        <div className="signupouter md:pl-64 md:pr-64 p-5 ">
+        <div className=" md:pl-64 md:pr-64 p-5 ">
           <form
-            className="signupform md:p-20 p-5 mt-20"
+            className="signupform md:p-14 p-5 mt-20"
             onSubmit={handleSubmit}
           >
             <div className="space-y-12 ">
@@ -122,30 +121,6 @@ function TrainerRegister(props) {
                       )}
                     </div>
                   </div>
-
-                  <div className="sm:col-span-3">
-                    <label
-                      htmlFor="last-name"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Last name
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="lname"
-                        id="last-name"
-                        value={values.lname}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        autoComplete="family-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                      {errors.lname && touched.lname && (
-                        <p className="text-red-600">{errors.lname}</p>
-                      )}
-                    </div>
-                  </div>
                   <div className="sm:col-span-3">
                     <label
                       htmlFor="last-name"
@@ -169,30 +144,6 @@ function TrainerRegister(props) {
                       )}
                     </div>
                   </div>
-                  <fieldset
-                    className="flex flex-row gap-4"
-                    id="radio"
-                    name="gender"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  >
-                    <legend>Gender</legend>
-                    <div className="flex items-center gap-2">
-                      <Radio id="united-state" name="gender" value="male" />
-                      <Label htmlFor="united-state">Male</Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Radio id="germany" name="gender" value="female" />
-                      <Label htmlFor="germany">Female</Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Radio id="spain" name="gender" value="other" />
-                      <Label htmlFor="spain">Others</Label>
-                    </div>
-                    {errors.gender && (
-                      <p className="text-red-600">{errors.gender}</p>
-                    )}
-                  </fieldset>
                   <div className="sm:col-span-3">
                     <label
                       htmlFor="last-name"
@@ -350,6 +301,30 @@ function TrainerRegister(props) {
                       )}
                     </div>
                   </div>
+                  <fieldset
+                    className="flex flex-row gap-4"
+                    id="radio"
+                    name="gender"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  >
+                    <legend>Gender</legend>
+                    <div className="flex items-center gap-2">
+                      <Radio id="united-state" name="gender" value="male" />
+                      <Label htmlFor="united-state">Male</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Radio id="germany" name="gender" value="female" />
+                      <Label htmlFor="germany">Female</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Radio id="spain" name="gender" value="other" />
+                      <Label htmlFor="spain">Others</Label>
+                    </div>
+                    {errors.gender && (
+                      <p className="text-red-600">{errors.gender}</p>
+                    )}
+                  </fieldset>
                 </div>
               </div>
             </div>

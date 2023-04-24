@@ -26,7 +26,7 @@ function NavBar() {
     if (Trainer?.trainer) {
       navigate("/trainer/profile", { state: { trainerId: Id } });
       console.log("trainer profile");
-    } else if (User.user) {
+    } else if (User?.user) {
       navigate("/client/profile", { state: { userId: Id } });
       console.log("user profile");
       setLoged(User.user);
@@ -56,7 +56,7 @@ function NavBar() {
     if (Trainer?.trainer) {
       console.log(Trainer, "in the use effect trainer");
       setLoged(Trainer.trainer);
-    } else if (User.user) {
+    } else if (User?.user) {
       console.log(User, "in the use effect user");
       setLoged(User.user);
     } else {

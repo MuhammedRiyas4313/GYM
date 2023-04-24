@@ -47,7 +47,7 @@ function GoogleButtonTrainer(props) {
           props.setTrainerVerifyStatus(true);
         console.log("trainer not verified");
       } else {
-        props.setLoader(true);
+        props.setLoader(false);
         toast.error(response.status);
       }
     
