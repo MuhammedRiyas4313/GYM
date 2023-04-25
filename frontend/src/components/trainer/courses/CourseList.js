@@ -33,6 +33,8 @@ function CourseList(props) {
             <th>Started</th>
             <th>Charge / Month</th>
             <th>Clients</th>
+            <th>Status</th>
+            <th>Action</th>
             <th></th>
           </tr>
         </thead>
@@ -52,6 +54,40 @@ function CourseList(props) {
                 <td>{formateDate(val.createdAt)}</td>
                 <td>{val.charge} ₹</td>
                 <td>0{val.clients?.length}</td>
+                <td> {val.status === 'Active' ? (
+                        <div>
+                          <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
+                            Active
+                          </span>
+                        </div>
+                      ) : (
+                        <div>
+                          <span class="bg-red-500 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-800">
+                            Inactive
+                          </span>
+                        </div>
+                      )}</td>
+                <td>{val.status === 'Active' ? (
+                        <button
+                          type="button"
+                          className="text-white bg-red-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                          // onClick={() => {
+                          //   blockStatus(val.isBlocked, val._id);
+                          // }}
+                        >
+                          Block
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          className="text-white bg-green-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                          // onClick={() => {
+                          //   blockStatus(val.isBlocked, val._id);
+                          // }}
+                        >
+                          Unblock
+                        </button>
+                      )}</td>
                 <th>
                   <button
                     onClick={() => viewDetails(val._id)}

@@ -7,7 +7,8 @@ const {
     trainerLoginWithGoogle,
     trainerDetails,
     addCourse,
-    trainerCourseList
+    trainerCourseList,
+    trainerClientList
                    
 } = require('../controllers/trainerController')
 
@@ -18,5 +19,6 @@ router.post('/loginwithgoogle', trainerLoginWithGoogle );
 router.get('/trainerdetails', trainerDetails );
 router.post('/addcourse', addCourse );
 router.get('/courses', trainerCourseList );
+router.get('/clients', trainerClientList );
 
 module.exports =  router;

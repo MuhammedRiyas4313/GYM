@@ -45,6 +45,11 @@ function TrianerProfile() {
     navigate("/trainer/courses", { state: { trainerId: trainerId } });
   }
 
+  function clients() {
+    console.log("courses calling");
+    navigate("/trainer/clients", { state: { trainerId: trainerId } });
+  }
+
   return (
     <div className="bg-white">
       <div className=" md:pt-12  ">
@@ -195,8 +200,8 @@ function TrianerProfile() {
                             <li onClick={courses}>
                               <a>Courses</a>
                             </li>
-                            <li>
-                              <a>Clients</a>
+                            <li onClick={clients}>
+                            <Link>Clients</Link>
                             </li>
                             <li>
                               <a>Edit Profile</a>

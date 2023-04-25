@@ -338,6 +338,9 @@ const enrollCLient = async (req, res) => {
     } = req.body;
 
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
+
+    if(course.status === 'blocked') return res.json({status:"Can't Enroll Now"})
+
     const slotes = course.availableSlots;
     const sloteIndex = await slotes.findIndex((obj) => obj.slote === slote);
     const updatedCourse = await Course.updateOne(
@@ -351,26 +354,35 @@ const enrollCLient = async (req, res) => {
           "availableSlots.$.joined": formattedDate,
         },
         $push: {
-          "availableSlots.$.updations": {
-            $each: [
-              {
-                month: currMonth,
-                payment: true,
-                weight: weight,
-                height:height,
-                paymentDetails:paymentDetails
-              },
-            ],
-            $position: 0,
-          },
           clients: {
             $each: [
               {
                 user: clientId,
-                payment: true,
+                joined:formattedDate,
+                paymentStatus: true,
                 bookedSlote: slote,
-                emergencyContact:emergencycontact,
-                healthInfo:healthinfo
+                emergencyContact: emergencycontact,
+                healthInfo: healthinfo,
+              },
+            ],
+            $position: 0,
+          },
+        }
+      }
+    );
+    const updateCourse = await Course.updateOne(
+      {
+        $and: [{ _id:new ObjectId(courseId) }, { "availableSlots.slote": slote }],
+      },
+      {
+        $push: {
+          "clients.$.updations": {
+            $each: [
+              {
+                month: currMonth,
+                weight: weight,
+                height: height,
+                paymentDetails: paymentDetails,
               },
             ],
             $position: 0,

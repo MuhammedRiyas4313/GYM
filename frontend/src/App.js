@@ -28,6 +28,7 @@ import TrainersList from "./pages/trainers/TrainersList";
 import TrainersDetails from "./pages/trainerDetails/TrainersDetails";
 import RegisterCourse from "./pages/client/joinCourse/RegisterCourse";
 import TrainerCourses from "./pages/trainer/Courses/TrainerCourses";
+import TrainerClients from "./pages/trainer/Clients/ClientsList";
 
 function App() {
   const UserDetails = useSelector((state) => state.userReducer.user);
@@ -63,6 +64,7 @@ function App() {
         <Route path="/trainer/profile" element={ Trainer ? <Profile /> : <ClientLogin /> } />
         <Route path="/trainer/addcourse" element={ Trainer ? <AddCourses /> : <ClientLogin /> } />
         <Route path="/trainer/courses" element={ Trainer ? <TrainerCourses /> : <ClientLogin /> } />
+        <Route path="/trainer/clients" element={ Trainer ? <TrainerClients /> : <ClientLogin /> } />
 
         <Route path="/admin" element={ Admin ? <Dashboard />:<AdminLogin />} />
         <Route path="/admin/dashboard" element={ Admin ? <Dashboard /> : <AdminLogin /> } />

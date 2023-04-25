@@ -33,6 +33,7 @@ function TrainerCourseList(props) {
             <th>Started</th>
             <th>Charge / Month</th>
             <th>Clients</th>
+            <th>Status</th>
             <th></th>
           </tr>
         </thead>
@@ -51,7 +52,8 @@ function TrainerCourseList(props) {
                 </td>
                 <td>{formateDate(val.createdAt)}</td>
                 <td>{val.charge} ₹</td>
-                <td>0{val.client?.length}</td>
+                <td>0{val.clients?.length}</td>
+                <td>{val.status === 'Active' ? <div className="badge bg-green-600 text-white p-2">Active</div>: <div className="badge bg-red-600 text-white p-2">Inactive</div>}</td>
                 <th>
                   <button
                     onClick={() => viewDetails(val._id)}

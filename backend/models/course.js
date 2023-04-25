@@ -21,10 +21,32 @@ const CourseSchema = mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "user",
         },
-        paymentStatus: String,
+        joined: {
+          type: String,
+        },
+        paymentStatus: Boolean,
         bookedSlote: String,
         emergencyContact: Number,
         healthInfo: String,
+        updations: [
+          {
+            month: Number,
+            weight: Number,
+            height: Number,
+            paymentDetails: Object,
+          },
+        ],
+        attendance: [
+          {
+            date: Date,
+            status: {
+              type: String,
+            },
+            reason: {
+              type: String,
+            },
+          },
+        ],
       },
     ],
     availableSlots: [
@@ -44,29 +66,6 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: String,
         },
-        updations: [
-          {
-            month: Number,
-            payment: {
-              type: Boolean,
-              default: false,
-            },
-            weight: Number,
-            height: Number,
-            paymentDetails: Object,
-          },
-        ],
-        attendance: [
-          {
-            date: Date,
-            status: {
-              type: String,
-            },
-            reason: {
-              type: String,
-            },
-          },
-        ],
       },
       {
         status: {
@@ -84,29 +83,6 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations: [
-          {
-            month: String,
-            payment: {
-              type: Boolean,
-              default: false,
-            },
-            weight: Number,
-            height: Number,
-            paymentDetails: Object,
-          },
-        ],
-        attendance: [
-          {
-            date: Date,
-            status: {
-              type: String,
-            },
-            reason: {
-              type: String,
-            },
-          },
-        ],
       },
       {
         status: {
@@ -124,29 +100,6 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations: [
-          {
-            month: String,
-            payment: {
-              type: Boolean,
-              default: false,
-            },
-            paymentDetails: Object,
-            weight: Number,
-            height: Number,
-          },
-        ],
-        attendance: [
-          {
-            date: Date,
-            status: {
-              type: String,
-            },
-            reason: {
-              type: String,
-            },
-          },
-        ],
       },
       {
         status: {
@@ -164,29 +117,6 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations: [
-          {
-            month: String,
-            payment: {
-              type: Boolean,
-              default: false,
-            },
-            weight: Number,
-            height: Number,
-            paymentDetails: Object,
-          },
-        ],
-        attendance: [
-          {
-            date: Date,
-            status: {
-              type: String,
-            },
-            reason: {
-              type: String,
-            },
-          },
-        ],
       },
       {
         status: {
@@ -204,29 +134,6 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations: [
-          {
-            month: String,
-            payment: {
-              type: Boolean,
-              default: false,
-            },
-            weight: Number,
-            height: Number,
-            paymentDetails: Object,
-          },
-        ],
-        attendance: [
-          {
-            date: Date,
-            status: {
-              type: String,
-            },
-            reason: {
-              type: String,
-            },
-          },
-        ],
       },
       {
         status: {
@@ -244,29 +151,6 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: Date,
         },
-        updations: [
-          {
-            month: String,
-            payment: {
-              type: Boolean,
-              default: false,
-            },
-            weight: Number,
-            height: Number,
-            paymentDetails: Object,
-          },
-        ],
-        attendance: [
-          {
-            date: Date,
-            status: {
-              type: String,
-            },
-            reason: {
-              type: String,
-            },
-          },
-        ],
       },
     ],
     charge: {

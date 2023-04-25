@@ -13,7 +13,7 @@ export default function TrainerHero() {
         <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56 flex justify-center align-bottom">
           
             <motion.h1 animate={{scale:1}} initial={{scale:0}} className="text-6xl font-bold  text-white sm:text-6xl">
-              Courses
+              Our Team
             </motion.h1>
           
         </div>

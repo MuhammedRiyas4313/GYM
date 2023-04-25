@@ -139,9 +139,14 @@ const addCourse = async (req, res) => {
     const values = req.body.values;
     const trainerId = req.body.trainerId;
 
-    const existCourse = await Course.findOne({trainerId:new ObjectId(trainerId),status:'Active'})
-    console.log(existCourse,'existing course....')
-    if(existCourse) return res.json({status:'Already have a active course !'})
+    const existCourse = await Course.findOne({
+      trainerId: new ObjectId(trainerId),
+      status: "Active",
+    });
+
+    console.log(existCourse, "existing course....");
+    if (existCourse)
+      return res.json({ status: "Already have a active course !" });
 
     const cover1 = await cloudinary.uploader.upload(Image1, {
       folder: "CourseCover",
@@ -208,7 +213,6 @@ const addCourse = async (req, res) => {
 };
 
 const trainerCourseList = async (req, res) => {
-
   console.log("ind trainer course list ........");
   try {
     const { trainerId } = req.query;
@@ -222,7 +226,35 @@ const trainerCourseList = async (req, res) => {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in trainerDetails client");
   }
-  
+};
+
+const trainerClientList = async (req, res) => {
+  try {
+    console.log('clientList calling.....')
+    const { trainerId } = req.query;
+    let resp = [];
+    const Arrr = await Course.find({
+      trainerId: new ObjectId(trainerId),
+    }).populate("clients.user")
+    // console.log(resp,'resp from clientList')
+    let clientArr = [];
+    resp = Arrr
+    const mapAr = resp?.map((curr)=>{
+      curr.clients?.map((val)=>{
+        console.log('course name =',curr.coursename,'clients.user.fname =',val.user.fname )
+        let data = {
+          ...val,
+          coursename:curr.coursename
+        }
+        clientArr.push(data)
+        })
+    })
+    const arrrrr = clientArr.map((val)=>console.log(val,'value from the map'))
+    res.json(clientArr)
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerClient list");
+  }
 };
 
 module.exports = {
@@ -231,5 +263,6 @@ module.exports = {
   trainerLoginWithGoogle,
   trainerDetails,
   addCourse,
-  trainerCourseList
+  trainerCourseList,
+  trainerClientList
 };

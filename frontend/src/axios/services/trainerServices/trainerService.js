@@ -92,3 +92,17 @@ export const trainerRegister = async (value) => {
       console.log('error in getTrainerDetails ......')
     }
   }
+
+  export const getTrainerClientList = async (trainerId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.get(`/clients?trainerId=${trainerId}`,config)
+      return response;
+    } catch (error) {
+      console.log(error.message,'error in getTrainerDetails ......')
+    }
+  }

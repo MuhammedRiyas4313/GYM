@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import avatar from "../../assets/images/19.jpg";
 import CourseHero from "./CourseHero";
 import { getCourses } from "../../axios/services/clientServices/clientServices";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +13,8 @@ function Courses() {
   useEffect(() => {
     getCourses().then((res) => {
       console.log(res.data, "response from the geCourse api");
-      setCourseList(res.data);
+      const coursesList = res.data.filter((obj)=>obj.status === 'Active')
+      setCourseList(coursesList);
     });
   }, []);
 

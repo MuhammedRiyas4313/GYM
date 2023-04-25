@@ -327,9 +327,11 @@ function CourseDetails() {
             {
               slote.length === 0 ? <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" disabled>
               No more Slotes available for this month
-            </button>:<button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
+            </button>: courseDetails.status === 'Active' ? <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
               Enroll Now
-            </button>
+            </button>:<div className="badge-warning md:p-5 rounded break-words text-black">
+                  Thank you for your interest in our course. We're sorry to hear that you were unable to enroll at this time. &nbsp;&nbsp;➡️
+                  </div>
             }
           </div>:''
            }

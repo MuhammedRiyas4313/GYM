@@ -63,7 +63,7 @@ function TrainerDetail() {
                   ></img>
                 </div>
                 <h1 className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase">
-                  {trainerDetails.fname}&nbsp;{trainerDetails.lname}
+                  {trainerDetails.fname}&nbsp;
                 </h1>
                 <h3 className="text-gray-600 font-lg text-center text-semibold leading-6">
                   Trainer at GYM FITNESS Company Inc.
@@ -103,26 +103,7 @@ function TrainerDetail() {
             </div>
             <div className="w-full md:w-9/12 mx-2 h-64">
               <div className="bg-gray-100 shadow-sm rounded-sm md:p-5">
-                <div className="flex flex-wrap justify-around font-semibold text-gray-900">
-                  <div className="flex">
-                    <input type="text" placeholder="Search" className="input" />
-                    <button className="btn btn-ghost btn-circle">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                    </button>
-                  </div>
+                <div className="flex flex-wrap justify-end font-semibold text-gray-900">
                   <div className="dropouter flex justify-end">
                     <div className="dropdown md:dropdown-end  ">
                       <label
@@ -177,7 +158,7 @@ function TrainerDetail() {
               <div className="my-4"></div>
 
               <div className="bg-gray-100">
-                <div className="flex justify-center align-middle font-bold text-3xl p-5">
+                <div className="flex justify-between align-middle font-bold text-3xl p-8">
                   Courses
                 </div>
 
@@ -185,7 +166,7 @@ function TrainerDetail() {
                 {/* Course list table */}
               </div>
 
-              <div className="bg-gray-100 p-10 shadow-sm rounded-sm flex flex-wrap justify-around mt-5">
+              {/* <div className="bg-gray-100 p-10 shadow-sm rounded-sm flex flex-wrap justify-around mt-5">
                 <div className="flex flex-wrap justify-between">
                   <div className="">
                     <div className="space-x-2 font-semibold text-gray-900 leading-8 mb-3 flex flex-wrap">
@@ -224,7 +205,7 @@ function TrainerDetail() {
                     </ul>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
