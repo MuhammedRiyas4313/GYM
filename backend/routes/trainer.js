@@ -8,7 +8,8 @@ const {
     trainerDetails,
     addCourse,
     trainerCourseList,
-    trainerClientList
+    trainerClientList,
+    trainerClientDetails
                    
 } = require('../controllers/trainerController')
 
@@ -20,5 +21,6 @@ router.get('/trainerdetails', trainerDetails );
 router.post('/addcourse', addCourse );
 router.get('/courses', trainerCourseList );
 router.get('/clients', trainerClientList );
+router.get('/client/details', trainerClientDetails );
 
 module.exports =  router;

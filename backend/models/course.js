@@ -24,13 +24,17 @@ const CourseSchema = mongoose.Schema(
         joined: {
           type: String,
         },
+        status: {
+          type:String,
+          default:'Active'
+        },
         paymentStatus: Boolean,
         bookedSlote: String,
         emergencyContact: Number,
         healthInfo: String,
         updations: [
           {
-            month: Number,
+            month: String,
             weight: Number,
             height: Number,
             paymentDetails: Object,

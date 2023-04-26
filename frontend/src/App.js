@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
+import io from 'socket.io-client'
 
 import Home from "./pages/home/home";
 import ClientLogin from "./pages/login/login";
@@ -29,6 +30,9 @@ import TrainersDetails from "./pages/trainerDetails/TrainersDetails";
 import RegisterCourse from "./pages/client/joinCourse/RegisterCourse";
 import TrainerCourses from "./pages/trainer/Courses/TrainerCourses";
 import TrainerClients from "./pages/trainer/Clients/ClientsList";
+import TrainerClientDetails from "./pages/trainer/ClientDetails/ClientsDetail";
+
+const socket = io.connect('http://localhost:3001')
 
 function App() {
   const UserDetails = useSelector((state) => state.userReducer.user);
@@ -65,6 +69,7 @@ function App() {
         <Route path="/trainer/addcourse" element={ Trainer ? <AddCourses /> : <ClientLogin /> } />
         <Route path="/trainer/courses" element={ Trainer ? <TrainerCourses /> : <ClientLogin /> } />
         <Route path="/trainer/clients" element={ Trainer ? <TrainerClients /> : <ClientLogin /> } />
+        <Route path="/trainer/client/details" element={ Trainer ? <TrainerClientDetails /> : <ClientLogin /> } />
 
         <Route path="/admin" element={ Admin ? <Dashboard />:<AdminLogin />} />
         <Route path="/admin/dashboard" element={ Admin ? <Dashboard /> : <AdminLogin /> } />

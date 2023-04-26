@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./TrainerProfile.css";
 import { getTrainerDetails } from "../../../axios/services/trainerServices/trainerService";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function TrianerProfile() {
-  
   const location = useLocation();
   const navigate = useNavigate();
-  const trainerId = location.state?.trainerId;
 
   const [option, setOption] = useState(false);
   const [trainerDetails, setTrainerDetails] = useState({});
@@ -30,9 +29,10 @@ function TrianerProfile() {
     console.log("close dropdown");
   }, [option]);
 
-  console.log(trainerId,'trainerId.....')
-  console.log(location.state?.trainerId,'location.state?.trainerId.....')
-
+  const trainer = useSelector((state) => state.trainerReducer.trainer);
+  let trainerId =  trainer.trainer._id
+  // let train =  location.state?.trainerId;
+  
   useEffect(() => {
     getTrainerDetails(trainerId).then((res) => {
       console.log(res.data, "response from the backend");
@@ -60,12 +60,15 @@ function TrianerProfile() {
               <div className="image overflow-hidden flex flex-wrap align-middle justify-center ">
                 <div className="w-full flex flex-wrap align-middle justify-center">
                   <div class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 ">
-                    <img src={trainerDetails.profile} alt="trainer profile" className="object-cover h-full w-full"/>
+                    <img
+                      src={trainerDetails.profile}
+                      alt="trainer profile"
+                      className="object-cover h-full w-full"
+                    />
                   </div>
                 </div>
                 <div className="flex w-full md:w-1/3 justify-between">
                   <div className="flex flex-wrap justify-between mt-3 ">
-                    
                     <div className="rating">
                       <input
                         type=""
@@ -201,13 +204,13 @@ function TrianerProfile() {
                               <a>Courses</a>
                             </li>
                             <li onClick={clients}>
-                            <Link>Clients</Link>
+                              <Link>Clients</Link>
                             </li>
                             <li>
                               <a>Edit Profile</a>
                             </li>
                             <li>
-                              <Link to='/trainer/addcourse'>Add course</Link>
+                              <Link to="/trainer/addcourse">Add course</Link>
                             </li>
                             <li>
                               <a>My wallet</a>
@@ -218,7 +221,6 @@ function TrianerProfile() {
                         <div></div>
                       )}
                     </div>
-                    
                   </div>
                 </div>
               </div>

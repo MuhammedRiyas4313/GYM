@@ -213,14 +213,12 @@ const addCourse = async (req, res) => {
 };
 
 const trainerCourseList = async (req, res) => {
-  console.log("ind trainer course list ........");
   try {
     const { trainerId } = req.query;
     console.log(trainerId, "trainer id from the query");
     const getCourses = await Course.find({
       trainerId: new ObjectId(trainerId),
     });
-    console.log(getCourses, "ind trainerCourseList calling......");
     res.json(getCourses);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -230,30 +228,64 @@ const trainerCourseList = async (req, res) => {
 
 const trainerClientList = async (req, res) => {
   try {
-    console.log('clientList calling.....')
+    console.log("clientList calling.....");
     const { trainerId } = req.query;
-    let resp = [];
-    const Arrr = await Course.find({
+    const resp = await Course.find({
       trainerId: new ObjectId(trainerId),
-    }).populate("clients.user")
-    // console.log(resp,'resp from clientList')
+    }).populate("clients.user");
+
     let clientArr = [];
-    resp = Arrr
-    const mapAr = resp?.map((curr)=>{
-      curr.clients?.map((val)=>{
-        console.log('course name =',curr.coursename,'clients.user.fname =',val.user.fname )
+    const mapAr = resp?.map((curr) => {
+      curr.clients?.map((val) => {
         let data = {
-          ...val,
-          coursename:curr.coursename
-        }
-        clientArr.push(data)
-        })
-    })
-    const arrrrr = clientArr.map((val)=>console.log(val,'value from the map'))
-    res.json(clientArr)
+          user: val.user,
+          joined: val.joined,
+          paymentStatus: val.paymentStatus,
+          bookedSlote: val.bookedSlote,
+          emergencyContact: val.emergencyContact,
+          healthInfo: val.healthInfo,
+          _id: val._id,
+          coursename: curr.coursename,
+          courseId: curr._id,
+          status:val.status
+        };
+        clientArr.push(data);
+      });
+    });
+    res.json(clientArr);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in trainerClient list");
+  }
+};
+
+const trainerClientDetails = async (req, res) => {
+  console.log("trainer client details is calling......");
+  try {
+    const { clientId, courseId } = req.query;
+    console.log("clientId = ", clientId);
+    console.log("courseId = ", courseId);
+
+    //client details in the course collection and the  clients array of object field
+    const course = await Course.findOne({_id:new ObjectId(courseId)})
+    const clientDetails = await Course.findOne(
+      { "clients._id": new ObjectId(clientId) },
+      { "clients.$": 1 }
+    ).populate('clients.user')
+
+    const data = {
+      clientDetails,
+      course
+    }
+
+    console.log(clientDetails,'clientDetails.......')
+    console.log(course,'courseDetails.......')
+
+    res.json(data);
+
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerClientDetails ...");
   }
 };
 
@@ -264,5 +296,6 @@ module.exports = {
   trainerDetails,
   addCourse,
   trainerCourseList,
-  trainerClientList
+  trainerClientList,
+  trainerClientDetails,
 };

@@ -3,10 +3,13 @@ import "./ClientProfile.css";
 import { getUserDetails } from "../../../axios/services/clientServices/clientServices";
 import { useLocation } from "react-router-dom";
 import userAvatar from '../../../assets/images/profileLogo.png'
+import { useSelector } from "react-redux";
 
 function ClientProfile() {
+  
   const location = useLocation();
-  const userId = location.state?.userId;
+  const User = useSelector((state) => state.userReducer.user);
+  const userId = User.user._id ;
 
   const [option, setOption] = useState(false);
   const [userDetails, setUserDetails] = useState({});

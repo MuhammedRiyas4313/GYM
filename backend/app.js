@@ -3,8 +3,10 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors')
+const http = require('http')
 const bodyParser = require('body-parser');
 const path = require('path')
+const { Server } = require('socket.io')
 
 const clientRouter = require('./routes/client');
 const trainerRouter = require('./routes/trainer');
@@ -51,10 +53,41 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-const port = 3001
 
-app.listen(port,()=>{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const port = 3001
+const server = http.createServer(app)
+const io = new Server(server,{
+  cors:{
+    origin: 'http://localhost:3000',
+    methods:["GET","POST"]
+  }
+})
+
+io.on('connection',(socket)=>{
+  console.log(`user connected socket ${socket.id}`)
+  socket.on('disconnect',()=>{
+    console.log(`user disconnected socket ${socket.id}`)
+  })
+})
+
+server.listen(port,()=>{
   console.log("server running in port",port)
 });
+
+
 
 module.exports = app;

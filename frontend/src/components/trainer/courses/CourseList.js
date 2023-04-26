@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-function CourseList(props) {
+function CourseList({courseList}) {
 
   const navigate = useNavigate()
 
-  const courseList = props.courseList;
+  
   const courseLength = courseList.length
   console.log(courseList,courseLength, "from the trainerCourseList and length table comp");
 
@@ -40,7 +40,7 @@ function CourseList(props) {
         </thead>
         <tbody>
         { courseLength === 0 && <tr><td></td><td className="flex justify-center text-bold w-full">NO COURSES ADDED YET</td><td></td><td></td><td></td></tr> }
-          { courseList.map((val) => {
+          { courseList?.map((val) => {
             return (
               <tr>
                 <td>

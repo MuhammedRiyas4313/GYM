@@ -22,8 +22,7 @@ const clientLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const oldUser = await User.findOne({ email });
-    console.log(oldUser, "olduser.....");
-
+    
     if (!oldUser) return res.json({ status: "User doesn't exist" });
 
     if (oldUser.isVerified === false) {
@@ -56,7 +55,7 @@ const clientLogin = async (req, res) => {
 };
 
 const clientLoginWithGoogle = async (req, res) => {
-  console.log(req.body, "client login calling with google.......");
+  console.log("client login calling with google.......");
   try {
     const { email, password } = req.body;
     const oldUser = await User.findOne({ email });
@@ -66,7 +65,6 @@ const clientLoginWithGoogle = async (req, res) => {
 
     if (oldUser.isVerified === false) {
       sendOtpVerification(oldUser, res);
-      console.log(oldUser, "olduser.....");
     } else {
 
       if (oldUser.isBlocked === true)
@@ -82,12 +80,11 @@ const clientLoginWithGoogle = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
-    console.log(error);
+    console.log(error.message);
   }
 };
 
 const clientRegister = async (req, res) => {
-  console.log(req.body, "values from the signup form ........");
   console.log("client register page  calling.......");
 
   const { name, dob, gender, email, phone, password, weight, height } =
@@ -111,11 +108,11 @@ const clientRegister = async (req, res) => {
       phone,
       password: hashedPassword,
     });
-    console.log(result, "user created");
+    console.log("user created");
     res.json({ status: "New account Created successfully" });
   } catch (error) {
     res.json({ status: "Something went wrong" });
-    console.log(error);
+    console.log(error.message);
   }
 };
 
@@ -145,7 +142,7 @@ const sendOtpVerification = async (result, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log("error", error);
+        console.log("error", error.message);
         res.json({ status: "Email not send" });
       } else {
         console.log(info, "info from otpmailer");
@@ -220,9 +217,9 @@ const clientVerifyOTP = async (req, res) => {
 
 const clientResendOTP = async (req, res) => {
   try {
+    console.log('resendOtp calling....')
     const userId = req.query.userId;
     const oldUser = await User.findOne({ _id: userId });
-    console.log(oldUser, "user find from resend otp...");
     sendOtpVerification(oldUser, res);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -232,10 +229,10 @@ const clientResendOTP = async (req, res) => {
 
 const clientDetails = async (req, res) => {
   try {
+    console.log('clientDetails calling.......')
     const { userId } = req.query;
 
     const getDetails = await User.findOne({ _id: userId });
-    console.log(getDetails, "user details from the data base......");
     res.json(getDetails);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -247,7 +244,6 @@ const courses = async (req, res) => {
   try {
     console.log("courses get calling.....");
     const getCourses = await Course.find({}).populate("trainerId");
-    console.log(getCourses, "getCourses");
     res.json(getCourses);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -264,7 +260,6 @@ const courseDetails = async (req, res) => {
     const getDetails = await Course.findOne({ _id: courseId }).populate(
       "trainerId"
     );
-    console.log(getDetails, "course details from the data base......");
     res.json(getDetails);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -276,7 +271,6 @@ const trainers = async (req, res) => {
   try {
     console.log("trainers get calling.....");
     const getTrainers = await Trainer.find({});
-    console.log(getTrainers, "getTrainers");
     res.json(getTrainers);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -302,11 +296,11 @@ const trainerCourseList = async (req, res) => {
   console.log("ind trainer course list ........");
   try {
     const { trainerId } = req.query;
-    console.log(trainerId, "trainer id from the query");
+
     const getCourses = await Course.find({
       trainerId: new ObjectId(trainerId),
     });
-    console.log(getCourses, "ind trainerCourseList calling......");
+
     res.json(getCourses);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -317,14 +311,13 @@ const trainerCourseList = async (req, res) => {
 
 const enrollCLient = async (req, res) => {
 
-  console.log("enroll client is calling.........");
-  console.log(req.body, "data from the frontend enrollClient");
   const today = new Date()
   const currMonth = today.getMonth()+1
+  const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString('default', { month: 'long' });
+  // const oneMonthFromNow = new Date();
+  //  oneMonthFromNow.setMonth(today.getMonth() + 1);
   const formattedDate = today.toISOString().slice(0, 10);
-  console.log(formattedDate,' formatedDate.......')
-  console.log(currMonth,' currentMonth.......')
-
+  
   try {
     const {
       weight,
@@ -379,7 +372,7 @@ const enrollCLient = async (req, res) => {
           "clients.$.updations": {
             $each: [
               {
-                month: currMonth,
+                month: monthName,
                 weight: weight,
                 height: height,
                 paymentDetails: paymentDetails,
@@ -396,11 +389,6 @@ const enrollCLient = async (req, res) => {
         courses:{course:courseId}
       }
     })
-
-    console.log(resp,'resp of user update')
-    console.log(sloteIndex, " slote index ");
-    console.log(slotes, " course found ");
-    console.log(updatedCourse, " updateCourse ");
 
     res.json({status:'successfully enrolled'})
 
