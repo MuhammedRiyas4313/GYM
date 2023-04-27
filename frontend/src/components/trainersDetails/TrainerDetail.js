@@ -5,11 +5,11 @@ import {
   getTrainerCourseList,
 } from "../../axios/services/clientServices/clientServices";
 import TrainerCourseList from "./TrainerCourseList";
+import { useSelector } from "react-redux";
 
 function TrainerDetail() {
-  
-  const location = useLocation();
-  const trainerId = location.state?.trainerId;
+  const Trainer = useSelector((state) => state.trainerReducer.trainer);
+  const trainerId = Trainer.trainer._id;
 
   const [option, setOption] = useState(false);
   const [trainerDetails, setTrainerDetails] = useState({});
@@ -88,11 +88,15 @@ function TrainerDetail() {
                   </li>
                   <li className="flex items-center py-3">
                     <span>Member since</span>
-                    <span className="ml-auto">{formateDate(trainerDetails.createdAt)}</span>
+                    <span className="ml-auto">
+                      {formateDate(trainerDetails.createdAt)}
+                    </span>
                   </li>
                   <li className="flex items-center py-3">
                     <span className="mr-5">Email</span>
-                    <span className="ml-auto break-words">{trainerDetails.email}</span>
+                    <span className="ml-auto break-words">
+                      {trainerDetails.email}
+                    </span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Gender</span>
@@ -102,59 +106,62 @@ function TrainerDetail() {
               </div>
             </div>
             <div className="w-full md:w-9/12 mx-2 h-64">
-              <div className="bg-gray-100 shadow-sm rounded-sm md:p-5">
-                <div className="flex flex-wrap justify-end font-semibold text-gray-900">
-                  <div className="dropouter flex justify-end">
-                    <div className="dropdown md:dropdown-end  ">
-                      <label
-                        tabIndex={1}
-                        className="btn m-1 btn-circle swap swap-rotate bg-orange-500"
-                      >
-                        <input
-                          type="checkbox"
-                          className="hidden"
-                          onClick={options}
-                        />
-
-                        <svg
-                          className="swap-off fill-current"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 512 512"
+              {!trainerId ? (
+                <div className="bg-gray-100 shadow-sm rounded-sm md:p-5">
+                  <div className="flex flex-wrap justify-end font-semibold text-gray-900">
+                    <div className="dropouter flex justify-end">
+                      <div className="dropdown md:dropdown-end  ">
+                        <label
+                          tabIndex={1}
+                          className="btn m-1 btn-circle swap swap-rotate bg-orange-500"
                         >
-                          <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                        </svg>
+                          <input
+                            type="checkbox"
+                            className="hidden"
+                            onClick={options}
+                          />
 
-                        <svg
-                          className="swap-on fill-current"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 512 512"
-                        >
-                          <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-                        </svg>
-                      </label>
-                      {option ? (
-                        <div className="dropdownlist">
-                          <ul
-                            tabIndex={1}
-                            className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                          <svg
+                            className="swap-off fill-current"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 512 512"
                           >
-                            <li>
-                              <a className="text-black">Message</a>
-                            </li>
-                          </ul>
-                        </div>
-                      ) : (
-                        <div></div>
-                      )}
+                            <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                          </svg>
+
+                          <svg
+                            className="swap-on fill-current"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="32"
+                            height="32"
+                            viewBox="0 0 512 512"
+                          >
+                            <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+                          </svg>
+                        </label>
+                        {option ? (
+                          <div className="dropdownlist">
+                            <ul
+                              tabIndex={1}
+                              className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+                            >
+                              <li>
+                                <a className="text-black">Message</a>
+                              </li>
+                            </ul>
+                          </div>
+                        ) : (
+                          <div></div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
+              ) : (
+                <div></div>
+              )}
               <div className="my-4"></div>
 
               <div className="bg-gray-100">

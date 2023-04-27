@@ -1,7 +1,8 @@
 import React from 'react'
 import SideBar from '../../../components/admin/sidebars/SideBar'
 import Messages from '../../../components/admin/message/Messages'
-function Message() {
+
+function AdminChat() {
   return (
     <div>
     <SideBar />
@@ -10,4 +11,4 @@ function Message() {
   )
 }
 
-export default Message
+export default AdminChat;

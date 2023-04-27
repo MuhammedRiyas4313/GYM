@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./ClientProfile.css";
 import { getUserDetails } from "../../../axios/services/clientServices/clientServices";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import userAvatar from '../../../assets/images/profileLogo.png'
 import { useSelector } from "react-redux";
 
 function ClientProfile() {
   
   const location = useLocation();
+  const navigate = useNavigate()
+
   const User = useSelector((state) => state.userReducer.user);
   const userId = User.user._id ;
 
@@ -38,8 +40,9 @@ function ClientProfile() {
     });
   }, []);
 
-  function updataProfile() {
-    console.log("updataProfile calling");
+  function message() {
+    console.log("message calling");
+    navigate('/client/chat',{state:{userId:userId}})
   }
 
   return (
@@ -127,7 +130,7 @@ function ClientProfile() {
                         </svg>
                       </label>
                     </div>
-                    <div className="flex">
+                    <div className="flex" onClick={message}>
                       <label
                         tabIndex={0}
                         className="btn m-1 btn-circle p-2 bg-orange-500"
@@ -189,7 +192,7 @@ function ClientProfile() {
                             tabIndex={0}
                             className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
                           >
-                            <li onClick={updataProfile}>
+                            <li>
                               <a>Edit Profile</a>
                             </li>
                             <li>

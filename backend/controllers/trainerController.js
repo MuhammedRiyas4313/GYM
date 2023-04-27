@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const Trainer = require("../models/trainer");
 const Course = require("../models/course");
+const Conversation = require('../models/conversation')
+
 const { ObjectId } = require("mongodb");
 const cloudinary = require("cloudinary").v2;
 const bcrypt = require("bcrypt");
@@ -289,6 +291,40 @@ const trainerClientDetails = async (req, res) => {
   }
 };
 
+const createConversation = async (req,res) => {
+  console.log('trainer conversation creation calling..')
+  const { trainerId, clientId } = req.body
+  try {
+
+    const conversationExist = await Conversation.findOne({
+      members: { 
+        $elemMatch: {
+          $all: [trainerId, clientId]
+        }
+      }
+    })
+    
+    if(conversationExist) res.json(conversationExist)
+
+    const response = await Conversation.create({
+      members:[trainerId,clientId]
+    })
+    res.json(response)
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerClientDetails ...");
+  }
+}
+
+const getConversation = async (req,res){
+  console.log('getconversation is calling')
+  try {
+    const conv = await Conversation.find({})
+  } catch (error) {
+    
+  }
+}
+
 module.exports = {
   trainerRegister,
   trainerLogin,
@@ -298,4 +334,6 @@ module.exports = {
   trainerCourseList,
   trainerClientList,
   trainerClientDetails,
+  createConversation,
+  getConversation
 };

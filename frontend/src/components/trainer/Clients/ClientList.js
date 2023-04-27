@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { createConversation } from "../../../axios/services/chat/trainerChat";
 
 function ClientList({ clients }) {
   const navigate = useNavigate();
@@ -7,20 +9,25 @@ function ClientList({ clients }) {
   const [client, setClient] = useState([]);
   const clientsLength = clients.length;
 
-  console.log(clients, "clients................");
-  console.log(clientsLength, "clientsLength from the clients");
+  const Trainer = useSelector((state) => state.trainerReducer.trainer);
+  const trainerId = Trainer.trainer._id
+
+
   function formateDate(date) {
     const formatDate = new Date(date);
     const formated = `${formatDate.getDate()}-${
       formatDate.getMonth() + 1
     }-${formatDate.getFullYear()}`;
-    console.log(formated, "formate date is calling.....");
     return formated;
   }
 
   function viewDetails(clientId, courseId) {
-    console.log(clientId, "view details trainer ");
     navigate("/trainer/client/details", { state: { clientId, courseId } });
+  }
+
+  function message (clientId){
+    createConversation(trainerId,clientId)
+    navigate('/trainer/chat',{state:{trainerId:trainerId,clientId:clientId}})
   }
 
   return (
@@ -65,7 +72,7 @@ function ClientList({ clients }) {
                   <div className="flex items-center space-x-3">
                     <div>
                       <div className="font-bold">{val.user.fname}</div>
-                      {/* <div className="text-sm opacity-50">United States</div> */}
+                      {/* <div classNameName="text-sm opacity-50">United States</div> */}
                     </div>
                   </div>
                 </td>
@@ -73,9 +80,9 @@ function ClientList({ clients }) {
                 <td>{val.joined}</td>
                 <td>
                   {val.paymentStatus ? (
-                    <div className="badge bg-green-700">Completed</div>
+                    <div classNameName="badge bg-green-700">Completed</div>
                   ) : (
-                    <div className="badge bg-red-700">Pending</div>
+                    <div classNameName="badge bg-red-700">Pending</div>
                   )}
                 </td>
                 <td>{val.emergencyContact}</td>
@@ -83,27 +90,27 @@ function ClientList({ clients }) {
                 <td>
                   {val.status === "Active" ? (
                     <div className="flex justify-center">
-                      <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
+                      <span className="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
                         Active
                       </span>
                     </div>
                   ) : (
                     <div>
-                      <span class="bg-red-500 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-800">
+                      <span className="bg-red-500 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-800">
                         Canceled
                       </span>
                     </div>
                   )}
                 </td>
                 <td>
-                  <button class="flex px-3 py-2 hover:bg-yellow-500 bg-yellow-400 mr-1 text-white font-semibold rounded">
+                  <button className="flex px-3 py-2 hover:bg-yellow-500 bg-yellow-400 mr-1 text-white font-semibold rounded">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
-                      class="w-6 h-6"
+                      className="w-6 h-6"
                     >
                       <path
                         stroke-linecap="round"
@@ -112,21 +119,21 @@ function ClientList({ clients }) {
                       />
                     </svg>
 
-                    <span class="ml-1">Update⬇️</span>
+                    <span className="ml-1">Update⬇️</span>
                   </button>
                 </td>
                 <td>
-                  <button class="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
-                    <span class="ml-1">🎥Video Call</span>
+                  <button className="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
+                    <span className="ml-1">🎥Video Call</span>
                   </button>
-                  <button class="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
+                  <button onClick={()=>message(val._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
-                      class="w-6 h-6"
+                      className="w-6 h-6"
                     >
                       <path
                         stroke-linecap="round"
@@ -135,7 +142,7 @@ function ClientList({ clients }) {
                       />
                     </svg>
 
-                    <span class="ml-1">Message</span>
+                    <span className="ml-1">Message</span>
                   </button>
                 </td>
                 <th>

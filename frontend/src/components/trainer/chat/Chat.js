@@ -1,48 +1,26 @@
-import React from "react";
-import avatar1 from "../../../assets/images/avatars/1.jpg";
+import React, { useEffect } from "react";
+import Avatar from "../../../assets/images/profileLogo.png";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-function Messages() {
-  
+
+function Chat() {
+
+    const location = useLocation()
+    // const trainerId = location.state?.trainerId
+    // const clientId = location.state?.clientId
+
+    const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
+    const trainerId = TrainerDetails?.trainer?._id
+
+    useEffect(()=>{
+        getConversation(trainerId)
+    },[])
+
+
   return (
     <div>
-      <div className="flex items-center justify-between p-4 bg-gray-900 dark:bg-gray-900 md:ml-64">
-        <h3 className="text-3xl text-white font-bold">Messages</h3>
-        <div class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg
-              aria-hidden="true"
-              class="w-5 h-5 text-gray-500 dark:text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search here"
-            required
-          ></input>
-          <button
-            type="submit"
-            class="text-white absolute right-2.5 bottom-2.5 bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Search
-          </button>
-        </div>
-      </div>
-      <div className="relative overflow-x-hidden shadow-md md:ml-64">
-        <div>
-          <div className="">
+          <div className="pt-20">
             <div className="container ">
               <div className="md:flex no-wrap md:-mx-2 ">
                 <div className="w-full md:w-3/12 md:mx-2 bg-gray-200">
@@ -68,7 +46,7 @@ function Messages() {
                         />
                       </div>
                       <div className="w-full">
-                        <div className="text-lg font-semibold">Luis1994</div>
+                        <div className="text-lg font-semibold">Athul</div>
                         <span className="text-gray-500">
                           Pick me at 9:00 Am
                         </span>
@@ -329,9 +307,7 @@ function Messages() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
   );
 }
 
-export default Messages;
+export default Chat;

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const path = require('path')
 const { Server } = require('socket.io')
 
+const socketConnection = require('./socketIO')
 const clientRouter = require('./routes/client');
 const trainerRouter = require('./routes/trainer');
 const adminRouter = require('./routes/admin');
@@ -54,35 +55,10 @@ app.use(function(err, req, res, next) {
 });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const port = 3001
 const server = http.createServer(app)
-const io = new Server(server,{
-  cors:{
-    origin: 'http://localhost:3000',
-    methods:["GET","POST"]
-  }
-})
 
-io.on('connection',(socket)=>{
-  console.log(`user connected socket ${socket.id}`)
-  socket.on('disconnect',()=>{
-    console.log(`user disconnected socket ${socket.id}`)
-  })
-})
+socketConnection(server)
 
 server.listen(port,()=>{
   console.log("server running in port",port)

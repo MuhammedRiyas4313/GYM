@@ -87,7 +87,7 @@ const clientLoginWithGoogle = async (req, res) => {
 const clientRegister = async (req, res) => {
   console.log("client register page  calling.......");
 
-  const { name, dob, gender, email, phone, password, weight, height } =
+  const { fname, dob, gender, email, phone, password, weight, height } =
     req.body;
   try {
     const oldUser = await User.findOne({ email });
@@ -99,7 +99,7 @@ const clientRegister = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const result = await User.create({
-      name,
+      fname,
       dob,
       gender,
       weight,

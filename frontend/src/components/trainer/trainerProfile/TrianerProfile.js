@@ -50,6 +50,10 @@ function TrianerProfile() {
     navigate("/trainer/clients", { state: { trainerId: trainerId } });
   }
 
+  function message(){
+    navigate('/trainer/chat',{state:{ trainerId: trainerId }})
+  }
+
   return (
     <div className="bg-white">
       <div className=" md:pt-12  ">
@@ -138,7 +142,7 @@ function TrianerProfile() {
                         </svg>
                       </label>
                     </div>
-                    <div className="flex">
+                    <div className="flex" onClick={message}>
                       <label
                         tabIndex={0}
                         className="btn m-1 btn-circle p-2 bg-orange-500"

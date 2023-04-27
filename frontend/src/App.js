@@ -13,7 +13,7 @@ import OtpVerfication from "./pages/client/otpverification/OtpVerfication";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Trainers from "./pages/admin/trainers/Trainers";
 import Users from "./pages/admin/users/Users";
-import Message from "./pages/admin/message/Message";
+import Message from "./pages/admin/message/AdminChat";
 import Notification from "./pages/admin/notification/Notification";
 import Transaction from "./pages/admin/transaction/Transaction";
 import TrainerDetail from "./pages/admin/trainerDetails/TrainerDetails";
@@ -31,6 +31,9 @@ import RegisterCourse from "./pages/client/joinCourse/RegisterCourse";
 import TrainerCourses from "./pages/trainer/Courses/TrainerCourses";
 import TrainerClients from "./pages/trainer/Clients/ClientsList";
 import TrainerClientDetails from "./pages/trainer/ClientDetails/ClientsDetail";
+import TrainerChat from "./pages/trainer/Chating/TrainerChat";
+import ClientChat from "./pages/client/Chat/ClientChat";
+import AdminChat from "./pages/admin/message/AdminChat";
 
 const socket = io.connect('http://localhost:3001')
 
@@ -55,6 +58,7 @@ function App() {
         <Route path="/login" element={<ClientLogin />} />
         <Route path="/clientregister" element={<ClientRegister />} />
         <Route path="/client/profile" element={ User ? <ClienProfile /> : <ClientLogin />} />
+        <Route path="/client/chat" element={ User ? <ClientChat /> : <ClientLogin />} />
 
         <Route path="/courses" element={<CourseList />} />
         <Route path="/course/details" element={<CourseDetail />} />
@@ -70,6 +74,7 @@ function App() {
         <Route path="/trainer/courses" element={ Trainer ? <TrainerCourses /> : <ClientLogin /> } />
         <Route path="/trainer/clients" element={ Trainer ? <TrainerClients /> : <ClientLogin /> } />
         <Route path="/trainer/client/details" element={ Trainer ? <TrainerClientDetails /> : <ClientLogin /> } />
+        <Route path="/trainer/chat" element={ Trainer ? <TrainerChat /> : <ClientLogin /> } />
 
         <Route path="/admin" element={ Admin ? <Dashboard />:<AdminLogin />} />
         <Route path="/admin/dashboard" element={ Admin ? <Dashboard /> : <AdminLogin /> } />
@@ -81,6 +86,7 @@ function App() {
         <Route path="/admin/notifications" element={ Admin ? <Notification /> :<AdminLogin /> } />
         <Route path="/admin/transactions" element={ Admin ? <Transaction />:<AdminLogin /> } />
         <Route path="/admin/courses" element={ Admin ? <Course />:<AdminLogin /> } />
+        <Route path="/admin/chat" element={ Admin ? <AdminChat />:<AdminLogin /> } />
       </Routes>
     </div>
   );

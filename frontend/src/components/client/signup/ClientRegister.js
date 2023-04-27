@@ -61,7 +61,7 @@ function ClientRegister() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="name"
+                    name="fname"
                     value={values.fname}
                     onChange={handleChange}
                     onBlur={handleBlur}
