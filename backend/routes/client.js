@@ -12,7 +12,12 @@ const {
   trainers,
   trainerDetails,
   trainerCourseList,
-  enrollCLient
+  enrollCLient,
+  createConversation,
+  getConversation,
+  getUser,
+  getMessages,
+  createMessage,
 } = require("../controllers/clientController");
 /* GET home page. */
 router.post("/register", clientRegister);
@@ -27,5 +32,10 @@ router.get("/trainers", trainers);
 router.get("/trainer/details", trainerDetails);
 router.get("/trainer/courses", trainerCourseList);
 router.post("/enroll", enrollCLient);
+router.post("/chat", createConversation);
+router.get("/chat", getConversation);
+router.get("/chat/user", getUser);
+router.get("/chat/messages", getMessages);
+router.post("/chat/message", createMessage);
 
 module.exports = router;

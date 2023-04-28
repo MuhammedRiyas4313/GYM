@@ -1,67 +1,136 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../../../assets/images/profileLogo.png";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import {
+  getConversation,
+  getMessages,
+  saveMessage,
+} from "../../../axios/services/chat/trainerChat";
+import UsersList from "./UsersList";
+import { getUser } from "../../../axios/services/chat/trainerChat";
+import Messages from "./Messages";
 
 function Chat() {
+  // const location = useLocation()
+  // const trainerId = location.state?.trainerId
+  // const clientId = location.state?.clientId
 
-    const location = useLocation()
-    // const trainerId = location.state?.trainerId
-    // const clientId = location.state?.clientId
+  const [conversations, setConversations] = useState([]);
+  const [currentChat, setCurrentChat] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [user, setUser] = useState(null);
+  const [newMessage, setNewMessage] = useState("");
 
-    const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
-    const trainerId = TrainerDetails?.trainer?._id
+  const sendInp = useRef();
+  const scrollRef = useRef()
 
-    useEffect(()=>{
-        getConversation(trainerId)
-    },[])
+  const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
+  const trainerId = TrainerDetails?.trainer?._id;
 
+  useEffect(() => {
+    getConversation(trainerId).then((res) => {
+      setConversations(res);
+    });
+  }, []);
+
+  console.log(currentChat, "current chat.....");
+  console.log(user?.fname, "user name.....");
+
+  useEffect(() => {
+    getMessages(currentChat?._id).then((res) => {
+      console.log(res, "res from get messages");
+      setMessages(res);
+    });
+  }, [currentChat]);
+
+  useEffect(()=>{
+    scrollRef?.current?.scrollIntoView()
+  },[messages])
+
+  async function setChat(conversation) {
+    const friendId = conversation.members.find((m) => m !== trainerId);
+    const findUser = async () => {
+      const friend = await getUser(friendId);
+      setUser(friend);
+    };
+    findUser();
+  }
+
+  function sendMessage() {
+    console.log(newMessage);
+    const data = {
+      conversationId: currentChat._id,
+      sender: trainerId,
+      text: newMessage,
+    };
+    if (newMessage) {
+      saveMessage(data).then((res)=>{
+        const messag = [...messages,res]
+        setMessages( messag )
+      });
+      setNewMessage("");
+      sendInp.current.focus();
+    } else {
+      console.log("message empty");
+    }
+  }
 
   return (
     <div>
-          <div className="pt-20">
-            <div className="container ">
-              <div className="md:flex no-wrap md:-mx-2 ">
-                <div className="w-full md:w-3/12 md:mx-2 bg-gray-200">
-                  <div
-                    className="bg-gray-200 flex flex-col overflow-y-scroll"
-                    style={{ maxHeight: "85vh" }}
-                  >
-                    <div className="bg-gray-200  border-b-2 py-4 px-2 absolute z-10">
-                      <input
-                        type="text"
-                        placeholder="search chatting"
-                        className="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
-                      />
-                    </div>
-                    {/* <!-- end search compt -->
+      <div className="pt-20">
+        <div className="container ">
+          <div className="md:flex no-wrap md:-mx-2 ">
+            <div className="w-full md:w-3/12 md:mx-2 bg-gray-200">
+              <div
+                className="bg-gray-200 flex flex-col overflow-y-scroll"
+                style={{ maxHeight: "85vh" }}
+              >
+                <div className="bg-gray-200  border-b-2 py-4 px-2 absolute z-10">
+                  <input
+                    type="text"
+                    placeholder="search chatting"
+                    className="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
+                  />
+                </div>
+                {/* <!-- end search compt -->
                  <!-- user list --> */}
-                    <div className="flex flex-row py-20 px-2 justify-center items-center border-b-2 bg-gray-200">
-                      <div className="w-1/4">
-                        <img
-                          src="https://source.unsplash.com/_7LbC5J-jw4/600x600"
-                          className="object-cover h-12 w-12 rounded-full"
-                          alt=""
+                <div className="pt-20">
+                  {conversations?.map((c) => {
+                    return (
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          setCurrentChat(c);
+                          setChat(c);
+                        }}
+                      >
+                        <UsersList
+                          conversation={c}
+                          currentUser={trainerId}
+                          user={user}
+                          currentChat={currentChat}
+                          setUser={setUser}
                         />
                       </div>
-                      <div className="w-full">
-                        <div className="text-lg font-semibold">Athul</div>
-                        <span className="text-gray-500">
-                          Pick me at 9:00 Am
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })}
                 </div>
-                <div className="w-full md:w-9/12 mx-2 h-full">
-                  <div className="bg-gray-100 shadow-sm rounded-sm md:p-5">
-                    <div className="flex flex-wrap justify-end font-semibold text-gray-900">
+              </div>
+            </div>
+            <div className="w-full md:w-9/12 mx-2 h-full">
+              <div className="bg-gray-100 shadow-sm rounded-sm md:p-1">
+                <div className="flex flex-wrap justify-end font-semibold text-gray-900">
+                  <div
+                    className="flex-1 p:2 sm:p-6 justify-center flex flex-col"
+                    style={{ minHeight: "85vh" }}
+                  >
+                    {currentChat ? (
                       <div
-                        className="flex-1 p:2 sm:p-6 justify-between flex flex-col"
+                        className="flex-1 p:2 sm:p-6 justify-center flex flex-col"
                         style={{ maxHeight: "80vh" }}
                       >
-                        <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
+                        <div className="flex sm:items-center justify-between  border-b-2 border-gray-200">
                           <div className="relative flex items-center space-x-4">
                             <div className="relative">
                               <span className="absolute text-green-500 right-0 bottom-0">
@@ -75,7 +144,7 @@ function Chat() {
                                 </svg>
                               </span>
                               <img
-                                src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
+                                src={Avatar}
                                 alt=""
                                 className="w-10 sm:w-16 h-10 sm:h-16 rounded-full"
                               ></img>
@@ -83,12 +152,9 @@ function Chat() {
                             <div className="flex flex-col leading-tight">
                               <div className="text-2xl mt-1 flex items-center">
                                 <span className="text-gray-700 mr-3">
-                                  Anderson Vanhron
+                                  {user?.fname}
                                 </span>
                               </div>
-                              <span className="text-lg text-gray-600">
-                                Junior Developer
-                              </span>
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
@@ -151,45 +217,23 @@ function Chat() {
                             </button>
                           </div>
                         </div>
+
                         <div
                           id="messages"
                           className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-1 h-screen scrolling-touch "
                         >
-                          <div className="chat-message">
-                            <div className="flex items-end">
-                              <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-2 items-start">
-                                <div>
-                                  <span className="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-300 text-gray-600">
-                                    Can be verified on any platform using docker
-                                  </span>
-                                </div>
+                          {messages?.map((message) => {
+                            return (
+                              <div ref={scrollRef}>
+                                <Messages
+                                message={message}
+                                own={message.sender === trainerId}
+                              />
                               </div>
-                              <img
-                                src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                                alt="My profile"
-                                className="w-6 h-6 rounded-full order-1"
-                              ></img>
-                            </div>
-                          </div>
-                          <div className="chat-message">
-                            <div className="flex items-end justify-end">
-                              <div className="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end">
-                                <div>
-                                  <span className="px-4 py-2 rounded-lg inline-block rounded-br-none bg-blue-600 text-white ">
-                                    Your error message says permission denied,
-                                    npm global installs must be given root
-                                    privileges.
-                                  </span>
-                                </div>
-                              </div>
-                              <img
-                                src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-                                alt="My profile"
-                                className="w-6 h-6 rounded-full order-2"
-                              ></img>
-                            </div>
-                          </div>
+                            );
+                          })}
                         </div>
+
                         <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
                           <div className="relative flex">
                             <span className="absolute inset-y-0 flex items-center">
@@ -215,6 +259,9 @@ function Chat() {
                             </span>
                             <input
                               type="text"
+                              ref={sendInp}
+                              onChange={(e) => setNewMessage(e.target.value)}
+                              value={newMessage}
                               placeholder="Write your message!"
                               className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"
                             ></input>
@@ -284,6 +331,7 @@ function Chat() {
                               </button>
                               <button
                                 type="button"
+                                onClick={sendMessage}
                                 className="inline-flex items-center justify-center rounded-lg px-4 py-3 transition duration-500 ease-in-out text-white bg-blue-500 hover:bg-blue-400 focus:outline-none"
                               >
                                 <span className="font-bold">Send</span>
@@ -300,13 +348,22 @@ function Chat() {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    ) : (
+                      <div
+                        className="flex-1 p:2 sm:p-6 justify-center flex items-center text-gray-300"
+                        style={{ maxHeight: "90vh", fontSize: "50px" }}
+                      >
+                        Open a chat to start a conversation
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
   );
 }
 

@@ -25,8 +25,9 @@ function ClientList({ clients }) {
     navigate("/trainer/client/details", { state: { clientId, courseId } });
   }
 
-  function message (clientId){
-    createConversation(trainerId,clientId)
+ async function message (clientId){
+   const response = await createConversation(trainerId,clientId)
+   console.log(response,'convo create')
     navigate('/trainer/chat',{state:{trainerId:trainerId,clientId:clientId}})
   }
 
@@ -126,7 +127,7 @@ function ClientList({ clients }) {
                   <button className="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
                     <span className="ml-1">🎥Video Call</span>
                   </button>
-                  <button onClick={()=>message(val._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
+                  <button onClick={()=>message(val.user._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

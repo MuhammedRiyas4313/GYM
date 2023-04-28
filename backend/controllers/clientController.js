@@ -7,6 +7,8 @@ const User = require("../models/user");
 const Otp = require("../models/otp");
 const Course = require("../models/course");
 const Trainer = require("../models/trainer");
+const Conversation = require('../models/conversation')
+const Message = require('../models/message')
 
 let transporter = nodemailer.createTransport({
   // true for 465, false for other ports
@@ -22,13 +24,12 @@ const clientLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
     const oldUser = await User.findOne({ email });
-    
+
     if (!oldUser) return res.json({ status: "User doesn't exist" });
 
     if (oldUser.isVerified === false) {
       sendOtpVerification(oldUser, res);
     } else {
-
       if (oldUser.isBlocked === true)
         return res.json({ status: "User is blocked" });
 
@@ -60,13 +61,11 @@ const clientLoginWithGoogle = async (req, res) => {
     const { email, password } = req.body;
     const oldUser = await User.findOne({ email });
 
-
     if (!oldUser) return res.json({ status: "User doesn't exist" });
 
     if (oldUser.isVerified === false) {
       sendOtpVerification(oldUser, res);
     } else {
-
       if (oldUser.isBlocked === true)
         return res.json({ status: "User is blocked" });
 
@@ -217,7 +216,7 @@ const clientVerifyOTP = async (req, res) => {
 
 const clientResendOTP = async (req, res) => {
   try {
-    console.log('resendOtp calling....')
+    console.log("resendOtp calling....");
     const userId = req.query.userId;
     const oldUser = await User.findOne({ _id: userId });
     sendOtpVerification(oldUser, res);
@@ -229,7 +228,7 @@ const clientResendOTP = async (req, res) => {
 
 const clientDetails = async (req, res) => {
   try {
-    console.log('clientDetails calling.......')
+    console.log("clientDetails calling.......");
     const { userId } = req.query;
 
     const getDetails = await User.findOne({ _id: userId });
@@ -292,7 +291,6 @@ const trainerDetails = async (req, res) => {
 };
 
 const trainerCourseList = async (req, res) => {
-
   console.log("ind trainer course list ........");
   try {
     const { trainerId } = req.query;
@@ -306,18 +304,19 @@ const trainerCourseList = async (req, res) => {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in trainerDetails client");
   }
-
 };
 
 const enrollCLient = async (req, res) => {
-
-  const today = new Date()
-  const currMonth = today.getMonth()+1
-  const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString('default', { month: 'long' });
+  const today = new Date();
+  const currMonth = today.getMonth() + 1;
+  const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString(
+    "default",
+    { month: "long" }
+  );
   // const oneMonthFromNow = new Date();
   //  oneMonthFromNow.setMonth(today.getMonth() + 1);
   const formattedDate = today.toISOString().slice(0, 10);
-  
+
   try {
     const {
       weight,
@@ -332,13 +331,17 @@ const enrollCLient = async (req, res) => {
 
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
 
-    if(course.status === 'blocked') return res.json({status:"Can't Enroll Now"})
+    if (course.status === "blocked")
+      return res.json({ status: "Can't Enroll Now" });
 
     const slotes = course.availableSlots;
     const sloteIndex = await slotes.findIndex((obj) => obj.slote === slote);
     const updatedCourse = await Course.updateOne(
       {
-        $and: [{ _id:new ObjectId(courseId) }, { "availableSlots.slote": slote }],
+        $and: [
+          { _id: new ObjectId(courseId) },
+          { "availableSlots.slote": slote },
+        ],
       },
       {
         $set: {
@@ -351,7 +354,7 @@ const enrollCLient = async (req, res) => {
             $each: [
               {
                 user: clientId,
-                joined:formattedDate,
+                joined: formattedDate,
                 paymentStatus: true,
                 bookedSlote: slote,
                 emergencyContact: emergencycontact,
@@ -360,12 +363,15 @@ const enrollCLient = async (req, res) => {
             ],
             $position: 0,
           },
-        }
+        },
       }
     );
     const updateCourse = await Course.updateOne(
       {
-        $and: [{ _id:new ObjectId(courseId) }, { "availableSlots.slote": slote }],
+        $and: [
+          { _id: new ObjectId(courseId) },
+          { "availableSlots.slote": slote },
+        ],
       },
       {
         $push: {
@@ -380,21 +386,104 @@ const enrollCLient = async (req, res) => {
             ],
             $position: 0,
           },
-        }
+        },
       }
     );
 
-    const resp = await User.updateOne({_id:new ObjectId(clientId)},{
-      $push:{
-        courses:{course:courseId}
+    const resp = await User.updateOne(
+      { _id: new ObjectId(clientId) },
+      {
+        $push: {
+          courses: { course: courseId },
+        },
       }
-    })
+    );
 
-    res.json({status:'successfully enrolled'})
-
+    res.json({ status: "successfully enrolled" });
   } catch (error) {
-    res.json({status:'something wrong'})
+    res.json({ status: "something wrong" });
     console.log(error.message, "error in mongoUpdate");
+  }
+};
+
+const createConversation = async (req, res) => {
+  console.log("client conversation creation calling..");
+  const { trainerId, clientId } = req.body;
+  try {
+    let response = null;
+    const conversationExist = await Conversation.findOne({
+      members: {
+        $all: [trainerId, clientId],
+      },
+    });
+
+    if (conversationExist) {
+      response = conversationExist;
+      return res.json(response);
+    }
+
+    const newConv = await Conversation.create({
+      members: [trainerId, clientId],
+    });
+    response = newConv;
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerClientDetails ...");
+  }
+};
+
+const getConversation = async (req, res) => {
+  console.log("getconversation is calling");
+  const { clientId } = req.query;
+  try {
+    const conv = await Conversation.find({
+      members: { $in: [clientId] },
+    }).sort({ timestamp: -1 });
+    res.json(conv);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getconversation ...");
+  }
+};
+
+const getUser = async (req, res) => {
+  console.log("getUser is calling in clientcontroller.......");
+  try {
+    const { userId } = req.query;
+    const user = await Trainer.findOne({ _id: new ObjectId(userId) });
+    res.json(user);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
+  }
+};
+
+const getMessages = async (req, res) => {
+  console.log("getMessages calling.......");
+  try {
+    const { conversationId } = req.query;
+    const response = await Message.find({ conversationId: conversationId });
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
+  }
+};
+
+const createMessage = async (req, res) => {
+  console.log("create message is calling....");
+  const { conversationId, sender, text } = req.body;
+  try {
+    const response = await Message.create({
+      conversationId,
+      sender,
+      text,
+    });
+    res.json(response)
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
   }
 };
 
@@ -411,4 +500,9 @@ module.exports = {
   trainerDetails,
   trainerCourseList,
   enrollCLient,
+  createConversation,
+  getConversation,
+  getUser,
+  getMessages,
+  createMessage,
 };

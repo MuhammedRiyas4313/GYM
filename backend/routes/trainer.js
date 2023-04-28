@@ -12,6 +12,9 @@ const {
     trainerClientDetails,
     createConversation,
     getConversation,
+    getUser,
+    getMessages,
+    createMessage
                    
 } = require('../controllers/trainerController')
 
@@ -26,5 +29,8 @@ router.get('/clients', trainerClientList );
 router.get('/client/details', trainerClientDetails );
 router.post('/chat',  createConversation);
 router.get('/chat',  getConversation);
+router.get('/chat/user',  getUser);
+router.get('/chat/messages',  getMessages);
+router.post('/chat/message',  createMessage);
 
 module.exports =  router;
