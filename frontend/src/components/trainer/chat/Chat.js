@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../../../assets/images/profileLogo.png";
-import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   getConversation,
@@ -10,20 +9,21 @@ import {
 import UsersList from "./UsersList";
 import { getUser } from "../../../axios/services/chat/trainerChat";
 import Messages from "./Messages";
+import { io } from "socket.io-client";
+
+const END_POINT = "http://localhost:3001";
+var socket, selectedChatCompare;
 
 function Chat() {
-  // const location = useLocation()
-  // const trainerId = location.state?.trainerId
-  // const clientId = location.state?.clientId
-
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState(null);
   const [newMessage, setNewMessage] = useState("");
+  const [socketConnection, setSocketConnection] = useState(false);
 
   const sendInp = useRef();
-  const scrollRef = useRef()
+  const scrollRef = useRef();
 
   const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
   const trainerId = TrainerDetails?.trainer?._id;
@@ -34,19 +34,42 @@ function Chat() {
     });
   }, []);
 
-  console.log(currentChat, "current chat.....");
-  console.log(user?.fname, "user name.....");
+  useEffect(() => {
+    socket = io(END_POINT);
+  }, []);
 
   useEffect(() => {
-    getMessages(currentChat?._id).then((res) => {
-      console.log(res, "res from get messages");
-      setMessages(res);
+    socket?.emit("setup", currentChat?._id);
+    socket?.on("connection", () => {
+      setSocketConnection(true);
+      console.log("trainer Connected socket");
+    });
+    socket?.on("connected", (Id) => {
+      setSocketConnection(true);
+      console.log("trainer connected socket");
     });
   }, [currentChat]);
 
-  useEffect(()=>{
-    scrollRef?.current?.scrollIntoView()
-  },[messages])
+  useEffect(() => {
+    getMessages(currentChat?._id).then((res) => {
+      setMessages(res);
+    });
+    selectedChatCompare = currentChat;
+  }, [currentChat]);
+
+  useEffect(() => {
+    socket.on("recieve_message", (data) => {
+      console.log(data.conversationId, "on recieve_message trainer");
+      if (data?.conversationId === currentChat?._id) {
+        const message = [...messages, data];
+        setMessages(message);
+      }
+    });
+  });
+
+  useEffect(() => {
+    scrollRef?.current?.scrollIntoView();
+  }, [messages]);
 
   async function setChat(conversation) {
     const friendId = conversation.members.find((m) => m !== trainerId);
@@ -64,11 +87,13 @@ function Chat() {
       sender: trainerId,
       text: newMessage,
     };
+
     if (newMessage) {
-      saveMessage(data).then((res)=>{
-        const messag = [...messages,res]
-        setMessages( messag )
+      saveMessage(data).then((res) => {
+        const messag = [...messages, res];
+        setMessages(messag);
       });
+      socket.emit("send_message", data);
       setNewMessage("");
       sendInp.current.focus();
     } else {
@@ -103,6 +128,7 @@ function Chat() {
                         onClick={() => {
                           setCurrentChat(c);
                           setChat(c);
+                          socket?.emit("join room", c._id);
                         }}
                       >
                         <UsersList
@@ -226,9 +252,9 @@ function Chat() {
                             return (
                               <div ref={scrollRef}>
                                 <Messages
-                                message={message}
-                                own={message.sender === trainerId}
-                              />
+                                  message={message}
+                                  own={message.sender === trainerId}
+                                />
                               </div>
                             );
                           })}
@@ -261,6 +287,9 @@ function Chat() {
                               type="text"
                               ref={sendInp}
                               onChange={(e) => setNewMessage(e.target.value)}
+                              onKeyUp={(e) => {
+                                e.key === "Enter" && sendMessage();
+                              }}
                               value={newMessage}
                               placeholder="Write your message!"
                               className="w-full focus:outline-none focus:placeholder-gray-400 text-gray-600 placeholder-gray-600 pl-12 bg-gray-200 rounded-md py-3"

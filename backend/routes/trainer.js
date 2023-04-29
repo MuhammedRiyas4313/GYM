@@ -1,5 +1,7 @@
 const Router = require('express');
-var router = Router();
+const router = Router();
+const socketConnection = require('../socketIO')
+
 const {
     
     trainerRegister,

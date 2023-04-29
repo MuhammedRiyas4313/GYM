@@ -188,25 +188,28 @@ function Signin() {
               <div className="relative flex items-center justify-center w-full mt-6 border border-t">
                 <div className="absolute px-5 bg-white">Or</div>
               </div>
-              <div className="flex mt-4 gap-x-2 items-center justify-center">
+              <div className="flex mt-8 gap-x-2 items-center justify-center">
                 {loginPerson === "user" ? (
-                  <GoogleButtonUser
+                  <div className="w-72 h-20">
+                    <GoogleButtonUser
                     loginPerson={loginPerson}
                     setTrainerVerifyStatus={setTrainerVerifyStatus}
                     setLoader={setLoader}
                   />
+                  </div>
                 ) : (
-                  <GoogleButtonTrainer
+                  <div className="w-72 h-20">
+                    <GoogleButtonTrainer
                     loginPerson={loginPerson}
                     setTrainerVerifyStatus={setTrainerVerifyStatus}
                     setLoader={setLoader}
                   />
+                  </div>
                 )}
               </div>
 
-              <p className="mt-8 text-xs font-light text-center text-gray-700">
-                {" "}
-                Don't have an account?{" "}
+              <p className="text-xs font-light text-center text-gray-700">
+                Don't have an account?
                 {loginPerson === "user" ? (
                   <Link to="/clientregister">
                     <p className="font-medium text-orange-500 hover:underline">

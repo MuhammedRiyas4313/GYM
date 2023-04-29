@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 
 import Home from "./pages/home/home";
 import ClientLogin from "./pages/login/login";
@@ -35,7 +35,7 @@ import TrainerChat from "./pages/trainer/Chating/TrainerChat";
 import ClientChat from "./pages/client/Chat/ClientChat";
 import AdminChat from "./pages/admin/message/AdminChat";
 
-const socket = io.connect('http://localhost:3001')
+// const socket = io.connect('http://localhost:3001')
 
 function App() {
   const UserDetails = useSelector((state) => state.userReducer.user);
