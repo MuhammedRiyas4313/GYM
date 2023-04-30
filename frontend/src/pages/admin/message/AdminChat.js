@@ -1,12 +1,12 @@
 import React from 'react'
 import SideBar from '../../../components/admin/sidebars/SideBar'
-import Messages from '../../../components/admin/message/Messages'
+import Chat from '../../../components/admin/message/Chat';
 
 function AdminChat() {
   return (
     <div>
     <SideBar />
-      <Messages />
+      <Chat />
    </div>
   )
 }

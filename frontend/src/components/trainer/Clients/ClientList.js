@@ -72,7 +72,7 @@ function ClientList({ clients }) {
                 <td>
                   <div className="flex items-center space-x-3">
                     <div>
-                      <div className="font-bold">{val.user.fname}</div>
+                      <div className="font-bold">{val.user?.fname}</div>
                       {/* <div classNameName="text-sm opacity-50">United States</div> */}
                     </div>
                   </div>

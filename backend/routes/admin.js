@@ -9,7 +9,12 @@ const {
   trainerDetails,
   verifyTrainer,
   clientList,
-  clientDetails
+  clientDetails,
+  createConversation,
+  getConversation,
+  getUser,
+  getMessages,
+  createMessage
 } = require("../controllers/adminController");
 const { verify } = require("jsonwebtoken");
 
@@ -22,5 +27,10 @@ router.get("/trainerdetails", trainerDetails);
 router.patch("/verifytrainer", verifyTrainer);
 router.get("/clients", clientList);
 router.get("/clientdetails", clientDetails);
+router.post('/chat',  createConversation);
+router.get('/chat',  getConversation);
+router.get('/chat/user',  getUser);
+router.get('/chat/messages',  getMessages);
+router.post('/chat/message',  createMessage);
 
 module.exports = router;

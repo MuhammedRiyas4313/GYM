@@ -34,6 +34,7 @@ import TrainerClientDetails from "./pages/trainer/ClientDetails/ClientsDetail";
 import TrainerChat from "./pages/trainer/Chating/TrainerChat";
 import ClientChat from "./pages/client/Chat/ClientChat";
 import AdminChat from "./pages/admin/message/AdminChat";
+import TrainerVideoCall from "./pages/trainer/VideoCall.js/TrainerVideoCall";
 
 // const socket = io.connect('http://localhost:3001')
 
@@ -75,6 +76,7 @@ function App() {
         <Route path="/trainer/clients" element={ Trainer ? <TrainerClients /> : <ClientLogin /> } />
         <Route path="/trainer/client/details" element={ Trainer ? <TrainerClientDetails /> : <ClientLogin /> } />
         <Route path="/trainer/chat" element={ Trainer ? <TrainerChat /> : <ClientLogin /> } />
+        <Route path="/trainer/videocall" element={ Trainer ? <TrainerVideoCall /> : <ClientLogin /> } />
 
         <Route path="/admin" element={ Admin ? <Dashboard />:<AdminLogin />} />
         <Route path="/admin/dashboard" element={ Admin ? <Dashboard /> : <AdminLogin /> } />

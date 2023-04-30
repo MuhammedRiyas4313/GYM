@@ -14,7 +14,10 @@ function socketConnection(server){
       
       io.on('connection',(socket)=>{
         console.log(`socket connection : ${socket.id}`)
+       
         
+        //socket for chat 
+
         socket.on('setup',(Id)=>{
           // const id = Id?.toString()
           socket.join(123);
@@ -33,8 +36,20 @@ function socketConnection(server){
           console.log('recieve_message emited...')
         })
 
+
+        //socket for videocall
+
+        socket.on('callUser',({ userToCall, from , signalData, name })=>{
+          io.to(userToCall).emit('callUser',{ signal: signalData, from , name })
+        })
+
+        socket.on('answerCall',(data)=>{
+          io.to(data.to).emit('callAccepted',data.signal)
+        })
+
         socket.on('disconnect',()=>{
           console.log(`lost connection : ${socket.id}`)
+          socket.broadcast.emit('call ended')
         })
 
       })

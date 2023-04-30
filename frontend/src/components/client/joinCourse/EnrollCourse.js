@@ -19,6 +19,7 @@ function EnrollCourse() {
   const [successModal, setSuccessModal] = useState(false);
   const [loader, setLoader] = useState(false);
   const [payment, setPayment] = useState(false);
+  const [enrolledClient,setEnrolledClient] = useState(false)
 
   const navigate = useNavigate();
   const Location = useLocation();
@@ -44,6 +45,10 @@ function EnrollCourse() {
       console.log(res.data, "getCourseDetails from the enroll compo");
       setCourse(res.data);
       const allSlotes = res.data.availableSlots;
+      const clients = res.data.clients
+      const trainee = clients.filter((val) => val.user  ===  clientId && val.status === 'Active')
+      console.log(trainee,'trainee enroll statussss')
+      if(trainee) setEnrolledClient(true)
       const slotes = allSlotes.filter((val) => val.status === "free");
       console.log(slotes, "free slotes.......");
       setSlote(slotes);
@@ -69,6 +74,7 @@ function EnrollCourse() {
     console.log(data, "before payment ");
 
     const response = await enrollClient(data);
+
     if (response) {
       navigate("/client/profile", { state: { userId: clientId } });
     }else{
@@ -96,11 +102,11 @@ function EnrollCourse() {
           <Loading />
         </div>
       ) : (
-        <div className="w-full h-full flex justify-center items-center">
+        <div className="w-full h-full flex justify-center items-center mt-20">
           {!payment ? (
-            <div className="md:w-1/2 ">
+            <div className="md:w-1/2">
               <form
-                className="signupform p-20 pb-10 mt-20"
+                className="signupform md:p-20 p-10 pb-10 "
                 onSubmit={handleSubmit}
               >
                 <div className="space-y-12 ">
@@ -255,8 +261,8 @@ function EnrollCourse() {
                     </div>
                   </div>
                 </div>
-                <div className="mt-6 flex items-center justify-around gap-x-6">
-                  <div className="badge-warning md:p-5 rounded break-words">
+               { !enrolledClient ? <div className="mt-6 flex items-center justify-around gap-x-6">
+               <div className="badge-warning md:p-5 rounded break-words">
                     This will direct you to the payment option &nbsp;&nbsp;➡️
                   </div>
                   <button
@@ -265,7 +271,10 @@ function EnrollCourse() {
                   >
                     Confirm
                   </button>
-                </div>
+                  </div>:<div className="badge-warning md:p-5 rounded break-words text-center absolute top-40">
+                    Your already have an active membership &nbsp;&nbsp;➡️
+                  </div>
+                  }
               </form>
             </div>
           ) : (

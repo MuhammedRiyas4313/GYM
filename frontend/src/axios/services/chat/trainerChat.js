@@ -35,7 +35,7 @@ export const getConversation = async (trainerId) => {
   }
 };
 
-export const getUser = async (userId) => {
+export const getUser = async (Id) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
@@ -43,7 +43,7 @@ export const getUser = async (userId) => {
   };
   try {
     const response = await axiosTrainerInstance.get(
-      `/chat/user?userId=${userId}`,
+      `/chat/user?Id=${Id}`,
       config
     );
     return response.data;

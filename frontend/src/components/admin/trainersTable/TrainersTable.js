@@ -2,12 +2,18 @@ import React, { useEffect, useState } from "react";
 import { getTrainers,changeBlockStatus } from "../../../axios/services/adminServices/adminServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { createConversation } from "../../../axios/services/chat/adminChat";
+import { useSelector } from "react-redux";
 
 function TrainersTable() {
 
   const [trainersList, setTrainersList] = useState([]);
   const [trainerBlockStatus, setTrainerBlockStatus] = useState(false)
+  
   const navigate = useNavigate()
+
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
 
   useEffect(() => {
    getTrainers().then((response)=>{
@@ -35,6 +41,12 @@ function TrainersTable() {
     console.log('formate date is calling.....')
     return formated
   }
+
+  async function message (trainerId){
+    const response = await createConversation(adminId,trainerId)
+    console.log(response,'convo create')
+     navigate('/admin/chat',{state:{trainerId:trainerId,adminId:adminId}})
+   }
 
   return (
     <div>
@@ -112,7 +124,7 @@ function TrainersTable() {
                       <img
                         className="w-10 h-10 rounded-full"
                         src={val.profile}
-                        alt="Jese image"
+                        alt=" trainer image"
                       ></img>
                       <div className="pl-3">
                         <div className="text-base font-semibold">
@@ -156,23 +168,27 @@ function TrainersTable() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      {val.isBlocked ? (
-                        <button
-                          type="button"
-                          className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-                          onClick={()=>{blockStatus(val.isBlocked,val._id)}}
-                        >
-                          Unblock
-                        </button>
-                      ) : (
-                        <button
-                          type="button"
-                          className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                          onClick={()=>{blockStatus(val.isBlocked,val._id)}}
-                        >
-                          Block
-                        </button>
-                      )}
+                    <button className="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
+                    <span className="ml-1">🎥Video Call</span>
+                  </button>
+                  <button onClick={()=>message(val._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"
+                      />
+                    </svg>
+
+                    <span className="ml-1">Message</span>
+                  </button>
                     </td>
                     <td className="px-6 py-4">
                     <button type="button" onClick={()=>{viewDetails(val._id)}} class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0">View Details</button>

@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer')
 const Admin = require("../models/admin");
 const Trainer = require("../models/trainer");
 const User = require('../models/user')
+const Conversation = require('../models/conversation')
 
 
 let transporter = nodemailer.createTransport({
@@ -126,6 +127,87 @@ const clientDetails = async (req,res)=>{
     res.json(getDetails)
 }
 
+const createConversation = async (req, res) => {
+    console.log("trainer conversation creation calling..");
+    const { adminId, trainerId } = req.body;
+    try {
+      let response = null;
+      const conversationExist = await Conversation.findOne({
+        members: {
+          $all: [trainerId, adminId],
+        },
+      });
+  
+      if (conversationExist) {
+        response = conversationExist;
+        return res.json(response);
+      }
+  
+      const newConv = await Conversation.create({
+        members: [trainerId, adminId],
+      });
+      response = newConv;
+      res.json(response);
+    } catch (error) {
+      res.json({ status: "something went wrong" });
+      console.log(error.message, "error in trainerClientDetails ...");
+    }
+  };
+  
+  const getConversation = async (req, res) => {
+    console.log("getconversation is calling");
+    const { adminId } = req.query;
+    try {
+      const conv = await Conversation.find({
+        members: { $in: [adminId] },
+      }).sort({ timestamp: -1 });
+      res.json(conv);
+    } catch (error) {
+      res.json({ status: "something went wrong" });
+      console.log(error.message, "error in trainerClientDetails ...");
+    }
+  };
+  
+  const getUser = async (req, res) => {
+    console.log("getUser is calling in trainercontroller.......");
+    try {
+      const { trainerId } = req.query;
+      const user = await Trainer.findOne({ _id: new ObjectId(trainerId) });
+      res.json(user);
+    } catch (error) {
+      res.json({ status: "something went wrong" });
+      console.log(error.message, "error in getuser ...");
+    }
+  };
+  
+  const getMessages = async (req, res) => {
+    console.log("getMessages calling.......");
+    try {
+      const { conversationId } = req.query;
+      const response = await Message.find({ conversationId: conversationId });
+      res.json(response);
+    } catch (error) {
+      res.json({ status: "something went wrong" });
+      console.log(error.message, "error in getuser ...");
+    }
+  };
+  
+  const createMessage = async (req, res) => {
+    console.log("create message is calling....");
+    const { conversationId, sender, text } = req.body;
+    try {
+      const response = await Message.create({
+        conversationId,
+        sender,
+        text
+      });
+      res.json(response)
+    } catch (error) {
+      res.json({ status: "something went wrong" });
+      console.log(error.message, "error in getuser ...");
+    }
+  };
+
 module.exports = {
     adminLogin,
     trainersList,
@@ -134,5 +216,10 @@ module.exports = {
     trainerDetails,
     verifyTrainer,
     clientList,
-    clientDetails
+    clientDetails,
+    createConversation,
+    getConversation,
+    getUser,
+    getMessages,
+    createMessage
 }

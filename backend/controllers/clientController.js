@@ -307,14 +307,13 @@ const trainerCourseList = async (req, res) => {
 };
 
 const enrollCLient = async (req, res) => {
+
   const today = new Date();
   const currMonth = today.getMonth() + 1;
   const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString(
     "default",
     { month: "long" }
   );
-  // const oneMonthFromNow = new Date();
-  //  oneMonthFromNow.setMonth(today.getMonth() + 1);
   const formattedDate = today.toISOString().slice(0, 10);
 
   try {
@@ -330,6 +329,12 @@ const enrollCLient = async (req, res) => {
     } = req.body;
 
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
+
+    const existClient = await Course.findOne({'clients.user': new ObjectId(clientId)})
+
+    console.log(existClient,'already enrolled client')
+
+    if(existClient) return res.json({status:'Your already enrolled In this course'})
 
     if (course.status === "blocked")
       return res.json({ status: "Can't Enroll Now" });

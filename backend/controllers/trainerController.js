@@ -4,6 +4,7 @@ const Course = require("../models/course");
 const User = require("../models/user");
 const Message = require("../models/message");
 const Conversation = require("../models/conversation");
+const Admin = require("../models/admin");
 
 const { ObjectId } = require("mongodb");
 const cloudinary = require("cloudinary").v2;
@@ -336,9 +337,11 @@ const getConversation = async (req, res) => {
 const getUser = async (req, res) => {
   console.log("getUser is calling in trainercontroller.......");
   try {
-    const { userId } = req.query;
-    const user = await User.findOne({ _id: new ObjectId(userId) });
-    res.json(user);
+    const { Id } = req.query;
+    const user = await User.findOne({ _id: new ObjectId(Id) });
+    if(user) return res.json(user);
+    const admin = await Admin.findOne({ _id: new ObjectId(Id)})
+    if(admin) return res.json(admin);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in getuser ...");

@@ -1,76 +1,75 @@
 import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../../../assets/images/profileLogo.png";
 import { useSelector } from "react-redux";
-import { getConversation, getMessages, saveMessage } from "../../../axios/services/chat/trainerChat";
-import UsersList from "./UsersList";
-import { getUser } from "../../../axios/services/chat/trainerChat";
+import { getConversation, getMessages, saveMessage, getUser } from "../../../axios/services/chat/adminChat";
+import ChatList from './ChatList'
 import Messages from "./Messages";
-import Picker from 'emoji-picker-react';
-import { io } from "socket.io-client";
+import {io} from 'socket.io-client'
 
-const END_POINT = "http://localhost:3001";
-var socket, selectedChatCompare;
+const END_POINT = 'http://localhost:3001'
+var socket,selectedChatCompare
 
 function Chat() {
+
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [user, setUser] = useState(null);
-  const [newMessage, setNewMessage] = useState("");
+  const [ newMessage, setNewMessage ] = useState('')
   const [socketConnection, setSocketConnection] = useState(false);
-  const [isEmojiPickerVisible, setIsEmojiPickerVisible] = useState(false);
+  
+  const sendInp = useRef()
+  const scrollRef = useRef()
 
-  const sendInp = useRef();
-  const scrollRef = useRef();
-
-  const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
-  const trainerId = TrainerDetails?.trainer?._id;
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id;
 
   useEffect(() => {
-    getConversation(trainerId).then((res) => {
+    getConversation(adminId).then((res) => {
       setConversations(res);
     });
   }, []);
 
-  useEffect(() => {
-    socket = io(END_POINT);
-  }, []);
+  useEffect(()=>{
+    socket = io(END_POINT)
+  },[])
 
-  useEffect(() => {
-    socket?.emit("setup", currentChat?._id);
-    socket?.on("connection", () => {
-      setSocketConnection(true);
-      console.log("trainer Connected socket");
-    });
-    socket?.on("connected", (Id) => {
-      setSocketConnection(true);
-      console.log("trainer connected socket");
-    });
-  }, [currentChat]);
+  useEffect(()=>{
+    socket?.emit('setup',currentChat?._id)
+    socket?.on('connection',()=>{
+      setSocketConnection(true)
+      console.log('user Connected socket')
+    })
+    socket?.on('connected',()=>{
+      setSocketConnection(true)
+      console.log('user Connected socket')
+    })
+  },[currentChat])
 
   useEffect(() => {
     getMessages(currentChat?._id).then((res) => {
+      console.log(res, "res from get messages");
       setMessages(res);
     });
     selectedChatCompare = currentChat;
   }, [currentChat]);
 
-  useEffect(() => {
-    socket.on("recieve_message", (data) => {
-      console.log(data.conversationId, "on recieve_message trainer");
-      if (data?.conversationId === currentChat?._id) {
-        const message = [...messages, data];
+  useEffect(()=>{
+    socket.on('recieve_message',(data)=>{
+      console.log(data.conversationId,'on recieve_message client')
+      if(data?.conversationId === currentChat?._id){
+        const message = [...messages,data]
         setMessages(message);
       }
-    });
-  });
+    })
+  })
 
-  useEffect(() => {
-    scrollRef?.current?.scrollIntoView();
-  }, [messages]);
+  useEffect(()=>{
+    scrollRef?.current?.scrollIntoView()
+  },[messages])
 
   async function setChat(conversation) {
-    const friendId = conversation.members.find((m) => m !== trainerId);
+    const friendId = conversation.members.find((m) => m !== adminId);
     const findUser = async () => {
       const friend = await getUser(friendId);
       setUser(friend);
@@ -78,39 +77,66 @@ function Chat() {
     findUser();
   }
 
-const handleEmojiPickerToggle = () => {
-    setIsEmojiPickerVisible(!isEmojiPickerVisible);
-}
 
-const handleEmojiClick = (emojiObject) => {
-    setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
-};
-
-  function sendMessage() {
-    console.log(newMessage);
+  function sendMessage(){
+    console.log(newMessage)
     const data = {
-      conversationId: currentChat._id,
-      sender: trainerId,
-      text: newMessage,
-    };
-
-    if (newMessage) {
-      saveMessage(data).then((res) => {
-        const messag = [...messages, res];
-        setMessages(messag);
-        setIsEmojiPickerVisible(false);
-      });
-      socket.emit("send_message", data);
-      setNewMessage("");
-      sendInp.current.focus();
-    } else {
-      console.log("message empty");
+      conversationId:currentChat._id,
+      sender:adminId,
+      text:newMessage,
+    }
+    if(newMessage){
+      saveMessage(data).then((res)=>{
+        const messag = [...messages,res]
+        setMessages( messag )
+      })
+      socket.emit('send_message',data)
+      setNewMessage('')
+      sendInp.current.focus()
+    }else{
+     console.log('message empty')
     }
   }
 
   return (
     <div>
-      <div className="pt-20">
+        <div className="flex items-center justify-between p-4 bg-gray-900 dark:bg-gray-900 md:ml-64">
+        <h3 className="text-3xl text-white font-bold">Messages</h3>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg
+              aria-hidden="true"
+              class="w-5 h-5 text-gray-500 dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              ></path>
+            </svg>
+          </div>
+          <input
+            type="search"
+            id="default-search"
+            class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search here"
+            required
+          ></input>
+          <button
+            type="submit"
+            class="text-white absolute right-2.5 bottom-2.5 bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Search
+          </button>
+        </div>
+      </div>
+      <div className="md:ml-64">
+        
         <div className="container ">
           <div className="md:flex no-wrap md:-mx-2 ">
             <div className="w-full md:w-3/12 md:mx-2 bg-gray-200">
@@ -135,12 +161,12 @@ const handleEmojiClick = (emojiObject) => {
                         onClick={() => {
                           setCurrentChat(c);
                           setChat(c);
-                          socket?.emit("join room", c._id);
+                          socket?.emit('join room',c._id)
                         }}
                       >
-                        <UsersList
+                        <ChatList
                           conversation={c}
-                          currentUser={trainerId}
+                          currentUser={adminId}
                           user={user}
                           currentChat={currentChat}
                           setUser={setUser}
@@ -255,18 +281,13 @@ const handleEmojiClick = (emojiObject) => {
                           id="messages"
                           className="flex flex-col space-y-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-1 h-screen scrolling-touch "
                         >
-                          {messages?.map((message) => {
+                          { messages?.map((message) => {
                             return (
-                              <div ref={scrollRef}>
-                                <Messages
-                                  message={message}
-                                  own={message.sender === trainerId}
-                                />
-                              </div>
+                              <div ref={scrollRef}><Messages message={message} own={ message.sender === adminId }/></div>
                             );
                           })}
                         </div>
-                        
+
                         <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
                           <div className="relative flex">
                             <span className="absolute inset-y-0 flex items-center">
@@ -293,9 +314,9 @@ const handleEmojiClick = (emojiObject) => {
                             <input
                               type="text"
                               ref={sendInp}
-                              onChange={(e) => setNewMessage(e.target.value)}
-                              onKeyUp={(e) => {
-                                e.key === "Enter" && sendMessage();
+                              onChange={(e)=>setNewMessage(e.target.value)}
+                              onKeyUp={(e)=>{
+                                e.key === 'Enter' && sendMessage()
                               }}
                               value={newMessage}
                               placeholder="Write your message!"
@@ -348,16 +369,23 @@ const handleEmojiClick = (emojiObject) => {
                               </button>
                               <button
                                 type="button"
-                                onClick={handleEmojiPickerToggle}
                                 className="inline-flex items-center justify-center rounded-full h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
                               >
-                                😀
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  className="h-6 w-6 text-gray-600"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                  ></path>
+                                </svg>
                               </button>
-                              { isEmojiPickerVisible && (
-                                <div style={{ zIndex: 99, position: 'absolute' ,right:'107px',bottom:'50px'  }}>
-                                    <Picker style={{ height: '200px', width: '100%'}} className='emojiPicker' onEmojiClick={handleEmojiClick} />
-                                </div>
-                               )}
                               <button
                                 type="button"
                                 onClick={sendMessage}
