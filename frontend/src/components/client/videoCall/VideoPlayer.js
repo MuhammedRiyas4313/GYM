@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Grid, Typography, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { SocketContext } from "../../../context/SocketContext";
 
 const useStyles = makeStyles((theme) => ({
   video: {
@@ -28,8 +29,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function VideoPlayer({ client,trainer ,call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, me, callUser, leaveCall, answerCall,}) {
-  
+function VideoPlayer({user}) {
+  const {
+    call,
+    callAccepted,
+    myVideo,
+    userVideo,
+    stream,
+    name,
+    setName,
+    callEnded,
+    me,
+    callUser,
+    leaveCall,
+    answerCall,
+  } = useContext(SocketContext);
   const classes = useStyles();
 
   return (
@@ -38,7 +52,7 @@ function VideoPlayer({ client,trainer ,call, callAccepted, myVideo, userVideo, s
         <Paper className={classes.paper}>
           <Grid videoContainer>
             <Typography className="text-center font-extrabold  uppercase" variant="h5" gutterBottom>
-              {trainer?.fname || "Name"}
+               {user?.fname}
             </Typography>
             <video
               playsInline
@@ -55,7 +69,7 @@ function VideoPlayer({ client,trainer ,call, callAccepted, myVideo, userVideo, s
         <Paper className={classes.paper}>
           <Grid>
             <Typography className="text-center" variant="h5" gutterBottom>
-              {client?.fname || "Name"}
+              Trainer
             </Typography>
             <video
               playsInline

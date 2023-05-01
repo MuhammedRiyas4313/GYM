@@ -39,8 +39,11 @@ function socketConnection(server){
 
         //socket for videocall
 
+        socket.emit('me',socket.id)
+
         socket.on('callUser',({ userToCall, from , signalData, name })=>{
-          io.to(userToCall).emit('callUser',{ signal: signalData, from , name })
+          console.log('callUser on ........')
+          socket.to(userToCall).emit('callUser',{ signal: signalData, from , name })
         })
 
         socket.on('answerCall',(data)=>{

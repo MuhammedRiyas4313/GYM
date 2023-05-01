@@ -1,17 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import Avatar from "../../../assets/images/profileLogo.png";
 import { useSelector } from "react-redux";
-import { getConversation, getMessages, saveMessage } from "../../../axios/services/chat/trainerChat";
+import {
+  getConversation,
+  getMessages,
+  saveMessage,
+} from "../../../axios/services/chat/trainerChat";
 import UsersList from "./UsersList";
 import { getUser } from "../../../axios/services/chat/trainerChat";
 import Messages from "./Messages";
-import Picker from 'emoji-picker-react';
+import Picker from "emoji-picker-react";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 const END_POINT = "http://localhost:3001";
 var socket, selectedChatCompare;
 
 function Chat() {
+
+
   const [conversations, setConversations] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -22,6 +29,8 @@ function Chat() {
 
   const sendInp = useRef();
   const scrollRef = useRef();
+
+  const navigate = useNavigate()
 
   const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
   const trainerId = TrainerDetails?.trainer?._id;
@@ -78,13 +87,13 @@ function Chat() {
     findUser();
   }
 
-const handleEmojiPickerToggle = () => {
+  const handleEmojiPickerToggle = () => {
     setIsEmojiPickerVisible(!isEmojiPickerVisible);
-}
+  };
 
-const handleEmojiClick = (emojiObject) => {
+  const handleEmojiClick = (emojiObject) => {
     setNewMessage((prevMessage) => prevMessage + emojiObject.emoji);
-};
+  };
 
   function sendMessage() {
     console.log(newMessage);
@@ -106,6 +115,12 @@ const handleEmojiClick = (emojiObject) => {
     } else {
       console.log("message empty");
     }
+  }
+
+  async function videoCall() {
+    navigate("/trainer/videocall", {
+      state: { trainerId: trainerId, clientId: user._id },
+    });
   }
 
   return (
@@ -192,22 +207,27 @@ const handleEmojiClick = (emojiObject) => {
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
+                            onClick={videoCall}
                               type="button"
                               className="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
                             >
                               <svg
+                                className="fill-current text-info"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 512 512"
+                                enable-background="new 0 0 48 48"
+                                id="Layer_1"
+                                version="1.1"
                                 xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="h-6 w-6"
                               >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                ></path>
+                                <g id="Layer_3">
+                                  <path
+                                    d="M0,109.7v292.6h402.3v-61.7L512,395.4V116.6l-109.7,54.9v-61.7H0z M36.6,146.3h329.1v219.4H36.6V146.3z M475.4,176v160l-73.1-36.6v-86.9L475.4,176z"
+                                    fill="#241F20"
+                                    className="fill-current text-info"
+                                  />
+                                </g>
                               </svg>
                             </button>
                             <button
@@ -266,7 +286,7 @@ const handleEmojiClick = (emojiObject) => {
                             );
                           })}
                         </div>
-                        
+
                         <div className="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
                           <div className="relative flex">
                             <span className="absolute inset-y-0 flex items-center">
@@ -353,11 +373,22 @@ const handleEmojiClick = (emojiObject) => {
                               >
                                 😀
                               </button>
-                              { isEmojiPickerVisible && (
-                                <div style={{ zIndex: 99, position: 'absolute' ,right:'107px',bottom:'50px'  }}>
-                                    <Picker style={{ height: '200px', width: '100%'}} className='emojiPicker' onEmojiClick={handleEmojiClick} />
+                              {isEmojiPickerVisible && (
+                                <div
+                                  style={{
+                                    zIndex: 99,
+                                    position: "absolute",
+                                    right: "107px",
+                                    bottom: "50px",
+                                  }}
+                                >
+                                  <Picker
+                                    style={{ height: "200px", width: "100%" }}
+                                    className="emojiPicker"
+                                    onEmojiClick={handleEmojiClick}
+                                  />
                                 </div>
-                               )}
+                              )}
                               <button
                                 type="button"
                                 onClick={sendMessage}

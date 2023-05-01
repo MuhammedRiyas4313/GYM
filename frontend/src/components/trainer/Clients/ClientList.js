@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createConversation } from "../../../axios/services/chat/trainerChat";
+import { VideoCall } from "@material-ui/icons";
 
 function ClientList({ clients }) {
   const navigate = useNavigate();
@@ -29,6 +30,9 @@ function ClientList({ clients }) {
    const response = await createConversation(trainerId,clientId)
    console.log(response,'convo create')
     navigate('/trainer/chat',{state:{trainerId:trainerId,clientId:clientId}})
+  }
+ async function videoCall (clientId){
+    navigate('/trainer/videocall',{state:{trainerId:trainerId,clientId:clientId}})
   }
 
   return (
@@ -124,7 +128,7 @@ function ClientList({ clients }) {
                   </button>
                 </td>
                 <td>
-                  <button className="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
+                  <button onClick={()=>videoCall(val.user._id)} className="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
                     <span className="ml-1">🎥Video Call</span>
                   </button>
                   <button onClick={()=>message(val.user._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">

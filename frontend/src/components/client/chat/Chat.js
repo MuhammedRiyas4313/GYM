@@ -5,6 +5,7 @@ import { getConversation, getMessages, saveMessage, getUser} from "../../../axio
 import ChatList from './ChatList'
 import Messages from "./Messages";
 import {io} from 'socket.io-client'
+import { useNavigate } from "react-router-dom";
 // import { }
 
 const END_POINT = 'http://localhost:3001'
@@ -21,6 +22,8 @@ function Chat() {
   
   const sendInp = useRef()
   const scrollRef = useRef()
+
+  const navigate = useNavigate()
 
   const UserDetails = useSelector((state) => state.userReducer.user);
   const userId = UserDetails?.user?._id;
@@ -98,6 +101,11 @@ function Chat() {
      console.log('message empty')
     }
   }
+
+  async function videoCall (clientId){
+    navigate('/client/videocall',{state:{trainerId:user._id,clientId:clientId}})
+  }
+
 
   return (
     <div>
@@ -182,23 +190,28 @@ function Chat() {
                             </div>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <button
+                          <button
+                            onClick={videoCall}
                               type="button"
                               className="inline-flex items-center justify-center rounded-lg border h-10 w-10 transition duration-500 ease-in-out text-gray-500 hover:bg-gray-300 focus:outline-none"
                             >
                               <svg
+                                className="fill-current text-info"
+                                width="32"
+                                height="32"
+                                viewBox="0 0 512 512"
+                                enable-background="new 0 0 48 48"
+                                id="Layer_1"
+                                version="1.1"
                                 xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="h-6 w-6"
                               >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                                ></path>
+                                <g id="Layer_3">
+                                  <path
+                                    d="M0,109.7v292.6h402.3v-61.7L512,395.4V116.6l-109.7,54.9v-61.7H0z M36.6,146.3h329.1v219.4H36.6V146.3z M475.4,176v160l-73.1-36.6v-86.9L475.4,176z"
+                                    fill="#241F20"
+                                    className="fill-current text-info"
+                                  />
+                                </g>
                               </svg>
                             </button>
                             <button

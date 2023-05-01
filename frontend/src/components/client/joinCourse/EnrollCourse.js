@@ -111,9 +111,13 @@ function EnrollCourse() {
               >
                 <div className="space-y-12 ">
                   <div className="border-b border-gray-900/10 pb-12">
-                    <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">
+                    {
+                      !enrolledClient ? <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">
                       Register now
-                    </h1>
+                    </h1>:<div className="badge-info md:p-5 rounded break-words text-center">
+                    Your already have an active membership &nbsp;&nbsp;⚠️
+                  </div>
+                    }
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                       <div className="sm:col-span-3">
                         <label
@@ -271,9 +275,7 @@ function EnrollCourse() {
                   >
                     Confirm
                   </button>
-                  </div>:<div className="badge-warning md:p-5 rounded break-words text-center absolute top-40">
-                    Your already have an active membership &nbsp;&nbsp;➡️
-                  </div>
+                  </div>:<div></div>
                   }
               </form>
             </div>

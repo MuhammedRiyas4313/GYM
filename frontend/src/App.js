@@ -35,10 +35,10 @@ import TrainerChat from "./pages/trainer/Chating/TrainerChat";
 import ClientChat from "./pages/client/Chat/ClientChat";
 import AdminChat from "./pages/admin/message/AdminChat";
 import TrainerVideoCall from "./pages/trainer/VideoCall.js/TrainerVideoCall";
-
-// const socket = io.connect('http://localhost:3001')
+import ClientVideoCall from "./pages/client/videocall/ClientVideoCall";
 
 function App() {
+  
   const UserDetails = useSelector((state) => state.userReducer.user);
   const TrainerDetails = useSelector((state) => state.trainerReducer.trainer);
   const AdminDetails = useSelector((state) => state.adminReducer.admin);
@@ -60,6 +60,7 @@ function App() {
         <Route path="/clientregister" element={<ClientRegister />} />
         <Route path="/client/profile" element={ User ? <ClienProfile /> : <ClientLogin />} />
         <Route path="/client/chat" element={ User ? <ClientChat /> : <ClientLogin />} />
+        <Route path="/client/videocall" element={ User ? <ClientVideoCall /> : <ClientLogin />} />
 
         <Route path="/courses" element={<CourseList />} />
         <Route path="/course/details" element={<CourseDetail />} />
