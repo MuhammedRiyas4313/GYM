@@ -15,16 +15,18 @@ import { Payment } from "@material-ui/icons";
 import Paypal from "./Paypal";
 
 function EnrollCourse() {
+
   const [enrollData, setEnrollData] = useState({});
   const [successModal, setSuccessModal] = useState(false);
   const [loader, setLoader] = useState(false);
   const [payment, setPayment] = useState(false);
-  const [enrolledClient,setEnrolledClient] = useState(false)
+  const [enrolledClient, setEnrolledClient] = useState(false);
+  const [feeToPay, setFeeToPay] = useState(false);
+  const [slotes, setSlote] = useState([]);
+  const [course, setCourse] = useState({});
 
   const navigate = useNavigate();
   const Location = useLocation();
-  const [slotes, setSlote] = useState([]);
-  const [course, setCourse] = useState({});
 
   const client = useSelector((state) => state.userReducer.user);
 
@@ -40,15 +42,31 @@ function EnrollCourse() {
     return formated;
   }
 
+  function chargeTopay(fee) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysLeft = daysInMonth - today.getDate();
+    const feePerDay = fee / 30
+    const feeForRestDays = Math.ceil(feePerDay * daysLeft)
+    setFeeToPay(feeForRestDays)
+    return feeForRestDays
+  }
+
   useEffect(() => {
     getCourseDetails(courseId).then((res) => {
       console.log(res.data, "getCourseDetails from the enroll compo");
       setCourse(res.data);
       const allSlotes = res.data.availableSlots;
-      const clients = res.data.clients
-      const trainee = clients.filter((val) => val.user  ===  clientId && val.status === 'Active')
-      console.log(trainee,'trainee enroll statussss')
-      if(trainee) setEnrolledClient(true)
+      const clients = res.data.clients;
+      const trainee = clients.filter((val) => val.user === clientId && val.status === 'Active');
+      chargeTopay(res.data.charge)
+      console.log(trainee, "trainee enroll statussss");
+      console.log(clientId, "clientId");
+      if (trainee.length) {
+        setEnrolledClient(true);
+      }
       const slotes = allSlotes.filter((val) => val.status === "free");
       console.log(slotes, "free slotes.......");
       setSlote(slotes);
@@ -77,7 +95,7 @@ function EnrollCourse() {
 
     if (response) {
       navigate("/client/profile", { state: { userId: clientId } });
-    }else{
+    } else {
       navigate("/course/details", { state: { courseId: courseId } });
     }
   }
@@ -102,7 +120,7 @@ function EnrollCourse() {
           <Loading />
         </div>
       ) : (
-        <div className="w-full h-full flex justify-center items-center mt-20">
+        <div className="signupouter w-full h-full flex justify-center items-center mt-20">
           {!payment ? (
             <div className="md:w-1/2">
               <form
@@ -111,13 +129,15 @@ function EnrollCourse() {
               >
                 <div className="space-y-12 ">
                   <div className="border-b border-gray-900/10 pb-12">
-                    {
-                      !enrolledClient ? <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">
-                      Register now
-                    </h1>:<div className="badge-info md:p-5 rounded break-words text-center">
-                    Your already have an active membership &nbsp;&nbsp;⚠️
-                  </div>
-                    }
+                    {!enrolledClient ? (
+                      <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">
+                        Register now
+                      </h1>
+                    ) : (
+                      <div className="badge-info md:p-5 rounded break-words text-center">
+                        Your already have an active membership &nbsp;&nbsp;⚠️
+                      </div>
+                    )}
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                       <div className="sm:col-span-3">
                         <label
@@ -128,7 +148,8 @@ function EnrollCourse() {
                         </label>
                         <div className="mt-2">
                           <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm bg-gray-100  sm:text-sm sm:leading-6 p-2">
-                            {course.charge}&nbsp;₹
+                            { feeToPay }&nbsp;₹
+                            {console.log(feeToPay)}
                           </div>
                         </div>
                       </div>
@@ -265,18 +286,21 @@ function EnrollCourse() {
                     </div>
                   </div>
                 </div>
-               { !enrolledClient ? <div className="mt-6 flex items-center justify-around gap-x-6">
-               <div className="badge-warning md:p-5 rounded break-words">
-                    This will direct you to the payment option &nbsp;&nbsp;➡️
+                {!enrolledClient ? (
+                  <div className="mt-6 flex items-center justify-around gap-x-6">
+                    <div className="badge-warning md:p-5 rounded break-words">
+                      This will direct you to the payment option &nbsp;&nbsp;➡️
+                    </div>
+                    <button
+                      type="submit"
+                      className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Confirm
+                    </button>
                   </div>
-                  <button
-                    type="submit"
-                    className="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    Confirm
-                  </button>
-                  </div>:<div></div>
-                  }
+                ) : (
+                  <div></div>
+                )}
               </form>
             </div>
           ) : (

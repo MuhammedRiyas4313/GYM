@@ -24,7 +24,6 @@ function TrainerRegister(props) {
       file1: filef,
       file2: fileb,
     });
-    console.log(response);
     if (response.status === "Successfully created Account") {
       props.setLoader(false);
       toast.success(response.status);
@@ -33,7 +32,6 @@ function TrainerRegister(props) {
       props.setLoader(false);
       toast.error(response.status);
     }
-    console.log(response);
   };
 
   const handleImage1 = (e) => {

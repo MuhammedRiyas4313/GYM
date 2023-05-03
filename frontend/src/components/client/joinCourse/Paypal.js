@@ -1,11 +1,10 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import './EnrollCourse.css'
 
 function Paypal(props) {
 
-  console.log('paypal is working.......')
-  console.log(props.payment, "payment .....");
 
   const payment = props.payment.toString()
 

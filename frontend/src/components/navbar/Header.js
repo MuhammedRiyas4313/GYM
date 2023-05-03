@@ -21,14 +21,11 @@ function NavBar() {
   const Trainer = useSelector((state) => state.trainerReducer.trainer);
 
   function showProfile(Id) {
-    console.log(Id, "show profile");
     navigate("/trainer/profile");
     if (Trainer?.trainer) {
       navigate("/trainer/profile", { state: { trainerId: Id } });
-      console.log("trainer profile");
     } else if (User?.user) {
       navigate("/client/profile", { state: { userId: Id } });
-      console.log("user profile");
       setLoged(User.user);
     }
   }
@@ -39,7 +36,6 @@ function NavBar() {
 
   useEffect(() => {
     const handleResize = () => {
-      console.log(' screen resize working...')
       if (window.innerWidth > 759) {
         setButtonHide(true);
       } else {
@@ -54,10 +50,8 @@ function NavBar() {
 
   function logedPerson() {
     if (Trainer?.trainer) {
-      console.log(Trainer, "in the use effect trainer");
       setLoged(Trainer.trainer);
     } else if (User?.user) {
-      console.log(User, "in the use effect user");
       setLoged(User.user);
     } else {
       setLoged("");
@@ -71,12 +65,10 @@ function NavBar() {
   function LogoutConfirmed(status) {
     if (status) {
       if (Trainer?.trainer) {
-        console.log("trainer logout ");
         dispatch(trainerLogout());
         setLoged("");
         navigate("/login");
       } else if (User.user) {
-        console.log("user logout ");
         dispatch(userLogout());
         setLoged("");
         navigate("/login");
@@ -85,7 +77,6 @@ function NavBar() {
   }
 
   function navGate(url){
-    console.log(url,'nav calling.....')
     navigate(url)
   }
 

@@ -13,7 +13,6 @@ function TrianerProfile() {
 
   function options() {
     setOption((state) => !state);
-    console.log(option, "option status....");
   }
 
   function formateDate(date) {
@@ -21,12 +20,10 @@ function TrianerProfile() {
     const formated = `${formatDate.getDate()}-${
       formatDate.getMonth() + 1
     }-${formatDate.getFullYear()}`;
-    console.log("formate date is calling.....");
     return formated;
   }
 
   useEffect(() => {
-    console.log("close dropdown");
   }, [option]);
 
   const trainer = useSelector((state) => state.trainerReducer.trainer);
@@ -35,18 +32,15 @@ function TrianerProfile() {
   
   useEffect(() => {
     getTrainerDetails(trainerId).then((res) => {
-      console.log(res.data, "response from the backend");
       setTrainerDetails(res.data);
     });
   }, []);
 
   function courses() {
-    console.log("courses calling");
     navigate("/trainer/courses", { state: { trainerId: trainerId } });
   }
 
   function clients() {
-    console.log("courses calling");
     navigate("/trainer/clients", { state: { trainerId: trainerId } });
   }
 

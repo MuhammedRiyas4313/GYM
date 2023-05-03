@@ -94,7 +94,7 @@ function ClientProfile() {
                     </div>
                   </div>
                   <div className="flex mb-5" >
-                    <div className="" onClick={videoCall}>
+                    {/* <div className="" onClick={videoCall}>
                       <label
                         tabIndex={0}
                         className="btn m-1 btn-circle swap swap-rotate bg-orange-500"
@@ -118,7 +118,7 @@ function ClientProfile() {
                           </g>
                         </svg>
                       </label>
-                    </div>
+                    </div> */}
                     <div className="flex" onClick={message}>
                       <label
                         tabIndex={0}

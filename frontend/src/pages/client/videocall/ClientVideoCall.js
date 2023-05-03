@@ -1,17 +1,15 @@
-import React from 'react'
+import React from "react";
+import NavBar from "../../../components/navbar/Header";
+import VideoCall from "../../../components/client/videocall/VideoCall";
 import { ContextProvider } from "../../../context/SocketContext";
-import NavBar from '../../../components/navbar/Header'
-import VideoCall from '../../../components/client/videoCall/VideoCall'
 
 function ClientVideoCall() {
   return (
-    <div>
-       <ContextProvider>
-        <NavBar />
-        <VideoCall />
-      </ContextProvider>
-    </div>
-  )
+    <ContextProvider>
+      <NavBar />
+      <VideoCall />
+    </ContextProvider>
+  );
 }
 
-export default ClientVideoCall
+export default ClientVideoCall;

@@ -41,18 +41,22 @@ function socketConnection(server){
 
         socket.emit('me',socket.id)
 
+        socket.on('join_room',(id)=>{
+          socket.join(id)
+          console.log('connected =',id)
+        })
+        socket.on('disconnect',()=>{
+          socket.broadcast.emit('callended')
+        })
+
         socket.on('callUser',({ userToCall, from , signalData, name })=>{
-          console.log('callUser on ........')
-          socket.to(userToCall).emit('callUser',{ signal: signalData, from , name })
+          console.log('callUser on ')
+          io.to(userToCall).emit('callUser',{ signal: signalData, from , name })
         })
 
         socket.on('answerCall',(data)=>{
-          io.to(data.to).emit('callAccepted',data.signal)
-        })
-
-        socket.on('disconnect',()=>{
-          console.log(`lost connection : ${socket.id}`)
-          socket.broadcast.emit('call ended')
+          console.log('answercall on')
+          io.to(data.to).emit('callaccepted',data.signal)
         })
 
       })

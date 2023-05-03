@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, {  useContext, useState } from "react";
 import {
   Button,
   TextField,
@@ -9,9 +9,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Person, Phone, PhoneDisabled } from "@material-ui/icons";
+import { Person,Assignment, Phone, PhoneDisabled } from "@material-ui/icons";
+
 import { SocketContext } from "../../../context/SocketContext";
-import { clientRegister } from "../../../axios/services/clientServices/clientServices";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,9 +44,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Options({ children ,client,call, callAccepted, myVideo, userVideo, stream, name, setName, callEnded, me, callUser, leaveCall, answerCall }) {
+function Options({ children }) {
+
+  const {   callAccepted,  name, setName, callEnded, me, callUser, leaveCall } = useContext(SocketContext)
 
   const [idToCall, setIdToCall] = useState("");
+
   const classes = useStyles();
 
 
@@ -59,17 +62,19 @@ function Options({ children ,client,call, callAccepted, myVideo, userVideo, stre
               <Typography gutterBottom variant="h6">
                 Account Info
               </Typography>
-              <div className="mt-10">
+              <TextField label="Name" Value={name} onChange={(e) => setName(e.target.value)}/>
+              {/* <div className="mt-10">
               <Button
                   variant="contained"
                   color="primary"
                   fullWidth
                   startIcon={<Person fontSize="large" />}
+                  onClick={()=> setName(trainer?.fname)}
                 >
                  {client?.fname}
                 </Button>
-              </div>
-              {/* <CopyToClipboard text={me} className={classes.margin}>
+              </div> */}
+              <CopyToClipboard text={me} className={classes.margin}>
                 <Button
                   variant="contained"
                   color="primary"
@@ -78,7 +83,7 @@ function Options({ children ,client,call, callAccepted, myVideo, userVideo, stre
                 >
                   Copy Your ID
                 </Button>
-              </CopyToClipboard> */}
+              </CopyToClipboard>
             </Grid>
             <Grid item xs={12} md={6} className={classes.padding}>
               <Typography gutterBottom variant="h6">
@@ -91,7 +96,7 @@ function Options({ children ,client,call, callAccepted, myVideo, userVideo, stre
                 fullWidth
                 border={0}
               />
-              {callAccepted && !callEnded ? (
+              { callAccepted && !callEnded ? (
                 <Button
                   variant="contained"
                   color="secondary"

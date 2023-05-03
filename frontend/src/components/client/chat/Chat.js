@@ -42,17 +42,14 @@ function Chat() {
     socket?.emit('setup',currentChat?._id)
     socket?.on('connection',()=>{
       setSocketConnection(true)
-      console.log('user Connected socket')
     })
     socket?.on('connected',()=>{
       setSocketConnection(true)
-      console.log('user Connected socket')
     })
   },[currentChat])
 
   useEffect(() => {
     getMessages(currentChat?._id).then((res) => {
-      console.log(res, "res from get messages");
       setMessages(res);
     });
     selectedChatCompare = currentChat;
@@ -60,7 +57,6 @@ function Chat() {
 
   useEffect(()=>{
     socket.on('recieve_message',(data)=>{
-      console.log(data.conversationId,'on recieve_message client')
       if(data?.conversationId === currentChat?._id){
         const message = [...messages,data]
         setMessages(message);
@@ -83,7 +79,6 @@ function Chat() {
 
 
   function sendMessage(){
-    console.log(newMessage)
     const data = {
       conversationId:currentChat._id,
       sender:userId,
@@ -98,13 +93,14 @@ function Chat() {
       setNewMessage('')
       sendInp.current.focus()
     }else{
-     console.log('message empty')
     }
   }
 
-  async function videoCall (clientId){
-    navigate('/client/videocall',{state:{trainerId:user._id,clientId:clientId}})
-  }
+  async function videoCall (){
+    navigate("/client/videocall", {
+      state: { trainerId: user._id, clientId:userId  },
+    });
+ }
 
 
   return (

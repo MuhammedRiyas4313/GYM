@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const CronJob = require("cron").CronJob;
 const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongodb");
 require("dotenv").config();
@@ -7,8 +8,8 @@ const User = require("../models/user");
 const Otp = require("../models/otp");
 const Course = require("../models/course");
 const Trainer = require("../models/trainer");
-const Conversation = require('../models/conversation')
-const Message = require('../models/message')
+const Conversation = require("../models/conversation");
+const Message = require("../models/message");
 
 let transporter = nodemailer.createTransport({
   // true for 465, false for other ports
@@ -307,7 +308,6 @@ const trainerCourseList = async (req, res) => {
 };
 
 const enrollCLient = async (req, res) => {
-
   const today = new Date();
   const currMonth = today.getMonth() + 1;
   const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString(
@@ -330,11 +330,14 @@ const enrollCLient = async (req, res) => {
 
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
 
-    const existClient = await Course.findOne({'clients.user': new ObjectId(clientId)})
+    const existClient = await Course.findOne({
+      "clients.user": new ObjectId(clientId),
+    });
 
-    console.log(existClient,'already enrolled client')
+    console.log(existClient, "already enrolled client");
 
-    if(existClient) return res.json({status:'Your already enrolled In this course'})
+    if (existClient)
+      return res.json({ status: "Your already enrolled In this course" });
 
     if (course.status === "blocked")
       return res.json({ status: "Can't Enroll Now" });
@@ -371,11 +374,12 @@ const enrollCLient = async (req, res) => {
         },
       }
     );
+
     const updateCourse = await Course.updateOne(
       {
         $and: [
           { _id: new ObjectId(courseId) },
-          { "availableSlots.slote": slote },
+          { "clients.user": new ObjectId(clientId) },
         ],
       },
       {
@@ -485,12 +489,42 @@ const createMessage = async (req, res) => {
       sender,
       text,
     });
-    res.json(response)
+    res.json(response);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in getuser ...");
   }
 };
+
+const updateMonthlyData = async () => {
+  // Your code to update monthly data here
+  try {
+    console.log("Monthly data updated");
+    const resp = await Course.updateMany(
+      {},
+      { $set: { "clients.$[].paymentStatus": false } }
+    );
+  } catch (error) {}
+};
+
+const scheduleMonthlyUpdate = () => {
+  
+
+  // Schedule the job to run at midnight on the first day of each month
+  const job = new CronJob(
+    "0 0 1 * *",
+    function () {
+      updateMonthlyData();
+    },
+    null,
+    true,
+    "UTC"
+  );
+
+  job.start();
+};
+
+scheduleMonthlyUpdate();
 
 module.exports = {
   clientLogin,
