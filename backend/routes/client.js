@@ -18,6 +18,7 @@ const {
   getUser,
   getMessages,
   createMessage,
+  updateProfile
 } = require("../controllers/clientController");
 /* GET home page. */
 router.post("/register", clientRegister);
@@ -37,5 +38,6 @@ router.get("/chat", getConversation);
 router.get("/chat/user", getUser);
 router.get("/chat/messages", getMessages);
 router.post("/chat/message", createMessage);
+router.post("/updateprofile", updateProfile);
 
 module.exports = router;

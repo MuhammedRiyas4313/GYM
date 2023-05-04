@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getCourseDetails } from "../../axios/services/clientServices/clientServices";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import "./CourseDetails.css";
@@ -14,6 +14,8 @@ function CourseDetails() {
   const [loged, setLoged] = useState('')
 
   const Location = useLocation();
+  const viewTop = useRef()
+
   const courseId = Location.state?.courseId;
 
   const User = useSelector((state) => state.userReducer.user);
@@ -42,6 +44,7 @@ function CourseDetails() {
       console.log(User.user,"user loged");
       setLoged('user');
     }
+    viewTop?.current?.scrollIntoView()
   }, []);
 
   function options() {
@@ -58,20 +61,25 @@ function CourseDetails() {
     return formated;
   }
 
+  function viewTrainerDetails() {
+    navigate("/trainer/details", { state: { trainerId: trainer._id } });
+  }
+
   return (
-    <div className="pb-10 mb-10">
+    <div className="pb-10 mb-10" ref={viewTop}>
       <div className="container ">
         <div className="md:flex no-wrap md:-mx-2 pt-24 md:pt-24 md:p-10">
           <div className="w-full md:w-3/12 md:mx-2">
             <div className="bg-gray-100 p-3">
               <div className="image overflow-hidden flex align-middle justify-center mt-10">
                 <img
+                  onClick={viewTrainerDetails}
                   className="rounded w-64 h-72 "
                   src={trainer.profile}
                   alt="Extra large avatar"
                 ></img>
               </div>
-              <h1 className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase">
+              <h1 onClick={viewTrainerDetails} className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase cursor-pointer">
                 {trainer.fname}
               </h1>
               <h3 className="text-gray-600 font-lg text-center text-semibold leading-6">

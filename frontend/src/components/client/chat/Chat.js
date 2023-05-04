@@ -28,6 +28,9 @@ function Chat() {
   const UserDetails = useSelector((state) => state.userReducer.user);
   const userId = UserDetails?.user?._id;
 
+  console.log(userId,'userId from the clientChat')
+  console.log(conversations,'conversations')
+
   useEffect(() => {
     getConversation(userId).then((res) => {
       setConversations(res);

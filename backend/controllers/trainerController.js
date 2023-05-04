@@ -7,8 +7,8 @@ const Conversation = require("../models/conversation");
 const Admin = require("../models/admin");
 
 const { ObjectId } = require("mongodb");
-const cloudinary = require("cloudinary").v2;
 const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
   cloud_name: "ddxqpujjv",

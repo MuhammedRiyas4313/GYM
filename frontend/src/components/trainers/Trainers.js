@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TriainersHero from "./TrianersHero";
 import { getTrainers } from "../../axios/services/clientServices/clientServices";
 import { useNavigate } from "react-router-dom";
 
 function Trainers() {
+
   const [trainersList, setTrainersList] = useState([]);
+
+  const viewTrainers = useRef()
+  const viewTop = useRef()
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,6 +17,10 @@ function Trainers() {
       console.log(res.data, "response from the getTrainers api");
       setTrainersList(res.data);
     });
+    viewTop?.current?.scrollIntoView()
+    setTimeout(() => {
+      viewTrainers?.current?.scrollIntoView({ behavior: 'smooth' })
+  }, 1000);
   }, []);
 
   function formateDate(date) {
@@ -29,9 +38,10 @@ function Trainers() {
   }
 
   return (
-    <div className="bg-black w-full h-full">
+    <div className="bg-black w-full h-full" ref={viewTop}>
       <TriainersHero />
       <div className="container">
+        <div className="w-20 h-20" ref={viewTrainers}></div>
         <div className="section-title pt-10">
           <span className="text-gray-400 text-3xl ">OUR TEAM</span>
         </div>

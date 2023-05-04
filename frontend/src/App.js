@@ -47,10 +47,6 @@ function App() {
   const Trainer = TrainerDetails?.token
   const Admin = AdminDetails?.token
 
-  console.log(User, "user from the app ");
-  console.log(Trainer, "trainer from the app ");
-  console.log(Admin, "admin from the app ");
-
   return (
     <div className="App">
       <ToastContainer />

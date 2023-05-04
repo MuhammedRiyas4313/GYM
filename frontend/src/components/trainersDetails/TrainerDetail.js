@@ -1,15 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   getTrainerDetails,
   getTrainerCourseList,
 } from "../../axios/services/clientServices/clientServices";
+import { createConversation } from '../../axios/services/chat/clientChat'
 import TrainerCourseList from "./TrainerCourseList";
 import { useSelector } from "react-redux";
 
-function TrainerDetail() {
+function TrainerDetail() {  
+
+
+  const location  = useLocation()
+  const navigate = useNavigate()
+
+
   const Trainer = useSelector((state) => state.trainerReducer.trainer);
-  const trainerId = Trainer.trainer._id;
+
+  const trainerId = location.state?.trainerId
+  const UserDetails = useSelector((state) => state.userReducer.user);
+  console.log(UserDetails,'userDetails in the trainer details')
+  const clientId = UserDetails?.user._id
+
+  const viewTop = useRef()
 
   const [option, setOption] = useState(false);
   const [trainerDetails, setTrainerDetails] = useState({});
@@ -17,7 +30,6 @@ function TrainerDetail() {
 
   function options() {
     setOption((state) => !state);
-    console.log(option, "option status....");
   }
 
   function formateDate(date) {
@@ -25,31 +37,38 @@ function TrainerDetail() {
     const formated = `${formatDate.getDate()}-${
       formatDate.getMonth() + 1
     }-${formatDate.getFullYear()}`;
-    console.log("formate date is calling.....");
     return formated;
   }
 
   useEffect(() => {
-    console.log("close dropdown");
   }, [option]);
+
+  useEffect(()=>{
+    viewTop?.current?.scrollIntoView()
+  },[])
 
   useEffect(() => {
     getTrainerDetails(trainerId).then((res) => {
-      console.log(res, "response from the backend");
       setTrainerDetails(res.data);
     });
     getTrainerCourseList(trainerId).then((res) => {
-      console.log(res.data, "ind trainer course list");
       setCourseList(res.data);
     });
   }, []);
+  
+  console.log(Trainer,'Trainer......')
 
-  function Courses() {
-    console.log("courses calling");
+  async function message() {
+    console.log("message calling");
+    const response = await createConversation(trainerId,clientId)
+    navigate('/client/chat',{state:{trainerId:trainerId,clientId:clientId}}) 
   }
 
+
+
   return (
-    <div>
+    <div ref={viewTop}>
+      
       <div className="pb-10 mb-10">
         <div className="container ">
           <div className="md:flex no-wrap md:-mx-2 pt-24 md:pt-24 md:p-10">
@@ -106,7 +125,7 @@ function TrainerDetail() {
               </div>
             </div>
             <div className="w-full md:w-9/12 mx-2 h-64">
-              {!trainerId ? (
+              {!Trainer?.trainer ? (
                 <div className="bg-gray-100 shadow-sm rounded-sm md:p-5">
                   <div className="flex flex-wrap justify-end font-semibold text-gray-900">
                     <div className="dropouter flex justify-end">
@@ -147,7 +166,7 @@ function TrainerDetail() {
                               tabIndex={1}
                               className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
                             >
-                              <li>
+                              <li onClick={message}>
                                 <a className="text-black">Message</a>
                               </li>
                             </ul>

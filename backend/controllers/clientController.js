@@ -11,6 +11,15 @@ const Trainer = require("../models/trainer");
 const Conversation = require("../models/conversation");
 const Message = require("../models/message");
 
+const cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "ddxqpujjv",
+  api_key: 285814637664696,
+  api_secret: "i8hO5c9YTp17cWXWDIIduZKlx2s",
+  secure: true,
+});
+
 let transporter = nodemailer.createTransport({
   // true for 465, false for other ports
   service: "gmail",
@@ -496,6 +505,27 @@ const createMessage = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+
+  const { filef, clientId } = req.body;
+
+  try {
+    const file1 = await cloudinary.uploader.upload(filef, {
+      folder: "ClientProfile",
+    });
+
+    const response = await User.findOneAndUpdate(
+      { _id: new ObjectId(clientId) },
+      { profile: file1.url },{ new: true}
+    );
+    
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
+  }
+};
+
 const updateMonthlyData = async () => {
   // Your code to update monthly data here
   try {
@@ -508,8 +538,6 @@ const updateMonthlyData = async () => {
 };
 
 const scheduleMonthlyUpdate = () => {
-  
-
   // Schedule the job to run at midnight on the first day of each month
   const job = new CronJob(
     "0 0 1 * *",
@@ -544,4 +572,5 @@ module.exports = {
   getUser,
   getMessages,
   createMessage,
+  updateProfile,
 };

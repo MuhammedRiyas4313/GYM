@@ -31,6 +31,10 @@ const UserSchema = mongoose.Schema({
         trim: true,
         required: true
     },
+    profile: {
+        type: String,
+        default: null,
+    },
     isBlocked: {
         type: Boolean,
         default: false

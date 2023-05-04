@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CourseHero from "./CourseHero";
 import { getCourses } from "../../axios/services/clientServices/clientServices";
 import { useNavigate } from "react-router-dom";
 
 function Courses() {
+
+  const viewCourses = useRef()
 
   const [courseList, setCourseList] = useState([]);
   const [mouseOver , setMouseOver] = useState('')
@@ -16,6 +18,9 @@ function Courses() {
       const coursesList = res.data.filter((obj)=>obj.status === 'Active')
       setCourseList(coursesList);
     });
+    setTimeout(() => {
+        viewCourses?.current?.scrollIntoView({ behavior: 'smooth' })
+    }, 800);
   }, []);
 
   function viewDetails(courseId) {
@@ -35,16 +40,17 @@ function Courses() {
 
   return (
     <div className="bg-black w-full h-full">
-      <CourseHero />
-      <div className="container">
-        <div className="section-title pt-10">
+      <CourseHero ref={viewCourses}/>
+      <div className="w-20 h-20 mt-5" ref={viewCourses}></div>
+      <div className="container"  >
+        <div className="section-title pt-10" >
           <span className="text-gray-400 text-3xl ">Top Courses</span>
         </div>
       </div>
-      <div className="flex flex-wrap">
+      <div  className="flex flex-wrap">
         { courseList?.map((val) => {
           return (
-            <section className="choseus-section spad  flex flex-wrap cursor-pointer mx-auto" >
+            <section  className="choseus-section spad  flex flex-wrap cursor-pointer mx-auto" >
               <div className="card card-compact bg-base-100 md:w-4-12 shadow-xl mx-5 my-5 border flex flex-wrap" onMouseOver={()=>changeCover1(val._id)} onMouseLeave={()=>changeCover2(val._id)}>
                 <figure>
                   <img src={ courseCover && mouseOver === val._id ? val.cover2 : val.cover1 } alt="Shoes" className="w-80 h-80 object-cover" />

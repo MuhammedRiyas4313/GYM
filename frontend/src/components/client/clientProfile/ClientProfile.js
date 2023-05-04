@@ -4,6 +4,8 @@ import { getUserDetails } from "../../../axios/services/clientServices/clientSer
 import { useLocation, useNavigate } from "react-router-dom";
 import userAvatar from "../../../assets/images/profileLogo.png";
 import { useSelector } from "react-redux";
+import EditProfilePicture from "./EditProfilePicture";
+import EditProfile from "./EditProfile";
 
 function ClientProfile() {
   const location = useLocation();
@@ -14,6 +16,8 @@ function ClientProfile() {
 
   const [option, setOption] = useState(false);
   const [userDetails, setUserDetails] = useState({});
+  const [updateProfileImage, setUpdateProfileImage] = useState(false);
+  const [updateProfile, setUpdateProfile] = useState(false);
 
   function options() {
     setOption((state) => !state);
@@ -29,29 +33,32 @@ function ClientProfile() {
   }
 
   useEffect(() => {
-    console.log("close dropdown");
-  }, [option]);
+    console.log("ClientProfile rendering");
+  }, [option, updateProfileImage, userDetails, updateProfile]);
 
   useEffect(() => {
     getUserDetails(userId).then((res) => {
-      console.log(res.data, "user details response from the backend");
       setUserDetails(res.data);
     });
   }, []);
 
   function message() {
-    console.log("message calling");
     navigate("/client/chat", { state: { userId: userId } });
-  }
-
-  function videoCall() {
-    console.log("video  calling");
-    navigate('/client/videocall')
-    
   }
 
   return (
     <div className="bg-white">
+      {updateProfile ? <EditProfile  userDetails={userDetails} /> : <div></div>}
+      {updateProfileImage ? (
+        <EditProfilePicture
+          userId={userId}
+          userDetails={userDetails}
+          setUserDetails={setUserDetails}
+          setUpdateProfileImage={setUpdateProfileImage}
+        />
+      ) : (
+        <div></div>
+      )}
       <div className=" md:pt-12  ">
         <div className="md:flex no-wrap md:-mx-2 ">
           <div className=" w-full md:mx-2 md:mb-2">
@@ -59,8 +66,20 @@ function ClientProfile() {
               <div className="flex flex-wrap justify-between p-5 bg-transparent mb-3"></div>
               <div className="image overflow-hidden flex flex-wrap align-middle justify-center ">
                 <div className="w-full flex flex-wrap align-middle justify-center">
-                  <div class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600  object-cover ">
-                    <img src={userAvatar} alt="trainer profile" />
+                  <div
+                    onClick={() => {
+                      setUpdateProfileImage((state) => !state);
+                    }}
+                    class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600  object-cover "
+                  >
+                    <img
+                      src={
+                        userDetails?.profile ? userDetails.profile : userAvatar
+                      }
+                      alt="trainer profile"
+                      className="hover:tooltip-bottom"
+                      title="Update Profile Photo"
+                    />
                   </div>
                 </div>
                 <div className="flex w-full md:w-1/3 justify-between">
@@ -93,7 +112,7 @@ function ClientProfile() {
                       />
                     </div>
                   </div>
-                  <div className="flex mb-5" >
+                  <div className="flex mb-5">
                     {/* <div className="" onClick={videoCall}>
                       <label
                         tabIndex={0}
@@ -181,7 +200,12 @@ function ClientProfile() {
                             tabIndex={0}
                             className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
                           >
-                            <li>
+                            <li
+                              onClick={() => {
+                                console.log("edit profile");
+                                setUpdateProfile((state) => !state);
+                              }}
+                            >
                               <a>Edit Profile</a>
                             </li>
                             <li>

@@ -1,6 +1,7 @@
 import { axiosClientInstance } from "../../axios";
 
 export const createConversation = async (trainerId, clientId) => {
+  console.log(trainerId, clientId,'in the createConversation service...')
     const value = {
       trainerId,
       clientId,
