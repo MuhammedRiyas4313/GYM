@@ -16,7 +16,9 @@ const {
     getConversation,
     getUser,
     getMessages,
-    createMessage
+    createMessage,
+    updateProfileImage,
+    updateProfile
                    
 } = require('../controllers/trainerController')
 
@@ -34,5 +36,7 @@ router.get('/chat',  getConversation);
 router.get('/chat/user',  getUser);
 router.get('/chat/messages',  getMessages);
 router.post('/chat/message',  createMessage);
+router.patch("/updateprofileImage", updateProfileImage);
+router.patch("/updateprofile", updateProfile);
 
 module.exports =  router;

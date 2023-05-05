@@ -5,6 +5,7 @@ const User = require("../models/user");
 const Message = require("../models/message");
 const Conversation = require("../models/conversation");
 const Admin = require("../models/admin");
+const Wallet = require("../models/wallet");
 
 const { ObjectId } = require("mongodb");
 const bcrypt = require("bcrypt");
@@ -40,7 +41,7 @@ const trainerRegister = async (req, res) => {
       folder: "TrainerCertificate",
     });
 
-    await Trainer.create({
+    const newTrainer = await Trainer.create({
       fname: values.fname,
       dob: values.dob,
       gender: values.gender,
@@ -51,6 +52,12 @@ const trainerRegister = async (req, res) => {
       certificate: file2.url,
       link: values.link,
     });
+
+    Wallet.create({
+      user: newTrainer._id,
+      balance:0
+    })
+
     res.json({ status: "Successfully created Account" });
   } catch (error) {
     console.log(error);
@@ -376,6 +383,51 @@ const createMessage = async (req, res) => {
   }
 };
 
+const updateProfileImage = async (req, res) => {
+  
+  const { filef, trainerId } = req.body;
+
+  try {
+    const file1 = await cloudinary.uploader.upload(filef, {
+      folder: "TrainerProfile",
+    });
+
+    const response = await Trainer.findOneAndUpdate(
+      { _id: new ObjectId(trainerId) },
+      { profile: file1.url },
+      { new: true }
+    );
+
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
+  }
+};
+
+const updateProfile = async (req, res) => {
+
+  const { fname, email, dob, phone } = req.body.values;
+  const { trainerId } = req.body;
+
+  try {
+    const response = await Trainer.findOneAndUpdate(
+      { _id: new ObjectId(trainerId) },
+      {
+        fname,
+        dob,
+        email,
+        phone
+      },
+      { new: true }
+    );
+    res.json(response)
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in update client profile ...");
+  }
+};
+
 module.exports = {
   trainerRegister,
   trainerLogin,
@@ -390,4 +442,6 @@ module.exports = {
   getUser,
   getMessages,
   createMessage,
+  updateProfileImage,
+  updateProfile
 };

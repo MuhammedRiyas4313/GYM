@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import avatar1 from "../../../assets/images/avatars/1.jpg";
+import { getCourses } from '../../../axios/services/adminServices/adminServices';
 
 function Courses() {
+
+  const [ courseList, setCourseList] = useState([])
+
+  useEffect(()=>{
+    getCourses().then((res)=>{
+      console.log(res)
+      setCourseList(res.data)
+    })
+  },[])
+
   return (
     <div>
       <div className="flex items-center justify-between p-4 bg-gray-900 dark:bg-gray-900 md:ml-64">
@@ -64,7 +75,9 @@ function Courses() {
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            { courseList?.map((val)=>{
+              return(
+                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
               <th
                 scope="row"
                 className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
@@ -99,6 +112,8 @@ function Courses() {
                 </a>
               </td>
             </tr>
+              )
+            })}
           </tbody>
         </table>
       </div>

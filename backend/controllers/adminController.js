@@ -4,6 +4,8 @@ const Admin = require("../models/admin");
 const Trainer = require("../models/trainer");
 const User = require('../models/user')
 const Conversation = require('../models/conversation')
+const Wallet = require('../models/wallet');
+const Course = require('../models/course');
 
 
 let transporter = nodemailer.createTransport({
@@ -64,10 +66,8 @@ const trainerBlockstatus = async (req,res) => {
 const notifications = async (req,res) => {
 
     const trainersToVerify = await Trainer.find({isVerified:false})
-    console.log(trainersToVerify,' trainers to verify')
      if(trainersToVerify.length > 0 )  res.json(trainersToVerify)
    
-
 }
 
 const trainerDetails = async (req,res) => {
@@ -117,6 +117,12 @@ const verifyTrainer = async (req,res) => {
 const clientList = async (req,res) => {
     console.log('client list calling....')
     const usersList = await User.find({})
+    res.json(usersList);
+}
+
+const courseList = async (req,res) => {
+    console.log('client list calling....')
+    const usersList = await Course.find({})
     res.json(usersList);
 }
 
@@ -221,5 +227,6 @@ module.exports = {
     getConversation,
     getUser,
     getMessages,
-    createMessage
+    createMessage,
+    courseList
 }

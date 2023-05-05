@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import ClientProfile from "../../../components/client/clientProfile/ClientProfile";
 import NavBar from "../../../components/navbar/Header";
 
 function Profile() {
+
   return (
     <div>
       <NavBar />

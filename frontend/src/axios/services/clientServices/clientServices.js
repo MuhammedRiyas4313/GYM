@@ -195,14 +195,33 @@ export const enrollClient = async (values) => {
   }
 };
 
-export const updateProfile = async (values) => {
+export const updateProfileImage = async (values) => {
   const config = {
     headers: {
       "Content-Type": "application/json",
     },
   };
   try {
-    const response = await axiosClientInstance.post(
+    const response = await axiosClientInstance.patch(
+      `/updateprofileImage`,
+      values,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error.message, "error in getTrainerDetails ......");
+  }
+};
+
+export const updateProfile = async (values) => {
+  console.log(values,'values from the updateProfile')
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axiosClientInstance.patch(
       `/updateprofile`,
       values,
       config
@@ -210,5 +229,34 @@ export const updateProfile = async (values) => {
     return response;
   } catch (error) {
     console.log(error.message, "error in getTrainerDetails ......");
+  }
+};
+
+
+export const searchCourses = async (search) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axiosClientInstance.get(`/courses?search=${search}`, config);
+    return response;
+  } catch (error) {
+    console.log("error in searchCourses......");
+  }
+};
+
+export const searchTrainers = async (search) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axiosClientInstance.get(`/trainers?search=${search}`, config);
+    return response;
+  } catch (error) {
+    console.log("error in searchCourses......");
   }
 };

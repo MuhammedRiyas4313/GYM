@@ -10,6 +10,7 @@ const Course = require("../models/course");
 const Trainer = require("../models/trainer");
 const Conversation = require("../models/conversation");
 const Message = require("../models/message");
+const Wallet = require("../models/wallet");
 
 const cloudinary = require("cloudinary").v2;
 
@@ -117,6 +118,10 @@ const clientRegister = async (req, res) => {
       phone,
       password: hashedPassword,
     });
+    Wallet.create({
+      user: result._id,
+      balance:0
+    })
     console.log("user created");
     res.json({ status: "New account Created successfully" });
   } catch (error) {
@@ -251,9 +256,19 @@ const clientDetails = async (req, res) => {
 
 const courses = async (req, res) => {
   try {
-    console.log("courses get calling.....");
-    const getCourses = await Course.find({}).populate("trainerId");
-    res.json(getCourses);
+    const { search } = req.query;
+    if (req.query.hasOwnProperty('search')) {
+      const regex = new RegExp(`^${search}`, "i");
+      const getCourses = await Course.find({
+        coursename: { $regex: regex },
+      }).populate("trainerId");
+      res.json(getCourses);
+      console.log(search, "search data");
+    } else {
+      console.log("courses get calling.....");
+      const getCourses = await Course.find({}).populate("trainerId");
+      res.json(getCourses);
+    }
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in courses client");
@@ -279,8 +294,17 @@ const courseDetails = async (req, res) => {
 const trainers = async (req, res) => {
   try {
     console.log("trainers get calling.....");
-    const getTrainers = await Trainer.find({});
-    res.json(getTrainers);
+    const { search } = req.query;
+    if (req.query.hasOwnProperty('search')) {
+      const regex = new RegExp(`^${search}`, "i");
+      const getTrainers = await Trainer.find({
+        fname: { $regex: regex },
+      })
+      res.json(getTrainers);
+    } else {
+      const getTrainers = await Trainer.find({})
+      res.json(getTrainers);
+    }
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in Trainers client");
@@ -417,6 +441,17 @@ const enrollCLient = async (req, res) => {
       }
     );
 
+    // const updatedWallet = await Wallet.updateOne(
+    //   { user:  },
+    //   {
+    //     $push: {
+    //       courses: { course: courseId },
+    //     },
+    //   }
+    // );
+
+    
+
     res.json({ status: "successfully enrolled" });
   } catch (error) {
     res.json({ status: "something wrong" });
@@ -505,8 +540,7 @@ const createMessage = async (req, res) => {
   }
 };
 
-const updateProfile = async (req, res) => {
-
+const updateProfileImage = async (req, res) => {
   const { filef, clientId } = req.body;
 
   try {
@@ -516,15 +550,42 @@ const updateProfile = async (req, res) => {
 
     const response = await User.findOneAndUpdate(
       { _id: new ObjectId(clientId) },
-      { profile: file1.url },{ new: true}
+      { profile: file1.url },
+      { new: true }
     );
-    
+
     res.json(response);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in getuser ...");
   }
 };
+
+const updateProfile = async (req, res) => {
+  console.log("update Profile calling......");
+
+  const { fname, email, dob, phone } = req.body.values;
+  const { clientId } = req.body;
+
+  try {
+    const response = await User.findOneAndUpdate(
+      { _id: new ObjectId(clientId) },
+      {
+        fname,
+        dob,
+        email,
+        phone,
+      },
+      { new: true }
+    );
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in update client profile ...");
+  }
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const updateMonthlyData = async () => {
   // Your code to update monthly data here
@@ -572,5 +633,6 @@ module.exports = {
   getUser,
   getMessages,
   createMessage,
+  updateProfileImage,
   updateProfile,
 };

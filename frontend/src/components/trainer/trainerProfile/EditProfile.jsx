@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useFormik } from "formik";
-import { clientProfileUpdateSchema } from "../../../validations/clientProfileUpdate";
-import { updateProfile } from "../../../axios/services/clientServices/clientServices";
+import { trainerProfileUpdateSchema } from "../../../validations/trainerProfileUpdate";
+import { updateProfile } from "../../../axios/services/trainerServices/trainerService";
 
 export default function EditProfile(props) {
 
@@ -13,7 +13,7 @@ export default function EditProfile(props) {
   const cancelButtonRef = useRef(null);
 
   useEffect(() => {
-    setUser(props.userDetails);
+    props.setTrainerDetails(props.trainerDetails);
   }, []);
 
   useEffect(() => {
@@ -23,27 +23,25 @@ export default function EditProfile(props) {
  async function onSubmit() {
     const data = {
       values,
-      clientId: user._id
+      trainerId: props.trainerDetails._id
     }
+    console.log(props.trainerDetails._id,'on submit trainer profile update...')
     const response = await updateProfile(data)
     console.log(response.data,'res from the profileupdate')
-    props.setUserDetails(response.data)
+    props.setTrainerDetails(response.data)
     props.setUpdateProfile(state => !state)
     props.setUpdateProfileImage(state => !state)
-    props.setLogedName(response.data.fname)
   }
-
-
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
-        fname: props.userDetails.fname,
-        dob: props.userDetails.dob,
-        email: props.userDetails.email,
-        phone: props.userDetails.phone,
+        fname: props.trainerDetails.fname,
+        dob: props.trainerDetails.dob,
+        email: props.trainerDetails.email,
+        phone: props.trainerDetails.phone,
       },
-      validationSchema: clientProfileUpdateSchema,
+      validationSchema: trainerProfileUpdateSchema,
       onSubmit,
     });
 

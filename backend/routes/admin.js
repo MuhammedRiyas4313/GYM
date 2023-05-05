@@ -14,7 +14,8 @@ const {
   getConversation,
   getUser,
   getMessages,
-  createMessage
+  createMessage,
+  courseList
 } = require("../controllers/adminController");
 const { verify } = require("jsonwebtoken");
 
@@ -26,6 +27,7 @@ router.get("/notifications", notifications);
 router.get("/trainerdetails", trainerDetails);
 router.patch("/verifytrainer", verifyTrainer);
 router.get("/clients", clientList);
+router.get("/courses", courseList);
 router.get("/clientdetails", clientDetails);
 router.post('/chat',  createConversation);
 router.get('/chat',  getConversation);

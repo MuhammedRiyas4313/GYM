@@ -120,3 +120,40 @@ export const trainerRegister = async (value) => {
       console.log(error.message,'error in getTrainerDetails ......')
     }
   }
+
+  export const updateProfileImage = async (values) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.patch(
+        `/updateprofileImage`,
+        values,
+        config
+      );
+      return response;
+    } catch (error) {
+      console.log(error.message, "error in getTrainerDetails ......");
+    }
+  };
+  
+  export const updateProfile = async (values) => {
+    console.log(values,'values from the updateProfile')
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.patch(
+        `/updateprofile`,
+        values,
+        config
+      );
+      return response;
+    } catch (error) {
+      console.log(error.message, "error in getTrainerDetails ......");
+    }
+  };

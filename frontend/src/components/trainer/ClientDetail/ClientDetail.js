@@ -58,8 +58,8 @@ function ClientDetail() {
             <div className="bg-gray-100 p-3">
               <div className="image overflow-hidden flex align-middle justify-center mt-10">
                 <img
-                  className="rounded w-32 h-32 "
-                  src={Avatar}
+                  className={client.profile ? "rounded w-50 h-72 " : "rounded w-32 h-32"}
+                  src={client.profile ? client.profile : Avatar}
                   alt="Extra large avatar"
                 ></img>
               </div>

@@ -7,6 +7,8 @@ import { trainerLogout } from "../../redux/trainerSlice";
 import { motion } from 'framer-motion'
 import Modal from "./Modal";
 import "./Header.css";
+import { getTrainerDetails } from "../../axios/services/trainerServices/trainerService";
+import { getUserDetails } from "../../axios/services/clientServices/clientServices";
 
 function NavBar() {
 
@@ -48,11 +50,15 @@ function NavBar() {
     };
   });
 
-  function logedPerson() {
+ async function logedPerson() {
     if (Trainer?.trainer) {
       setLoged(Trainer.trainer);
+      // const response = await getTrainerDetails(Trainer.trainer._id)
+      // props.setLogedName(response.data.fname)
     } else if (User?.user) {
       setLoged(User.user);
+      // const response = await getUserDetails(User.user._id)
+      // props.setLogedName(response.data.fname)
     } else {
       setLoged("");
     }
@@ -101,7 +107,7 @@ function NavBar() {
             onClick={() => showProfile(loged._id)}
             className="bg-orange-500 font-mono hover:bg-orange-700 mr-1 md:mr-5 text-white uppercase"
           >
-            {loged.fname}
+            { loged.fname}
           </Button>
         )}
         {buttonHide && (

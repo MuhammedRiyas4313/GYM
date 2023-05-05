@@ -6,8 +6,10 @@ import userAvatar from "../../../assets/images/profileLogo.png";
 import { useSelector } from "react-redux";
 import EditProfilePicture from "./EditProfilePicture";
 import EditProfile from "./EditProfile";
+import Wallet from "./Wallet";
 
 function ClientProfile() {
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -18,10 +20,10 @@ function ClientProfile() {
   const [userDetails, setUserDetails] = useState({});
   const [updateProfileImage, setUpdateProfileImage] = useState(false);
   const [updateProfile, setUpdateProfile] = useState(false);
+  const [showWallet, setShowWallet] = useState(false);
 
   function options() {
     setOption((state) => !state);
-    console.log(option, "option status....");
   }
 
   function formateDate(date) {
@@ -33,8 +35,8 @@ function ClientProfile() {
   }
 
   useEffect(() => {
-    console.log("ClientProfile rendering");
-  }, [option, updateProfileImage, userDetails, updateProfile]);
+    console.log("ClientProfile");
+  }, [option, updateProfileImage, userDetails, updateProfile,showWallet]);
 
   useEffect(() => {
     getUserDetails(userId).then((res) => {
@@ -45,10 +47,23 @@ function ClientProfile() {
   function message() {
     navigate("/client/chat", { state: { userId: userId } });
   }
+  function wallet() {
+    console.log('wallet')
+    setShowWallet(state => !state)
+  }
 
   return (
     <div className="bg-white">
-      {updateProfile ? <EditProfile  userDetails={userDetails} /> : <div></div>}
+      {showWallet ? (<Wallet />) : (<div></div>)}
+      {updateProfile ? (
+        <EditProfile
+          setUserDetails={setUserDetails}
+          setUpdateProfile={setUpdateProfile}
+          userDetails={userDetails}
+        />
+      ) : (
+        <div></div>
+      )}
       {updateProfileImage ? (
         <EditProfilePicture
           userId={userId}
@@ -82,8 +97,8 @@ function ClientProfile() {
                     />
                   </div>
                 </div>
-                <div className="flex w-full md:w-1/3 justify-between">
-                  <div className="flex flex-wrap justify-between mt-3 ">
+                <div className="flex w-full md:w-1/3 justify-end">
+                  {/* <div className="flex flex-wrap justify-between mt-3 ">
                     <div className="rating">
                       <input
                         type=""
@@ -111,7 +126,7 @@ function ClientProfile() {
                         className="mask mask-star-2 bg-orange-400"
                       />
                     </div>
-                  </div>
+                  </div> */}
                   <div className="flex mb-5">
                     {/* <div className="" onClick={videoCall}>
                       <label
@@ -202,13 +217,12 @@ function ClientProfile() {
                           >
                             <li
                               onClick={() => {
-                                console.log("edit profile");
                                 setUpdateProfile((state) => !state);
                               }}
                             >
                               <a>Edit Profile</a>
                             </li>
-                            <li>
+                            <li onClick={wallet}>
                               <a>My wallet</a>
                             </li>
                           </ul>

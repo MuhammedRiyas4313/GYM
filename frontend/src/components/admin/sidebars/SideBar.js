@@ -27,18 +27,7 @@ function SideBar() {
 
   function sideShowUpdater() {
     setSideShow((state) => !state);
-    console.log("side show ", sideShow);
   }
-
-  // window.addEventListener("resize", () => {
-  //   if (window.innerWidth > 759) {
-  //     setSideShow(true);
-  //   } else {
-  //     setSideShow(false);
-  //   }
-  // });
-
-  console.log('side bar is rendering.......')
 
   useEffect(() => {
     const handleResize = () => {

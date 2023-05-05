@@ -71,10 +71,10 @@ function CourseDetails() {
         <div className="md:flex no-wrap md:-mx-2 pt-24 md:pt-24 md:p-10">
           <div className="w-full md:w-3/12 md:mx-2">
             <div className="bg-gray-100 p-3">
-              <div className="image overflow-hidden flex align-middle justify-center mt-10">
+              <div className="image overflow-hidden flex align-middle justify-center mt-10 object-cover">
                 <img
                   onClick={viewTrainerDetails}
-                  className="rounded w-64 h-72 "
+                  className="rounded w-50 h-72 "
                   src={trainer.profile}
                   alt="Extra large avatar"
                 ></img>

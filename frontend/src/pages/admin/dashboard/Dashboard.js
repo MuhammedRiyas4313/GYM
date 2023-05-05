@@ -1,9 +1,10 @@
 import React from 'react'
-import AdminDashboard from '../../../components/admin/dashboard/Dashboard'
+import DashboardAdmin from '../../../components/admin/dashboard/DashboardAdmin'
 import SideBar from '../../../components/admin/sidebars/SideBar'
 function Dashboard() {
   return (
     <div>
+      <DashboardAdmin />
       <SideBar />
     </div>
   )

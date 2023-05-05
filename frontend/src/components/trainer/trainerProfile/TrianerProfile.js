@@ -4,12 +4,17 @@ import { getTrainerDetails } from "../../../axios/services/trainerServices/train
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+import EditProfile from "./EditProfile";
+import EditProfilePicture from "./EditProfilePicture";
+
 function TrianerProfile() {
   const location = useLocation();
   const navigate = useNavigate();
 
   const [option, setOption] = useState(false);
   const [trainerDetails, setTrainerDetails] = useState({});
+  const [updateProfileImage, setUpdateProfileImage] = useState(false);
+  const [updateProfile, setUpdateProfile] = useState(false);
 
   function options() {
     setOption((state) => !state);
@@ -23,13 +28,12 @@ function TrianerProfile() {
     return formated;
   }
 
-  useEffect(() => {
-  }, [option]);
+  useEffect(() => {}, [option]);
 
   const trainer = useSelector((state) => state.trainerReducer.trainer);
-  let trainerId =  trainer.trainer._id
+  let trainerId = trainer.trainer._id;
   // let train =  location.state?.trainerId;
-  
+
   useEffect(() => {
     getTrainerDetails(trainerId).then((res) => {
       setTrainerDetails(res.data);
@@ -44,12 +48,31 @@ function TrianerProfile() {
     navigate("/trainer/clients", { state: { trainerId: trainerId } });
   }
 
-  function message(){
-    navigate('/trainer/chat',{state:{ trainerId: trainerId }})
+  function message() {
+    navigate("/trainer/chat", { state: { trainerId: trainerId } });
   }
 
   return (
     <div className="bg-white">
+      {updateProfile ? (
+        <EditProfile
+          setTrainerDetails={setTrainerDetails}
+          setUpdateProfile={setUpdateProfile}
+          trainerDetails={trainerDetails}
+        />
+      ) : (
+        <div></div>
+      )}
+      {updateProfileImage ? (
+        <EditProfilePicture
+          trainerId={trainerId}
+          trainerDetails={trainerDetails}
+          setTrainerDetails={setTrainerDetails}
+          setUpdateProfileImage={setUpdateProfileImage}
+        />
+      ) : (
+        <div></div>
+      )}
       <div className=" md:pt-12  ">
         <div className="md:flex no-wrap md:-mx-2 ">
           <div className=" w-full md:mx-2 md:mb-2">
@@ -57,11 +80,17 @@ function TrianerProfile() {
               <div className="flex flex-wrap justify-between p-5 bg-transparent mb-3"></div>
               <div className="image overflow-hidden flex flex-wrap align-middle justify-center ">
                 <div className="w-full flex flex-wrap align-middle justify-center">
-                  <div class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600 ">
+                  <div
+                    onClick={() => {
+                      setUpdateProfileImage((state) => !state);
+                    }}
+                    class="relative w-52 h-52 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600  object-cover"
+                  >
                     <img
-                      src={trainerDetails.profile}
+                      src={trainerDetails?.profile}
                       alt="trainer profile"
-                      className="object-cover h-full w-full"
+                      className="hover:tooltip-bottom"
+                      title="Update Profile Photo"
                     />
                   </div>
                 </div>
@@ -204,7 +233,12 @@ function TrianerProfile() {
                             <li onClick={clients}>
                               <Link>Clients</Link>
                             </li>
-                            <li>
+                            <li
+                              onClick={() => {
+                                console.log("edit profile");
+                                setUpdateProfile((state) => !state);
+                              }}
+                            >
                               <a>Edit Profile</a>
                             </li>
                             <li>
@@ -228,7 +262,7 @@ function TrianerProfile() {
                   <li className="flex items-center py-3">
                     <span>Name</span>
                     <span className="ml-auto font-bold uppercase">
-                      {trainerDetails.fname}
+                      {trainerDetails?.fname}
                     </span>
                   </li>
                   <li className="flex items-center py-3">
