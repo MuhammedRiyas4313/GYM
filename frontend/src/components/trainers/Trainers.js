@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import TriainersHero from "./TrianersHero";
-import { getTrainers, searchTrainers } from "../../axios/services/clientServices/clientServices";
+import { getTrainers } from "../../axios/services/clientServices/clientServices";
 import { useNavigate } from "react-router-dom";
 
 function Trainers() {
 
+  const [allTrainersList, setAllTrainersList] = useState([]);
   const [trainersList, setTrainersList] = useState([]);
 
   const viewTrainers = useRef()
@@ -15,7 +16,8 @@ function Trainers() {
 
   useEffect(() => {
     getTrainers().then((res) => {
-      setTrainersList(res.data);
+      setAllTrainersList(res.data);
+      setTrainersList(res.data)
     });
     viewTop?.current?.scrollIntoView()
     setTimeout(() => {
@@ -38,12 +40,14 @@ function Trainers() {
   }
 
   async function search(){
-    const data = searchInp.current.value
-    console.log(data,'search.....')
-    const response = await searchTrainers(data)
-    console.log(response.data,'search.....')
-    searchInp.current.focus()
-    setTrainersList(response.data);
+    const data = searchInp.current.value;
+    const regex = new RegExp(`^${data}`, "i");
+    const filteredCourse = trainersList?.filter((trainer) => regex.test(trainer.fname));
+    if(!data){
+      setTrainersList(allTrainersList)
+    }else{
+      setTrainersList(filteredCourse)
+    }
   }
 
   return (
@@ -51,8 +55,8 @@ function Trainers() {
       <TriainersHero />
       <div className="pt-20" ref={viewTrainers}></div>
       <div className="container">
-      <div className="section-title p-5 flex justify-around align-middle  bg-gray-900">
-          <span className="text-gray-400 text-3xl ">Our Team</span>
+      <div className="section-title p-5 flex flex-wrap  justify-around align-middle  bg-gray-900">
+          <span className="text-gray-400 text-3xl md:mb-0 mb-3">Our Team</span>
           <div className="flex items-center">
             <div className="flex space-x-1">
               <input

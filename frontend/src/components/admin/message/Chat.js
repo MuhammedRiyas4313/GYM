@@ -144,7 +144,7 @@ function Chat() {
                 className="bg-gray-200 flex flex-col overflow-y-scroll"
                 style={{ maxHeight: "85vh" }}
               >
-                <div className="bg-gray-200  border-b-2 py-4 px-2 absolute z-10">
+                <div className="bg-gray-200  border-b-2 py-4 px-4 absolute z-10">
                   <input
                     type="text"
                     placeholder="search chatting"

@@ -192,7 +192,7 @@ function Chat() {
                                 </svg>
                               </span>
                               <img
-                                src={Avatar}
+                                src={user?.profile ? user.profile : Avatar}
                                 alt=""
                                 className="w-10 sm:w-16 h-10 sm:h-16 rounded-full"
                               ></img>

@@ -113,7 +113,7 @@ function CourseDetails() {
                 </li>
                 <li className="flex items-center py-3">
                   <span>Email</span>
-                  <span className="ml-auto break-words">{trainer.email}</span>
+                  <span className="ml-3 truncate">{trainer.email}ghvhghghgh</span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Gender</span>
