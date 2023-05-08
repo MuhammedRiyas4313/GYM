@@ -11,6 +11,7 @@ const Trainer = require("../models/trainer");
 const Conversation = require("../models/conversation");
 const Message = require("../models/message");
 const Wallet = require("../models/wallet");
+const Transaction = require("../models/transactions");
 
 const cloudinary = require("cloudinary").v2;
 
@@ -441,16 +442,44 @@ const enrollCLient = async (req, res) => {
       }
     );
 
-    // const updatedWallet = await Wallet.updateOne(
-    //   { user:  },
-    //   {
-    //     $push: {
-    //       courses: { course: courseId },
-    //     },
-    //   }
-    // );
+    const totalAmount = parseInt(paymentDetails.amount)
+    const adminAmount = totalAmount * 0.2
+    const trainerAmount = totalAmount - adminAmount 
 
-    
+    const userTransaction = await Transaction.create({
+      payee:clientId,
+      reciever: '64300ee00b649a2abb940de1',
+      amount:totalAmount,
+      status:paymentDetails.status
+    })
+
+    const trainerTransaction = await Transaction.create({
+      payee:'64300ee00b649a2abb940de1',
+      reciever: course.trainerId,
+      amount:trainerAmount,
+      status:paymentDetails.status
+    })
+
+    const updatedTrainerWallet = await Wallet.updateOne(
+      { user: course.trainerId  },
+      { $inc:{ balance:trainerAmount },
+        $push: {
+            transactions:{id:trainerTransaction._id},
+        },
+      }
+    );
+
+    const updatedAdminWallet = await Wallet.updateOne(
+      { user: '64300ee00b649a2abb940de1'  },
+      { $inc:{balance:adminAmount},
+        $push: {
+          transactions: [
+            { id: trainerTransaction._id },
+            { id: userTransaction._id }
+          ]
+        },
+      }
+    );
 
     res.json({ status: "successfully enrolled" });
   } catch (error) {

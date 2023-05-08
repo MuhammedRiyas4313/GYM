@@ -7,11 +7,7 @@ import { useSelector } from "react-redux";
 import { Textarea } from "flowbite-react";
 import Loading from "../../loadingSpinner/Loading";
 import "./EnrollCourse.css";
-import {
-  enrollClient,
-  getCourseDetails,
-} from "../../../axios/services/clientServices/clientServices";
-import { Payment } from "@material-ui/icons";
+import { enrollClient, getCourseDetails } from "../../../axios/services/clientServices/clientServices";
 import Paypal from "./Paypal";
 
 function EnrollCourse() {
@@ -56,27 +52,21 @@ function EnrollCourse() {
 
   useEffect(() => {
     getCourseDetails(courseId).then((res) => {
-      console.log(res.data, "getCourseDetails from the enroll compo");
       setCourse(res.data);
       const allSlotes = res.data.availableSlots;
       const clients = res.data.clients;
       const trainee = clients.filter((val) => val.user === clientId && val.status === 'Active');
       chargeTopay(res.data.charge)
-      console.log(trainee, "trainee enroll statussss");
-      console.log(clientId, "clientId");
       if (trainee.length) {
         setEnrolledClient(true);
       }
       const slotes = allSlotes.filter((val) => val.status === "free");
-      console.log(slotes, "free slotes.......");
       setSlote(slotes);
     });
   }, []);
 
   const onSubmit = async (values) => {
     setPayment(true);
-    console.log("onsubmit working.... enroll fn");
-    console.log(values, "values from the form");
     const data = {
       ...values,
       clientId,
@@ -314,7 +304,7 @@ function EnrollCourse() {
                       </h1>
                       <div className="mt-10 flex justify-center w-full h-full">
                         <Paypal
-                          payment={course.charge}
+                          payment={feeToPay}
                           paypalpayment={paypalpayment}
                         />
                       </div>

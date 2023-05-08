@@ -109,7 +109,7 @@ function Trainers() {
                   <div className="card-actions justify-end m-3">
                     <button
                       className="btn btn-primary"
-                      onClick={() => viewDetails(val._id)}
+                      onClick={() => viewDetails(val?._id)}
                     >
                       View Details
                     </button>

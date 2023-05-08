@@ -136,3 +136,17 @@ export const getClients = async () => {
           console.log('error in client login......')
         }
       }
+
+      export const getTransactions = async () => {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        try {
+          const response = await axiosAdminInstance.get(`/transactions`,config)
+          return response;
+        } catch (error) {
+          console.log(error.message,'error in getTrainerDetails ......')
+        }
+      }

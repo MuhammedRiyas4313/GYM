@@ -50,8 +50,8 @@ function TrainersTable() {
 
   return (
     <div>
-      <div className="flex items-center justify-between p-4 bg-gray-900 dark:bg-gray-900 md:ml-64">
-        <h3 className="text-3xl text-white font-bold">Trainers</h3>
+      <div className="flex flex-wrap items-center justify-center md:justify-between p-6 bg-gray-900 dark:bg-gray-900 md:ml-64">
+        <h3 className="md:text-3xl text-lg text-white font-bold">Trainers</h3>
         <div class="relative">
           <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
             <svg
@@ -73,16 +73,10 @@ function TrainersTable() {
           <input
             type="search"
             id="default-search"
-            class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="block w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search here"
             required
           ></input>
-          <button
-            type="submit"
-            class="text-white absolute right-2.5 bottom-2.5 bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Search
-          </button>
         </div>
       </div>
       <div className="relative overflow-x-auto shadow-md md:ml-64">
@@ -168,9 +162,6 @@ function TrainersTable() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                    <button className="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
-                    <span className="ml-1">🎥Video Call</span>
-                  </button>
                   <button onClick={()=>message(val._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

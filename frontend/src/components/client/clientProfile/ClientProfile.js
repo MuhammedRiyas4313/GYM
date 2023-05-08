@@ -6,7 +6,6 @@ import userAvatar from "../../../assets/images/profileLogo.png";
 import { useSelector } from "react-redux";
 import EditProfilePicture from "./EditProfilePicture";
 import EditProfile from "./EditProfile";
-import Wallet from "./Wallet";
 
 function ClientProfile() {
 
@@ -20,7 +19,6 @@ function ClientProfile() {
   const [userDetails, setUserDetails] = useState({});
   const [updateProfileImage, setUpdateProfileImage] = useState(false);
   const [updateProfile, setUpdateProfile] = useState(false);
-  const [showWallet, setShowWallet] = useState(false);
 
   function options() {
     setOption((state) => !state);
@@ -36,7 +34,7 @@ function ClientProfile() {
 
   useEffect(() => {
     console.log("ClientProfile");
-  }, [option, updateProfileImage, userDetails, updateProfile,showWallet]);
+  }, [option, updateProfileImage, userDetails, updateProfile ]);
 
   useEffect(() => {
     getUserDetails(userId).then((res) => {
@@ -48,13 +46,11 @@ function ClientProfile() {
     navigate("/client/chat", { state: { userId: userId } });
   }
   function wallet() {
-    console.log('wallet')
-    setShowWallet(state => !state)
+    navigate('/wallet', { state: { userId: userId } })
   }
 
   return (
     <div className="bg-white">
-      {showWallet ? (<Wallet />) : (<div></div>)}
       {updateProfile ? (
         <EditProfile
           setUserDetails={setUserDetails}

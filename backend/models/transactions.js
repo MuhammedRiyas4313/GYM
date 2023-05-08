@@ -1,26 +1,13 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  wallet: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Wallet',
-    required: true
-  },
+  payee: String,
+  reciever: String,
   amount: {
     type: Number,
     required: true
   },
-  type: {
-    type: String,
-    enum: ['debit', 'credit'],
-    required: true
-  },
-  description: {
+  status: {
     type: String,
     required: true
   }

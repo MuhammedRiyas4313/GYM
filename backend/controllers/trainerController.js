@@ -6,6 +6,7 @@ const Message = require("../models/message");
 const Conversation = require("../models/conversation");
 const Admin = require("../models/admin");
 const Wallet = require("../models/wallet");
+const Transaction = require("../models/transactions");
 
 const { ObjectId } = require("mongodb");
 const bcrypt = require("bcrypt");
@@ -55,8 +56,8 @@ const trainerRegister = async (req, res) => {
 
     Wallet.create({
       user: newTrainer._id,
-      balance:0
-    })
+      balance: 0,
+    });
 
     res.json({ status: "Successfully created Account" });
   } catch (error) {
@@ -346,9 +347,9 @@ const getUser = async (req, res) => {
   try {
     const { Id } = req.query;
     const user = await User.findOne({ _id: new ObjectId(Id) });
-    if(user) return res.json(user);
-    const admin = await Admin.findOne({ _id: new ObjectId(Id)})
-    if(admin) return res.json(admin);
+    if (user) return res.json(user);
+    const admin = await Admin.findOne({ _id: new ObjectId(Id) });
+    if (admin) return res.json(admin);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in getuser ...");
@@ -374,9 +375,9 @@ const createMessage = async (req, res) => {
     const response = await Message.create({
       conversationId,
       sender,
-      text
+      text,
     });
-    res.json(response)
+    res.json(response);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in getuser ...");
@@ -384,7 +385,6 @@ const createMessage = async (req, res) => {
 };
 
 const updateProfileImage = async (req, res) => {
-  
   const { filef, trainerId } = req.body;
 
   try {
@@ -406,7 +406,6 @@ const updateProfileImage = async (req, res) => {
 };
 
 const updateProfile = async (req, res) => {
-
   const { fname, email, dob, phone } = req.body.values;
   const { trainerId } = req.body;
 
@@ -417,11 +416,45 @@ const updateProfile = async (req, res) => {
         fname,
         dob,
         email,
-        phone
+        phone,
       },
       { new: true }
     );
-    res.json(response)
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in update client profile ...");
+  }
+};
+
+const wallet = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const userWallet = await Wallet.findOne({
+      user: userId,
+    });
+    res.json(userWallet);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in update client profile ...");
+  }
+};
+
+const transactions = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    console.log(userId, "userId in transactions");
+    const resp = await Transaction.find({
+      $or: [
+        { payee: userId },
+        {
+          reciever: userId,
+        },
+      ],
+    });
+    console.log(resp, "transactions....");
+
+    res.json(resp);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in update client profile ...");
@@ -443,5 +476,7 @@ module.exports = {
   getMessages,
   createMessage,
   updateProfileImage,
-  updateProfile
+  updateProfile,
+  wallet,
+  transactions,
 };

@@ -36,6 +36,9 @@ import ClientChat from "./pages/client/Chat/ClientChat";
 import AdminChat from "./pages/admin/message/AdminChat";
 import TrainerVideoCall from "./pages/trainer/VideoCall.js/TrainerVideoCall";
 import ClientVideoCall from "./pages/client/videocall/ClientVideoCall";
+import About from "./pages/aboutUs/About";
+import Wallets from "./pages/Wallet.js/Wallets";
+import Transactions from "./pages/transactions/Transactions";
 
 function App() {
   
@@ -86,6 +89,11 @@ function App() {
         <Route path="/admin/transactions" element={ Admin ? <Transaction />:<AdminLogin /> } />
         <Route path="/admin/courses" element={ Admin ? <Course />:<AdminLogin /> } />
         <Route path="/admin/chat" element={ Admin ? <AdminChat />:<AdminLogin /> } />
+
+        <Route path="/wallet" element={<Wallets />} />
+        <Route path="/transaction" element={<Transactions />} />
+        <Route path="/aboutus" element={<About />} />
+
       </Routes>
     </div>
   );

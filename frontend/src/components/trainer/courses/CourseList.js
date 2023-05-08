@@ -34,7 +34,7 @@ function CourseList({courseList}) {
             <th>Charge / Month</th>
             <th>Clients</th>
             <th>Status</th>
-            <th>Action</th>
+            {/* <th>Action</th> */}
             <th></th>
           </tr>
         </thead>
@@ -67,7 +67,7 @@ function CourseList({courseList}) {
                           </span>
                         </div>
                       )}</td>
-                <td>{val.status === 'Active' ? (
+                {/* <td>{val.status === 'Active' ? (
                         <button
                           type="button"
                           className="text-white bg-red-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
@@ -87,7 +87,7 @@ function CourseList({courseList}) {
                         >
                           Unblock
                         </button>
-                      )}</td>
+                      )}</td> */}
                 <th>
                   <button
                     onClick={() => viewDetails(val._id)}

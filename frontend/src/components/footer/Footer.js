@@ -73,13 +73,6 @@ function FooterComponent() {
         </Footer.LinkGroup>
       </div>
     </div>
-    <div className="w-full bg-gray-700 py-6 px-4 sm:flex sm:items-center sm:justify-between">
-      <Footer.Copyright
-        href="#"
-        by="Flowbite™"
-        year={2022}
-      />
-    </div>
   </div>
 </Footer>
   )

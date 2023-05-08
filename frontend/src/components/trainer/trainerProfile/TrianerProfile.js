@@ -52,6 +52,10 @@ function TrianerProfile() {
     navigate("/trainer/chat", { state: { trainerId: trainerId } });
   }
 
+  function wallet() {
+    navigate('/wallet', { state: { userId: trainerId } })
+  }
+
   return (
     <div className="bg-white">
       {updateProfile ? (
@@ -235,7 +239,6 @@ function TrianerProfile() {
                             </li>
                             <li
                               onClick={() => {
-                                console.log("edit profile");
                                 setUpdateProfile((state) => !state);
                               }}
                             >
@@ -244,7 +247,9 @@ function TrianerProfile() {
                             <li>
                               <Link to="/trainer/addcourse">Add course</Link>
                             </li>
-                            <li>
+                            <li
+                            onClick={wallet}
+                            >
                               <a>My wallet</a>
                             </li>
                           </ul>

@@ -1,6 +1,9 @@
 import React from "react";
 import { Card } from "flowbite-react";
-import Stepper from '../../../assets/logo/Stepper.png'
+import Stepper from '../../../assets/images/dumbbell.png'
+import equipment from '../../../assets/images/treadmill.png'
+import dumbbell from '../../../assets/images/dumbell2.png'
+import wellness from '../../../assets/images/wellness.png'
 import "./Features.css";
 
 function Features() {
@@ -13,11 +16,11 @@ function Features() {
       </div>
     <div className="flex flex-wrap justify-around ">
       <div className="pb-5">
-          <Card className="cardcontainer border-orange-600 md:m-0 m-3">
-            <div className="flex flex-col items-center pb-10 bg-black">
+          <Card className="cardcontainer md:m-0 border-0 m-3">
+            <div className="flex flex-col items-center pb-10 bg-black object-fill">
               <img
-                className="mb-3 h-24 w-24 rounded-full shadow-lg"
-                src={Stepper}
+                className="mb-3 h-24 w-24 shadow-lg"
+                src={equipment}
                 alt="Bonnie image"
               />
               <h5 className="mb-1 md:text-2xl text-lg font-bold text-gray-300 dark:text-gray-300">
@@ -29,11 +32,11 @@ function Features() {
           </Card>
         </div>
         <div className="pb-5">
-          <Card className="cardcontainer border-orange-600 md:m-0 m-3">
+          <Card className="cardcontainer border-0 md:m-0 m-3">
             <div className="flex flex-col items-center pb-10">
               <img
-                className="mb-3 h-24 w-24 rounded-full shadow-lg"
-                src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+                className="mb-3 h-24 w-24 shadow-lg"
+                src={wellness}
                 alt="Bonnie image"
               />
               <h5 className="mb-1 md:text-2xl text-lg font-bold text-gray-300 dark:text-gray-300">
@@ -45,11 +48,11 @@ function Features() {
           </Card>
         </div>
         <div className="pb-5">
-          <Card className="cardcontainer border-orange-600 md:m-0 m-3">
+          <Card className="cardcontainer border-0 md:m-0 m-3">
             <div className="flex flex-col items-center pb-10">
               <img
-                className="mb-3 h-24 w-24 rounded-full shadow-lg"
-                src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+                className="mb-3 h-24 w-24  shadow-lg"
+                src={dumbbell}
                 alt="Bonnie image"
               />
               <h5 className="mb-1 md:text-2xl text-lg font-bold text-gray-300 dark:text-gray-300">
@@ -61,11 +64,11 @@ function Features() {
           </Card>
         </div>
         <div className="pb-5">
-          <Card className="cardcontainer border-orange-600 md:m-0 m-3">
+          <Card className="cardcontainer border-0 md:m-0 m-3">
             <div className="flex flex-col items-center pb-10">
               <img
-                className="mb-3 h-24 w-24 rounded-full shadow-lg"
-                src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+                className="mb-3 h-24 w-24 shadow-lg"
+                src={Stepper}
                 alt="Bonnie image"
               />
               <h5 className="mb-1 md:text-2xl text-lg font-bold  text-gray-300 dark:text-gray-300">

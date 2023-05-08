@@ -19,8 +19,8 @@ function TrainerDetail() {
 
   const trainerId = location.state?.trainerId
   const UserDetails = useSelector((state) => state.userReducer.user);
-  console.log(UserDetails,'userDetails in the trainer details')
-  const clientId = UserDetails?.user._id
+
+  const clientId = UserDetails?.user?._id
 
   const viewTop = useRef()
 

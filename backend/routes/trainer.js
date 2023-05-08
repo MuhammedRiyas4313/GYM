@@ -18,7 +18,9 @@ const {
     getMessages,
     createMessage,
     updateProfileImage,
-    updateProfile
+    updateProfile,
+    wallet,
+    transactions
                    
 } = require('../controllers/trainerController')
 
@@ -38,5 +40,7 @@ router.get('/chat/messages',  getMessages);
 router.post('/chat/message',  createMessage);
 router.patch("/updateprofileImage", updateProfileImage);
 router.patch("/updateprofile", updateProfile);
+router.get("/wallet", wallet);
+router.get("/transactions", transactions);
 
 module.exports =  router;

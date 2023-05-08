@@ -1,13 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import avatar1 from "../../../assets/images/avatars/1.jpg";
+import { getTransactions } from "../../../axios/services/adminServices/adminServices";
+import { useLocation } from "react-router-dom";
+
 
 function Transactions() {
+
+  const [transaction, setTransaction] = useState([]);
+
+  useEffect(() => {
+    getTransactions().then((res) => {
+        console.log(res.data,'transactions...')
+      setTransaction(res.data);
+    });
+  }, []);
+
+  function transId(id){
+    const ID = id.slice(-6)
+     return ID
+    }
+  
+    function formatDate(date) {
+      const formatDate = new Date(date);
+      const formated = `${formatDate.getDate()}-${
+        formatDate.getMonth() + 1
+      }-${formatDate.getFullYear()}`;
+  
+      return formated;
+    }
+
   return (
     <div>
-      <div className="flex items-center justify-between p-4 bg-gray-900 dark:bg-gray-900 md:ml-64">
-        <h3 className="text-3xl text-white font-bold">Transactions</h3>
+      <div className="flex  flex-wrap items-center justify-center md:justify-between p-6   bg-gray-900 dark:bg-gray-900 md:ml-64">
+        <h3 className="md:text-3xl text-lg text-white font-bold">Transactions</h3>
         <div class="relative">
-          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg
               aria-hidden="true"
               class="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -27,80 +54,42 @@ function Transactions() {
           <input
             type="search"
             id="default-search"
-            class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="block w-full pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search here"
             required
           ></input>
-          <button
-            type="submit"
-            class="text-white absolute right-2.5 bottom-2.5 bg-orange-600 hover:bg-orange-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            Search
-          </button>
         </div>
       </div>
       <div className="relative overflow-x-auto shadow-md md:ml-64">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 bg-gray-500">
-          <thead className="text-xs text-white uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
+      <div className="overflow-y-scroll max-h-screen">
+        <table className="table w-full border border-gray-900">
+          {/* head */}
+          <thead>
             <tr>
-              <th scope="col" className="px-6 py-3">
-                Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Joined
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Course Name
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Charge/month
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Status
-              </th>
-              <th scope="col" className="px-6 py-3">
-                Action
-              </th>
+              <th></th>
+              <th>Transaction ID</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-              <th
-                scope="row"
-                className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
-              >
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src={avatar1}
-                  alt="Jese image"
-                ></img>
-                <div className="pl-3">
-                  <div className="text-base font-semibold">Neil Sims</div>
-                  <div className="font-normal text-gray-500">
-                    neil.sims@flowbite.com
-                  </div>
-                </div>
-              </th>
-              <td className="px-6 py-4">React Developer</td>
-              <td className="px-6 py-4">React Developer</td>
-              <td className="px-6 py-4">React Developer</td>
-              <td className="px-6 py-4">
-                <div className="flex items-center">
-                  <div className="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div>{" "}
-                  Online
-                </div>
-              </td>
-              <td className="px-6 py-4">
-                <a
-                  href="#"
-                  className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                >
-                  Edit user
-                </a>
-              </td>
-            </tr>
+            {transaction?.map((transaction) => {
+              return (
+                <tr>
+                  <td></td>
+                  <td>{transId(transaction._id)}</td>
+                  <td>{formatDate(transaction.createdAt)}</td>
+                  <td>{transaction.amount}&nbsp;₹</td>
+                  <th>
+                    <div className='badge badge-success'>{transaction.status}</div>
+                  </th>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   );

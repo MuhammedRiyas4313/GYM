@@ -1,95 +1,100 @@
-const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer')
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const Admin = require("../models/admin");
 const Trainer = require("../models/trainer");
-const User = require('../models/user')
-const Conversation = require('../models/conversation')
-const Wallet = require('../models/wallet');
-const Course = require('../models/course');
-
+const User = require("../models/user");
+const Conversation = require("../models/conversation");
+const Wallet = require("../models/wallet");
+const Course = require("../models/course");
+const Transaction = require("../models/transactions");
 
 let transporter = nodemailer.createTransport({
-    // true for 465, false for other ports
-    service: "gmail",
-    auth: {
-      user: process.env.NODEMAILER_AUTHER, // generated ethereal user
-      pass: process.env.NODEMAILER_AUTHER_PASSWORD, // generated ethereal password
-    },
-  });
+  // true for 465, false for other ports
+  service: "gmail",
+  auth: {
+    user: process.env.NODEMAILER_AUTHER, // generated ethereal user
+    pass: process.env.NODEMAILER_AUTHER_PASSWORD, // generated ethereal password
+  },
+});
 
+const adminLogin = async (req, res) => {
+  console.log(req.body, "data from the front end admin login credential");
+  try {
+    const { email, password } = req.body;
+    const oldAdmin = await Admin.findOne({ email });
 
+    if (!oldAdmin) return res.json({ status: "Admin doesn't exist" });
 
-const adminLogin = async (req,res) => {
-     console.log(req.body , 'data from the front end admin login credential')
-     try {
-        const { email, password } = req.body;
-        const oldAdmin = await Admin.findOne({ email });
+    if (password !== oldAdmin.password)
+      return res.json({ status: "Invalid Credentials" });
 
-        if (!oldAdmin)
-            return res.json({ status: "Admin doesn't exist" })
+    const toke = jwt.sign(
+      { email: oldAdmin.email, id: oldAdmin._id },
+      "admin_secret",
+      { expiresIn: "5h" }
+    );
+    res
+      .status(200)
+      .json({ token: toke, status: "Login success", admin: oldAdmin });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: "Something went wrong" });
+  }
+};
 
-        if (password !== oldAdmin.password)
-            return res.json({ status: "Invalid Credentials" })
+const trainersList = async (req, res) => {
+  console.log(req.body, "data from the frontend");
+  const trainersList = await Trainer.find({});
+  console.log(trainersList, "trainers list from the database");
+  res.json(trainersList);
+};
 
-        const toke = jwt.sign({ email: oldAdmin.email, id: oldAdmin._id }, "admin_secret", { expiresIn: "5h" });
-
-        res.status(200).json({ token: toke, status: 'Login success', admin: oldAdmin })
-    } catch (error) {
-        console.log(error);
-        res.json({ status: 'Something went wrong' })
+const trainerBlockstatus = async (req, res) => {
+  console.log(req.body, " values from  the front end blockstatus updater");
+  const { currentStatus, trainerId } = req.body;
+  const response = await Trainer.updateOne(
+    { _id: trainerId },
+    { isBlocked: !currentStatus }
+  );
+  console.log(response);
+  if (response.modifiedCount > 0) {
+    if (currentStatus) {
+      res.json({ message: "Trainer is Unblocked", status: false });
+    } else {
+      res.json({ message: "Trainer is Blocked", status: true });
     }
-}
+  }
+};
 
-const trainersList = async (req,res) =>{
+const notifications = async (req, res) => {
+  const trainersToVerify = await Trainer.find({ isVerified: false });
+  if (trainersToVerify.length > 0) res.json(trainersToVerify);
+};
 
-    console.log(req.body,'data from the frontend')
-    const trainersList = await Trainer.find({})
-    console.log(trainersList,'trainers list from the database')
-    res.json(trainersList);
+const trainerDetails = async (req, res) => {
+  console.log("trainerDetails is calling.....");
+  const { trainerId } = req.query;
 
-}
+  const getDetails = await Trainer.findOne({ _id: trainerId });
+  console.log(getDetails, "trainer details from the data base......");
+  res.json(getDetails);
+};
 
-const trainerBlockstatus = async (req,res) => {
-    console.log(req.body, ' values from  the front end blockstatus updater')
-    const { currentStatus, trainerId } = req.body;
-    const response  = await Trainer.updateOne({_id:trainerId},{isBlocked:!currentStatus})
-    console.log(response);
-    if(response.modifiedCount > 0){
-        if(currentStatus){
-            res.json({message:'Trainer is Unblocked',status:false})
-        }else{
-            res.json({message:'Trainer is Blocked',status:true})
-        }
-    }
-}
+const verifyTrainer = async (req, res) => {
+  const { trainerId } = req.query;
+  console.log("verify Trainer........");
+  const updatedTrainer = await Trainer.findOneAndUpdate(
+    { _id: trainerId },
+    { isVerified: true },
+    { new: true }
+  );
 
-const notifications = async (req,res) => {
-
-    const trainersToVerify = await Trainer.find({isVerified:false})
-     if(trainersToVerify.length > 0 )  res.json(trainersToVerify)
-   
-}
-
-const trainerDetails = async (req,res) => {
-    console.log('trainerDetails is calling.....')
-    const { trainerId } = req.query
-
-    const getDetails = await Trainer.findOne({_id:trainerId})
-    console.log(getDetails,'trainer details from the data base......')
-    res.json(getDetails)
-}
-
-const verifyTrainer = async (req,res) => {
-    const { trainerId } = req.query
-     console.log('verify Trainer........')
-     const updatedTrainer = await Trainer.findOneAndUpdate({_id:trainerId},{isVerified:true},{ new: true })
-
-     console.log(updatedTrainer,'vrified trainer')
-     const mailOptions = {
-        from: "gymtrainersonline@gmail.com", // sender address
-        to: updatedTrainer.email, // list of receivers
-        subject: "GYM Fitness Center Account Verification", // Subject line
-        html: `<p>Hello ${updatedTrainer.fname},</p>
+  console.log(updatedTrainer, "vrified trainer");
+  const mailOptions = {
+    from: "gymtrainersonline@gmail.com", // sender address
+    to: updatedTrainer.email, // list of receivers
+    subject: "GYM Fitness Center Account Verification", // Subject line
+    html: `<p>Hello ${updatedTrainer.fname},</p>
 
         <p>We are pleased to inform you that your account has been successfully verified.</p> <p>You can now log in and access all the features and benefits of our platform.</p>
         
@@ -97,136 +102,152 @@ const verifyTrainer = async (req,res) => {
         
         <p>Best regards,</p>
         <p>GYM TRAINERS MANAGEMENT TEAM</p>`,
-      };
-  
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log("error", error);
-          res.json({ status: "Email not send" });
-        } else {
-          console.log(info, "info from otpmailer");
-          res.json({
-            status: 'Verification email has been sent',
-            message: `Verification Email has been sent to ${info.accepted[0]} !`,
-            data:updatedTrainer ,
-          });
-        }
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("error", error);
+      res.json({ status: "Email not send" });
+    } else {
+      console.log(info, "info from otpmailer");
+      res.json({
+        status: "Verification email has been sent",
+        message: `Verification Email has been sent to ${info.accepted[0]} !`,
+        data: updatedTrainer,
       });
-}
+    }
+  });
+};
 
-const clientList = async (req,res) => {
-    console.log('client list calling....')
-    const usersList = await User.find({})
-    res.json(usersList);
-}
+const clientList = async (req, res) => {
+  console.log("client list calling....");
+  const usersList = await User.find({});
+  res.json(usersList);
+};
 
-const courseList = async (req,res) => {
-    console.log('client list calling....')
-    const usersList = await Course.find({})
-    res.json(usersList);
-}
+const courseList = async (req, res) => {
+  try {
+    console.log("client list calling....");
+    const courseList = await Course.find({}).populate('trainerId');
+    res.json(courseList);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in courses ...");
+  }
+};
 
-const clientDetails = async (req,res)=>{
-    const { userId } = req.query;
-    const getDetails = await User.findOne({_id:userId})
-    console.log(getDetails,'user details from the data base......')
-    res.json(getDetails)
-}
+const clientDetails = async (req, res) => {
+  const { userId } = req.query;
+  const getDetails = await User.findOne({ _id: userId });
+  console.log(getDetails, "user details from the data base......");
+  res.json(getDetails);
+};
 
 const createConversation = async (req, res) => {
-    console.log("trainer conversation creation calling..");
-    const { adminId, trainerId } = req.body;
-    try {
-      let response = null;
-      const conversationExist = await Conversation.findOne({
-        members: {
-          $all: [trainerId, adminId],
-        },
-      });
-  
-      if (conversationExist) {
-        response = conversationExist;
-        return res.json(response);
-      }
-  
-      const newConv = await Conversation.create({
-        members: [trainerId, adminId],
-      });
-      response = newConv;
-      res.json(response);
-    } catch (error) {
-      res.json({ status: "something went wrong" });
-      console.log(error.message, "error in trainerClientDetails ...");
+  console.log("trainer conversation creation calling..");
+  const { adminId, trainerId } = req.body;
+  try {
+    let response = null;
+    const conversationExist = await Conversation.findOne({
+      members: {
+        $all: [trainerId, adminId],
+      },
+    });
+
+    if (conversationExist) {
+      response = conversationExist;
+      return res.json(response);
     }
-  };
-  
-  const getConversation = async (req, res) => {
-    console.log("getconversation is calling");
-    const { adminId } = req.query;
-    try {
-      const conv = await Conversation.find({
-        members: { $in: [adminId] },
-      }).sort({ timestamp: -1 });
-      res.json(conv);
-    } catch (error) {
-      res.json({ status: "something went wrong" });
-      console.log(error.message, "error in trainerClientDetails ...");
-    }
-  };
-  
-  const getUser = async (req, res) => {
-    console.log("getUser is calling in trainercontroller.......");
-    try {
-      const { trainerId } = req.query;
-      const user = await Trainer.findOne({ _id: new ObjectId(trainerId) });
-      res.json(user);
-    } catch (error) {
-      res.json({ status: "something went wrong" });
-      console.log(error.message, "error in getuser ...");
-    }
-  };
-  
-  const getMessages = async (req, res) => {
-    console.log("getMessages calling.......");
-    try {
-      const { conversationId } = req.query;
-      const response = await Message.find({ conversationId: conversationId });
-      res.json(response);
-    } catch (error) {
-      res.json({ status: "something went wrong" });
-      console.log(error.message, "error in getuser ...");
-    }
-  };
-  
-  const createMessage = async (req, res) => {
-    console.log("create message is calling....");
-    const { conversationId, sender, text } = req.body;
-    try {
-      const response = await Message.create({
-        conversationId,
-        sender,
-        text
-      });
-      res.json(response)
-    } catch (error) {
-      res.json({ status: "something went wrong" });
-      console.log(error.message, "error in getuser ...");
-    }
-  };
+
+    const newConv = await Conversation.create({
+      members: [trainerId, adminId],
+    });
+    response = newConv;
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerClientDetails ...");
+  }
+};
+
+const getConversation = async (req, res) => {
+  console.log("getconversation is calling");
+  const { adminId } = req.query;
+  try {
+    const conv = await Conversation.find({
+      members: { $in: [adminId] },
+    }).sort({ timestamp: -1 });
+    res.json(conv);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in trainerClientDetails ...");
+  }
+};
+
+const getUser = async (req, res) => {
+  console.log("getUser is calling in trainercontroller.......");
+  try {
+    const { trainerId } = req.query;
+    const user = await Trainer.findOne({ _id: new ObjectId(trainerId) });
+    res.json(user);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
+  }
+};
+
+const getMessages = async (req, res) => {
+  console.log("getMessages calling.......");
+  try {
+    const { conversationId } = req.query;
+    const response = await Message.find({ conversationId: conversationId });
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
+  }
+};
+
+const createMessage = async (req, res) => {
+  console.log("create message is calling....");
+  const { conversationId, sender, text } = req.body;
+  try {
+    const response = await Message.create({
+      conversationId,
+      sender,
+      text,
+    });
+    res.json(response);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getuser ...");
+  }
+};
+
+const transactions = async (req, res) => {
+  try {
+    const resp = await Transaction.find({});
+    res.json(resp);
+  } catch (error) {
+    res.json({ status: "somet}hing went wrong" });
+    console.log(error.message, "error in transaction ...");
+  }
+};
 
 module.exports = {
-    adminLogin,
-    trainersList,
-    trainerBlockstatus,
-    notifications,
-    trainerDetails,
-    verifyTrainer,
-    clientList,
-    clientDetails,
-    createConversation,
-    getConversation,
-    getUser,
-    getMessages,
-    createMessage,
-    courseList
-}
+  adminLogin,
+  trainersList,
+  trainerBlockstatus,
+  notifications,
+  trainerDetails,
+  verifyTrainer,
+  clientList,
+  clientDetails,
+  createConversation,
+  getConversation,
+  getUser,
+  getMessages,
+  createMessage,
+  courseList,
+  transactions,
+};

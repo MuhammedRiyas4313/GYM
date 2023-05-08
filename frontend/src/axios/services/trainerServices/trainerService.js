@@ -157,3 +157,31 @@ export const trainerRegister = async (value) => {
       console.log(error.message, "error in getTrainerDetails ......");
     }
   };
+
+  export const getWallet = async (userId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.get(`/wallet?userId=${userId}`,config)
+      return response;
+    } catch (error) {
+      console.log(error.message,'error in getTrainerDetails ......')
+    }
+  }
+
+  export const getTransactions = async (userId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.get(`/transactions?userId=${userId}`,config)
+      return response;
+    } catch (error) {
+      console.log(error.message,'error in getTrainerDetails ......')
+    }
+  }
