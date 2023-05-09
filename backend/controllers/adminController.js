@@ -138,12 +138,13 @@ const courseList = async (req, res) => {
 
 const clientDetails = async (req, res) => {
   const { userId } = req.query;
-  const getDetails = await User.findOne({ _id: userId });
+  const getDetails = await User.findOne({ _id: userId }).populate('courses.course');
   console.log(getDetails, "user details from the data base......");
   res.json(getDetails);
 };
 
 const createConversation = async (req, res) => {
+
   console.log("trainer conversation creation calling..");
   const { adminId, trainerId } = req.body;
   try {
@@ -185,7 +186,7 @@ const getConversation = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-  console.log("getUser is calling in trainercontroller.......");
+  console.log("getUser is calling in admin controller.......");
   try {
     const { trainerId } = req.query;
     const user = await Trainer.findOne({ _id: new ObjectId(trainerId) });
@@ -249,5 +250,5 @@ module.exports = {
   getMessages,
   createMessage,
   courseList,
-  transactions,
+  transactions
 };

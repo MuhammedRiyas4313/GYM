@@ -279,11 +279,7 @@ function TrainerDetails() {
                   >
                     Verify Trainer
                   </button>
-                ) : (
-                  <button className=" text-white text-sm font-semibold rounded-lg  focus:outline-none focus:shadow-outline  bg-green-700  p-5 my-4 disabled:">
-                    Verified Trainer
-                  </button>
-                )}
+                ) :''}
               </div>
             </div>
           </div>

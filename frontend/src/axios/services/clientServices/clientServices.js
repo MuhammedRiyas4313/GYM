@@ -260,3 +260,31 @@ export const searchTrainers = async (search) => {
     console.log("error in searchCourses......");
   }
 };
+
+export const getUserCourseList = async (userId) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axiosClientInstance.get(`/courselist?userId=${userId}`, config);
+    return response;
+  } catch (error) {
+    console.log("error in searchCourses......");
+  }
+};
+
+export const cancelCourse = async (courseId,userId) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axiosClientInstance.delete(`/cancel/course?courseId=${courseId}&userId=${userId}`, config);
+    return response;
+  } catch (error) {
+    console.log("error in searchCourses......");
+  }
+};

@@ -162,6 +162,7 @@ function TrainersTable() {
                       )}
                     </td>
                     <td className="px-6 py-4">
+
                   <button onClick={()=>message(val._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

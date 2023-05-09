@@ -121,8 +121,8 @@ const clientRegister = async (req, res) => {
     });
     Wallet.create({
       user: result._id,
-      balance:0
-    })
+      balance: 0,
+    });
     console.log("user created");
     res.json({ status: "New account Created successfully" });
   } catch (error) {
@@ -258,7 +258,7 @@ const clientDetails = async (req, res) => {
 const courses = async (req, res) => {
   try {
     const { search } = req.query;
-    if (req.query.hasOwnProperty('search')) {
+    if (req.query.hasOwnProperty("search")) {
       const regex = new RegExp(`^${search}`, "i");
       const getCourses = await Course.find({
         coursename: { $regex: regex },
@@ -296,14 +296,14 @@ const trainers = async (req, res) => {
   try {
     console.log("trainers get calling.....");
     const { search } = req.query;
-    if (req.query.hasOwnProperty('search')) {
+    if (req.query.hasOwnProperty("search")) {
       const regex = new RegExp(`^${search}`, "i");
       const getTrainers = await Trainer.find({
         fname: { $regex: regex },
-      })
+      });
       res.json(getTrainers);
     } else {
-      const getTrainers = await Trainer.find({})
+      const getTrainers = await Trainer.find({});
       res.json(getTrainers);
     }
   } catch (error) {
@@ -442,41 +442,32 @@ const enrollCLient = async (req, res) => {
       }
     );
 
-    const totalAmount = parseInt(paymentDetails.amount)
-    const adminAmount = totalAmount * 0.2
-    const trainerAmount = totalAmount - adminAmount 
+    // const totalAmount = parseInt(paymentDetails.amount)
+    // const adminAmount = totalAmount * 0.2
+    // const trainerAmount = totalAmount - adminAmount
 
     const userTransaction = await Transaction.create({
-      payee:clientId,
-      reciever: '64300ee00b649a2abb940de1',
-      amount:totalAmount,
-      status:paymentDetails.status
-    })
+      payee: clientId,
+      reciever: "64300ee00b649a2abb940de1",
+      amount: totalAmount,
+      status: paymentDetails.status,
+    });
 
-    const trainerTransaction = await Transaction.create({
-      payee:'64300ee00b649a2abb940de1',
-      reciever: course.trainerId,
-      amount:trainerAmount,
-      status:paymentDetails.status
-    })
-
-    const updatedTrainerWallet = await Wallet.updateOne(
-      { user: course.trainerId  },
-      { $inc:{ balance:trainerAmount },
+    const adminWallet = await Wallet.updateOne(
+      { user: "64300ee00b649a2abb940de1" },
+      {
+        $inc: { balance: totalAmount },
         $push: {
-            transactions:{id:trainerTransaction._id},
+            transactions:{id:userTransaction._id},
         },
       }
     );
 
-    const updatedAdminWallet = await Wallet.updateOne(
-      { user: '64300ee00b649a2abb940de1'  },
-      { $inc:{balance:adminAmount},
+    const userWallet = await Wallet.updateOne(
+      { user: clientId },
+      {
         $push: {
-          transactions: [
-            { id: trainerTransaction._id },
-            { id: userTransaction._id }
-          ]
+            transactions:{id:userTransaction._id},
         },
       }
     );
@@ -614,6 +605,95 @@ const updateProfile = async (req, res) => {
   }
 };
 
+const courseList = async (req, res) => {
+  try {
+    const { userId } = req.query;
+    const resp = await User.findOne({ _id: new ObjectId(userId) }).populate(
+      "courses.course"
+    );
+    res.json(resp);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in update client profile ...");
+  }
+};
+
+const cancelCourse = async (req, res) => {
+  console.log("course cancelation calling..");
+
+  try {
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const currentDate = new Date();
+    const currentMonth = months[currentDate.getMonth()];
+
+    const { courseId, userId } = req.query;
+    console.log(courseId, userId);
+    const course = await Course.findOne({ _id: new ObjectId(courseId) });
+    const user = await User.findOne({ _id: new ObjectId(userId) });
+
+    const courseIndex = user.courses.findIndex((obj) => obj.course == courseId);
+    const clientIndex = course.clients.findIndex((obj) => obj.user == userId);
+    const sloteIndex = course.availableSlots.findIndex(
+      (obj) => obj.client == userId
+    );
+    const UpdationDocIndex = clientDoc.updations.findIndex(
+      (obj) => obj.month == currentMonth
+    );
+
+    const clientDoc = course.clients[clientIndex];
+    const sloteDoc = course.availableSlots[sloteIndex];
+    const courseDoc = user.courses[courseIndex];
+    const UpdationDoc = clientDoc.updations[UpdationDocIndex];
+
+    const paymentDetails = UpdationDoc.paymentDetails;
+
+    const removeCourse = await User.findOneAndUpdate(
+      { _id: new ObjectId(userId) },
+      { $pull: { courses: { _id: new ObjectId(courseDoc._id) } } },
+      { new: true }
+    );
+    const removeClient = await Course.findOneAndUpdate(
+      { _id: new ObjectId(courseId) },
+      { $pull: { clients: { _id: new ObjectId(clientDoc._id) } } },
+      { new: true }
+    );
+    const sloteClear = await Course.findOneAndUpdate(
+      { _id: new ObjectId(courseId), "availableSlots.index": sloteIndex },
+      {
+        $unset: { "availableSlots.$.client": 1 },
+        $unset: { "availableSlots.$.joined": 1 },
+      },
+      { new: true }
+    );
+
+    console.log(clientDoc.joined, "client joined date.....");
+
+    const joinedDate = new Date(clientDoc.joined);
+    const today = new Date();
+    const timeDiff = today.getTime() - joinedDate.getTime();
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+
+    if (daysDiff <= 7) {
+    }
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in course cancelation......");
+  }
+};
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const updateMonthlyData = async () => {
@@ -624,7 +704,10 @@ const updateMonthlyData = async () => {
       {},
       { $set: { "clients.$[].paymentStatus": false } }
     );
-  } catch (error) {}
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in cron job in client controller ...");
+  }
 };
 
 const scheduleMonthlyUpdate = () => {
@@ -664,4 +747,6 @@ module.exports = {
   createMessage,
   updateProfileImage,
   updateProfile,
+  courseList,
+  cancelCourse,
 };

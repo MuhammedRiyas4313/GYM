@@ -19,7 +19,9 @@ const {
   getMessages,
   createMessage,
   updateProfileImage,
-  updateProfile
+  updateProfile,
+  courseList,
+  cancelCourse
 } = require("../controllers/clientController");
 /* GET home page. */
 router.post("/register", clientRegister);
@@ -41,5 +43,7 @@ router.get("/chat/messages", getMessages);
 router.post("/chat/message", createMessage);
 router.patch("/updateprofileImage", updateProfileImage);
 router.patch("/updateprofile", updateProfile);
+router.get("/courselist", courseList);
+router.delete("/cancel/course", cancelCourse);
 
 module.exports = router;

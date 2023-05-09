@@ -39,6 +39,7 @@ import ClientVideoCall from "./pages/client/videocall/ClientVideoCall";
 import About from "./pages/aboutUs/About";
 import Wallets from "./pages/Wallet.js/Wallets";
 import Transactions from "./pages/transactions/Transactions";
+import ClientCourses from './pages/client/Course/Course'
 
 function App() {
   
@@ -60,6 +61,7 @@ function App() {
         <Route path="/client/profile" element={ User ? <ClienProfile /> : <ClientLogin />} />
         <Route path="/client/chat" element={ User ? <ClientChat /> : <ClientLogin />} />
         <Route path="/client/videocall" element={ User ? <ClientVideoCall /> : <ClientLogin />} />
+        <Route path="/client/courses" element={ User ? <ClientCourses /> : <ClientLogin />} />
 
         <Route path="/courses" element={<CourseList />} />
         <Route path="/course/details" element={<CourseDetail />} />

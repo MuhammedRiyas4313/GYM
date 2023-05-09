@@ -55,7 +55,7 @@ function EnrollCourse() {
       setCourse(res.data);
       const allSlotes = res.data.availableSlots;
       const clients = res.data.clients;
-      const trainee = clients.filter((val) => val.user === clientId && val.status === 'Active');
+      const trainee = clients.filter((val) => val.user === clientId && val.status === 'Active' && val.paymentStatus );
       chargeTopay(res.data.charge)
       if (trainee.length) {
         setEnrolledClient(true);

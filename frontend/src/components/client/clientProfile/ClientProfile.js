@@ -49,6 +49,10 @@ function ClientProfile() {
     navigate('/wallet', { state: { userId: userId } })
   }
 
+  function courses() {
+    navigate('/client/courses', { state: { userId: userId } })
+  }
+
   return (
     <div className="bg-white">
       {updateProfile ? (
@@ -220,6 +224,9 @@ function ClientProfile() {
                             </li>
                             <li onClick={wallet}>
                               <a>My wallet</a>
+                            </li>
+                            <li onClick={courses}>
+                              <a>My Courses</a>
                             </li>
                           </ul>
                         </div>
