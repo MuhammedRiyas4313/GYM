@@ -16,7 +16,11 @@ const {
   getMessages,
   createMessage,
   courseList,
-  transactions
+  transactions,
+  transaction,
+  transactionClients,
+  getwallet,
+  getUserCount
 } = require("../controllers/adminController");
 const { verify } = require("jsonwebtoken");
 
@@ -36,5 +40,9 @@ router.get('/chat/user',  getUser);
 router.get('/chat/messages',  getMessages);
 router.post('/chat/message',  createMessage);
 router.get('/transactions',  transactions);
+router.get('/transaction',  transaction);
+router.get('/transaction/clients',  transactionClients);
+router.get('/wallet',  getwallet);
+router.get('/usercount',  getUserCount);
 
 module.exports = router;

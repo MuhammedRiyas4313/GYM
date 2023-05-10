@@ -342,12 +342,11 @@ const trainerCourseList = async (req, res) => {
 };
 
 const enrollCLient = async (req, res) => {
+
+
   const today = new Date();
   const currMonth = today.getMonth() + 1;
-  const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString(
-    "default",
-    { month: "long" }
-  );
+  const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString("default",{ month: "long" });
   const formattedDate = today.toISOString().slice(0, 10);
 
   try {
@@ -442,21 +441,19 @@ const enrollCLient = async (req, res) => {
       }
     );
 
-    // const totalAmount = parseInt(paymentDetails.amount)
-    // const adminAmount = totalAmount * 0.2
-    // const trainerAmount = totalAmount - adminAmount
+    const adminId = "64300ee00b649a2abb940de1"
 
     const userTransaction = await Transaction.create({
       payee: clientId,
-      reciever: "64300ee00b649a2abb940de1",
-      amount: totalAmount,
+      reciever: adminId,
+      amount: paymentDetails.amount,
       status: paymentDetails.status,
     });
 
     const adminWallet = await Wallet.updateOne(
-      { user: "64300ee00b649a2abb940de1" },
+      { user: adminId },
       {
-        $inc: { balance: totalAmount },
+        $inc: { balance: paymentDetails.amount },
         $push: {
             transactions:{id:userTransaction._id},
         },
@@ -472,7 +469,37 @@ const enrollCLient = async (req, res) => {
       }
     );
 
+    const amountTrainer = Math.round(paymentDetails.amount * 0.80)
+
+    const trainerTransaction = await Transaction.create({
+      payee: adminId,
+      reciever: course.trainerId,
+      amount: amountTrainer,
+      status: paymentDetails.status,
+    });
+
+    const trainerWallet = await Wallet.updateOne(
+      { user: course.trainerId },
+      {
+        $inc: { balance: amountTrainer },
+        $push: {
+            transactions:{id:trainerTransaction._id},
+        },
+      }
+    );
+
+    const adminWallet2 = await Wallet.updateOne(
+      { user: adminId },
+      {
+        $inc: { balance: -amountTrainer },
+        $push: {
+            transactions:{id:trainerTransaction._id},
+        },
+      }
+    );
+
     res.json({ status: "successfully enrolled" });
+
   } catch (error) {
     res.json({ status: "something wrong" });
     console.log(error.message, "error in mongoUpdate");
@@ -639,24 +666,24 @@ const cancelCourse = async (req, res) => {
     const currentDate = new Date();
     const currentMonth = months[currentDate.getMonth()];
 
+    const adminId = "64300ee00b649a2abb940de1" 
+
     const { courseId, userId } = req.query;
     console.log(courseId, userId);
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
     const user = await User.findOne({ _id: new ObjectId(userId) });
 
     const courseIndex = user.courses.findIndex((obj) => obj.course == courseId);
-    const clientIndex = course.clients.findIndex((obj) => obj.user == userId);
-    const sloteIndex = course.availableSlots.findIndex(
-      (obj) => obj.client == userId
-    );
-    const UpdationDocIndex = clientDoc.updations.findIndex(
-      (obj) => obj.month == currentMonth
-    );
-
-    const clientDoc = course.clients[clientIndex];
-    const sloteDoc = course.availableSlots[sloteIndex];
     const courseDoc = user.courses[courseIndex];
+    const clientIndex = course.clients.findIndex((obj) => obj.user == userId);
+    const clientDoc = course.clients[clientIndex];
+    const sloteIndex = course.availableSlots.findIndex((obj) => obj.client == userId);
+    console.log(sloteIndex,'slote index....cancelation')
+    const sloteDoc = course.availableSlots[sloteIndex];
+    console.log(sloteDoc,'slote doc to clear')
+    const UpdationDocIndex = clientDoc.updations.findIndex((obj) => obj.month == currentMonth);
     const UpdationDoc = clientDoc.updations[UpdationDocIndex];
+    
 
     const paymentDetails = UpdationDoc.paymentDetails;
 
@@ -670,14 +697,24 @@ const cancelCourse = async (req, res) => {
       { $pull: { clients: { _id: new ObjectId(clientDoc._id) } } },
       { new: true }
     );
-    const sloteClear = await Course.findOneAndUpdate(
-      { _id: new ObjectId(courseId), "availableSlots.index": sloteIndex },
-      {
-        $unset: { "availableSlots.$.client": 1 },
-        $unset: { "availableSlots.$.joined": 1 },
-      },
-      { new: true }
-    );
+    const slot = await Course.findOne({
+      _id: new ObjectId(courseId),
+      "availableSlots._id": sloteDoc._id,
+    }).populate({
+      path: "availableSlots.client",
+      model: "user",
+    });
+    
+    if (slot) {
+
+      slot.availableSlots.id(sloteDoc._id).status = "free";
+      slot.availableSlots.id(sloteDoc._id).client = null;
+      slot.availableSlots.id(sloteDoc._id).joined = "";
+    
+      await slot.save();
+    
+      console.log(`Slot ${sloteDoc._id} cleared.`);
+    }
 
     console.log(clientDoc.joined, "client joined date.....");
 
@@ -687,6 +724,72 @@ const cancelCourse = async (req, res) => {
     const daysDiff = timeDiff / (1000 * 3600 * 24);
 
     if (daysDiff <= 7) {
+
+      console.log('cancelation within 7 days')
+
+      const refundAmount = paymentDetails.amount * 0.7
+
+      const userTransaction = await Transaction.create({
+        payee: adminId,
+        reciever: userId,
+        amount: refundAmount,
+        status: paymentDetails.status,
+      });
+
+      const trainerTransaction = await Transaction.create({
+        payee: course.trainerId,
+        reciever: adminId,
+        amount: refundAmount*0.9,
+        status: paymentDetails.status,
+      });
+
+
+      const userWallet = await Wallet.updateOne(
+        { user: userId },
+        {
+          $inc: { balance: refundAmount },
+          $push: {
+              transactions:{id:userTransaction._id},
+          },
+        }
+      );
+
+      const trainerWallet = await Wallet.updateOne(
+        { user: course.trainerId },
+        {
+          $inc: { balance: -refundAmount*0.9 },
+          $push: {
+              transactions:{id:trainerTransaction._id},
+          },
+        }
+      );
+
+      const adminWallet = await Wallet.updateOne(
+        { user: adminId },
+        {
+          $inc: { balance: refundAmount*0.9 },
+          $push: {
+              transactions:{id:userTransaction._id},
+          },
+        }
+      );
+
+
+      const adminWallet2 = await Wallet.updateOne(
+        { user: adminId },
+        {
+          $inc: { balance: -refundAmount },
+          $push: {
+              transactions:{id:userTransaction._id},
+          },
+        }
+      );
+
+      res.json({status:`We would like to inform you that your amount of ${refundAmount} will be credited to your wallet after a deduction of 30% within a week`})
+
+    }else{
+      console.log('cancelation after 7 days')
+      res.json({status:`We regret to inform you that we are unable to process your refund request as your membership has exceeded 7 days`})
     }
   } catch (error) {
     res.json({ status: "something went wrong" });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { getUsersCount } from '../../../axios/services/adminServices/adminServices';
 
 ChartJS.register(
   CategoryScale,
@@ -19,6 +20,16 @@ ChartJS.register(
   Legend
 );
 export function RevanueChart() {
+
+  const [userCount, setUserCount] = useState([])
+
+
+  useEffect(()=>{
+    getUsersCount().then((res)=>{
+      setUserCount(res.data)
+      })
+    
+  }, [])
 
  const options = {
   responsive: true,
@@ -32,21 +43,25 @@ export function RevanueChart() {
   },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July','Auguest', 'Septemper', 'October', 'November', 'December'];
+const labels = userCount.map((val)=>{
+  return val._id
+})
 
  const data = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
-      data: [1,2,3,5,1,2],
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data:  [1,2,3,5,1,2],
+      label: 'Monthly Admissions',
+      data: userCount.map((val)=>{
+        return val.count
+      }),
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
     },
+    // {
+    //   label: 'Dataset 2',
+    //   data:  [1,2,3,5,1,2],
+    //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    // },
   ],
 };
 

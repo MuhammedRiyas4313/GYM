@@ -8,6 +8,8 @@ const Wallet = require("../models/wallet");
 const Course = require("../models/course");
 const Transaction = require("../models/transactions");
 
+const { ObjectId } = require("mongodb");
+
 let transporter = nodemailer.createTransport({
   // true for 465, false for other ports
   service: "gmail",
@@ -43,10 +45,13 @@ const adminLogin = async (req, res) => {
 };
 
 const trainersList = async (req, res) => {
-  console.log(req.body, "data from the frontend");
-  const trainersList = await Trainer.find({});
-  console.log(trainersList, "trainers list from the database");
-  res.json(trainersList);
+  try {
+    const trainersList = await Trainer.find({});
+    res.json(trainersList);
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in courses ...");
+  }
 };
 
 const trainerBlockstatus = async (req, res) => {
@@ -230,10 +235,109 @@ const transactions = async (req, res) => {
     const resp = await Transaction.find({});
     res.json(resp);
   } catch (error) {
-    res.json({ status: "somet}hing went wrong" });
+    res.json({ status: "something went wrong" });
     console.log(error.message, "error in transaction ...");
   }
 };
+
+const transactionClients = async (req,res) => {
+  try {
+    const { clientId } = req.query
+    console.log(clientId,'client id from the frontend')
+
+    let client = {}
+
+    const admin = await Admin.findOne({_id: new ObjectId(clientId)})
+    const trainer = await Trainer.findOne({_id: new ObjectId(clientId)})
+    const user = await User.findOne({_id: new ObjectId(clientId)})
+
+    if(admin){
+      client = admin
+    }else if(trainer){
+      client = trainer
+    }else if(user){
+      client = user
+    }
+    
+    res.json(client)
+    
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in transactions ...");
+  }
+}
+
+const transaction = async (req,res) => {
+  try {
+    const { transactionId } = req.query
+    const response = await Transaction.findOne({_id:new ObjectId(transactionId)})
+    res.json(response)
+    
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in transaction ...");
+  }
+}
+
+const getwallet = async (req,res) => {
+  try {
+    const { adminId } = req.query
+    const response = await Wallet.findOne({user: adminId})
+    res.json(response)
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in Wallet ...");
+  }
+}
+
+const getUserCount = async (req,res) => {
+  try {
+
+    const response = await User.aggregate([
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m", date: "$createdAt" }
+          },
+          count: { $sum: 1 }
+        }
+      }, 
+      {
+        $sort: {
+          "_id": -1
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          data: { $push: "$$ROOT" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          data: {
+            $reverseArray: "$data"
+          }
+        }
+      },
+      {
+        $unwind: "$data"
+      },
+      {
+        $replaceRoot: {
+          newRoot: "$data"
+        }
+      }
+    ]);
+    res.json(response)
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in Wallet ...");
+  }
+}
+
+
 
 module.exports = {
   adminLogin,
@@ -250,5 +354,9 @@ module.exports = {
   getMessages,
   createMessage,
   courseList,
-  transactions
+  transactions,
+  transaction,
+  transactionClients,
+  getwallet,
+  getUserCount
 };

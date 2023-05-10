@@ -2,8 +2,9 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { cancelCourse } from '../../../axios/services/clientServices/clientServices'
+import { toast } from 'react-toastify'
 
-export default function CancelationModal({setCancelation,courseId,userId}) {
+export default function CancelationModal({setCancelation,courseId,userId,setCourseCancel}) {
 
   const [open, setOpen] = useState(true)
 
@@ -12,7 +13,10 @@ export default function CancelationModal({setCancelation,courseId,userId}) {
   function cancelationConfirmation(){
 
     setCancelation(state => !state)
-    cancelCourse(courseId,userId)
+    cancelCourse(courseId,userId).then((res)=>{
+      setCourseCancel(state => !state)
+      toast.warn(res.data.status)
+    })
 
   }
 

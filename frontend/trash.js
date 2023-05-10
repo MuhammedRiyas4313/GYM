@@ -78,3 +78,12 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
   ];
   const currentDate = new Date();
   const currentMonth = months[currentDate.getMonth()];
+
+  function formateDate(date) {
+    const formatDate = new Date(date);
+    const formated = `${formatDate.getDate()}-${
+      formatDate.getMonth() + 1
+    }-${formatDate.getFullYear()}`;
+
+    return formated;
+  }

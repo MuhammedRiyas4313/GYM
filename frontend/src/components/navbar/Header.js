@@ -143,7 +143,7 @@ function NavBar() {
         <Navbar.Link onClick={() => navGate('/aboutus')} className="navbarlink cursor-pointer">
           About
         </Navbar.Link>
-        <Navbar.Link onClick={() => navGate('/')} className="navbarlink cursor-pointer">
+        <Navbar.Link onClick={() => navGate('/contactus')} className="navbarlink cursor-pointer">
           Contact
         </Navbar.Link>
         {!buttonHide && (

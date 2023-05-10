@@ -4,6 +4,7 @@ import { getCourses } from "../../axios/services/clientServices/clientServices";
 import { useNavigate } from "react-router-dom";
 
 function Courses() {
+  
   const viewCourses = useRef();
   const searchInp = useRef();
 

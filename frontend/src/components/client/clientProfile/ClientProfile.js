@@ -8,7 +8,6 @@ import EditProfilePicture from "./EditProfilePicture";
 import EditProfile from "./EditProfile";
 
 function ClientProfile() {
-
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,7 +33,7 @@ function ClientProfile() {
 
   useEffect(() => {
     console.log("ClientProfile");
-  }, [option, updateProfileImage, userDetails, updateProfile ]);
+  }, [option, updateProfileImage, userDetails, updateProfile]);
 
   useEffect(() => {
     getUserDetails(userId).then((res) => {
@@ -46,11 +45,11 @@ function ClientProfile() {
     navigate("/client/chat", { state: { userId: userId } });
   }
   function wallet() {
-    navigate('/wallet', { state: { userId: userId } })
+    navigate("/wallet", { state: { userId: userId } });
   }
 
   function courses() {
-    navigate('/client/courses', { state: { userId: userId } })
+    navigate("/client/courses", { state: { userId: userId } });
   }
 
   return (
@@ -98,61 +97,7 @@ function ClientProfile() {
                   </div>
                 </div>
                 <div className="flex w-full md:w-1/3 justify-end">
-                  {/* <div className="flex flex-wrap justify-between mt-3 ">
-                    <div className="rating">
-                      <input
-                        type=""
-                        name="rating-2"
-                        className="mask mask-star-2 bg-orange-400"
-                      />
-                      <input
-                        type=""
-                        name="rating-2"
-                        className="mask mask-star-2 bg-orange-400"
-                      />
-                      <input
-                        type=""
-                        name="rating-2"
-                        className="mask mask-star-2 bg-orange-400"
-                      />
-                      <input
-                        type=""
-                        name="rating-2"
-                        className="mask mask-star-2 bg-orange-400"
-                      />
-                      <input
-                        type=""
-                        name="rating-2"
-                        className="mask mask-star-2 bg-orange-400"
-                      />
-                    </div>
-                  </div> */}
                   <div className="flex mb-5">
-                    {/* <div className="" onClick={videoCall}>
-                      <label
-                        tabIndex={0}
-                        className="btn m-1 btn-circle swap swap-rotate bg-orange-500"
-                      >
-                        <svg
-                          className="fill-current text-white"
-                          width="32"
-                          height="32"
-                          viewBox="0 0 512 512"
-                          enable-background="new 0 0 48 48"
-                          id="Layer_1"
-                          version="1.1"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <g id="Layer_3">
-                            <path
-                              d="M0,109.7v292.6h402.3v-61.7L512,395.4V116.6l-109.7,54.9v-61.7H0z M36.6,146.3h329.1v219.4H36.6V146.3z M475.4,176v160l-73.1-36.6v-86.9L475.4,176z"
-                              fill="#241F20"
-                              className="fill-current text-white"
-                            />
-                          </g>
-                        </svg>
-                      </label>
-                    </div> */}
                     <div className="flex" onClick={message}>
                       <label
                         tabIndex={0}

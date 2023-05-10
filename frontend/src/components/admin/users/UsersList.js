@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import avatar1 from "../../../assets/images/avatars/1.jpg";
+import avatar1 from "../../../assets/images/profileLogo.png";
 import { getClients } from "../../../axios/services/adminServices/adminServices";
 import { useNavigate } from "react-router-dom";
 
 function UsersList() {
-
   const [users, setUsers] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     getClients().then((res) => {
@@ -26,8 +25,8 @@ function UsersList() {
 
   function viewDetails(userId) {
     console.log("user view details");
-    console.log(userId,'view details trainer ')
-    navigate('/admin/userdetails', { state: { userId: userId } });
+    console.log(userId, "view details trainer ");
+    navigate("/admin/userdetails", { state: { userId: userId } });
   }
 
   function blockStatus() {
@@ -102,18 +101,11 @@ function UsersList() {
                       className="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white"
                     >
                       <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
-                        <svg
-                          class="absolute w-12 h-12 text-gray-400 -left-1"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                            clip-rule="evenodd"
-                          ></path>
-                        </svg>
+                        <img
+                          src={val.profile ? val.profile : avatar1}
+                          className="object-cover h-12 w-12 rounded-full"
+                          alt=""
+                        />
                       </div>
                       <div className="pl-3">
                         <div className="text-base font-semibold">

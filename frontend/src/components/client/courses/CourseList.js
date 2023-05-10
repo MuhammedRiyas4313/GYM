@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CancelationModal from "./CancelationModal";
 
-function CourseList({ courses, userId }) {
+function CourseList({ courses, userId, setCourseCancel }) {
 
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ function CourseList({ courses, userId }) {
   return (
     <div className="overflow-x-auto w-full">
         {
-            cancelation ? <CancelationModal userId={userId} courseId={courseId} setCancelation={setCancelation} />:<></>
+            cancelation ? <CancelationModal setCourseCancel={setCourseCancel} userId={userId} courseId={courseId} setCancelation={setCancelation} />:<></>
         }
       <table className="table w-full">
         <thead>
@@ -43,7 +43,10 @@ function CourseList({ courses, userId }) {
           {courseLength === 0 && (
             <tr>
               <td className="hidden"></td>
-              <td className="flex justify-center text-bold w-full">
+              <td className=""></td>
+              <td className=""></td>
+              <td className=""></td>
+              <td className="">
                 NO COURSES ADDED YET
               </td>
               <td></td>

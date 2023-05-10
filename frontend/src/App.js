@@ -40,6 +40,7 @@ import About from "./pages/aboutUs/About";
 import Wallets from "./pages/Wallet.js/Wallets";
 import Transactions from "./pages/transactions/Transactions";
 import ClientCourses from './pages/client/Course/Course'
+import Contactus from "./pages/contactUs/Contactus";
 
 function App() {
   
@@ -95,6 +96,7 @@ function App() {
         <Route path="/wallet" element={<Wallets />} />
         <Route path="/transaction" element={<Transactions />} />
         <Route path="/aboutus" element={<About />} />
+        <Route path="/contactus" element={<Contactus />} />
 
       </Routes>
     </div>

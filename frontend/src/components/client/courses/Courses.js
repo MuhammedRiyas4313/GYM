@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import CourseList from "./CourseList";
 import { getUserCourseList } from "../../../axios/services/clientServices/clientServices";
 
@@ -9,13 +9,15 @@ function Courses() {
   const userId = location.state?.userId;
 
   const [courses, setCourses] = useState([]);
+  const [cancelCourse, setCourseCancel] = useState(false)
   
   useEffect(() => {
     getUserCourseList(userId).then((res) => {
       console.log(res.data.courses, "ind user course list");
       setCourses(res.data.courses);
     });
-  }, []);
+  }, [cancelCourse]);
+
 
   return (
     <div>
@@ -54,7 +56,7 @@ function Courses() {
 
               <div className="bg-gray-100">
                 
-                <CourseList courses={courses} userId={userId} />
+                <CourseList setCourseCancel={setCourseCancel} courses={courses} userId={userId} />
                 {/* Course list table */}
               </div>
             </div>
