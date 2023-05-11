@@ -21,7 +21,8 @@ const {
   updateProfileImage,
   updateProfile,
   courseList,
-  cancelCourse
+  cancelCourse,
+  attendanceDetails
 } = require("../controllers/clientController");
 /* GET home page. */
 router.post("/register", clientRegister);
@@ -45,5 +46,6 @@ router.patch("/updateprofileImage", updateProfileImage);
 router.patch("/updateprofile", updateProfile);
 router.get("/courselist", courseList);
 router.delete("/cancel/course", cancelCourse);
+router.get("/attendance", attendanceDetails);
 
 module.exports = router;

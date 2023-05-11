@@ -288,3 +288,18 @@ export const cancelCourse = async (courseId,userId) => {
     console.log("error in searchCourses......");
   }
 };
+
+
+export const getAttendanceDetails = async (courseId,clientId) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axiosClientInstance.get(`/attendance?courseId=${courseId}&clientId=${clientId}`, config);
+    return response;
+  } catch (error) {
+    console.log("error in searchCourses......");
+  }
+};

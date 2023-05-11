@@ -7,8 +7,6 @@ import { trainerLogout } from "../../redux/trainerSlice";
 import { motion } from 'framer-motion'
 import Modal from "./Modal";
 import "./Header.css";
-import { getTrainerDetails } from "../../axios/services/trainerServices/trainerService";
-import { getUserDetails } from "../../axios/services/clientServices/clientServices";
 
 function NavBar() {
 
@@ -98,14 +96,14 @@ function NavBar() {
       )}
       <Link to="/">
         <Navbar.Brand href="">
-          <img src="/logo.png" className="mr-3 h-6 sm:h-9" alt="Logo" />
+          <img src="/logo.png" className="md:mr-3 mr-0 md:h-7 h-2" alt="Logo" />
         </Navbar.Brand>
       </Link>
       <div className="flex md:order-2 ">
         {loged && (
           <Button
             onClick={() => showProfile(loged._id)}
-            className="bg-orange-500 font-mono hover:bg-orange-700 mr-1 md:mr-5 text-white uppercase"
+            className="bg-orange-500 font-mono hover:bg-orange-700 mr-1 md:mr-5  text-white uppercase"
           >
             { loged.fname}
           </Button>

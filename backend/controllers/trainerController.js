@@ -461,6 +461,40 @@ const transactions = async (req, res) => {
   }
 };
 
+const attendance = async (req, res) => {
+  try {
+    console.log(" in the attendance registration........");
+    const { clientId, courseId, objectId, status, reason, date } = req.body;
+    const course = await Course.findOne({ _id: courseId });
+    const client = course.clients.find(
+      (c) => c.user.toString() === clientId.toString()
+    );
+    const attendan = client.attendance.find((c) => c.date === date);
+
+    if(attendan) return res.json({status:'already marked'})
+
+    if (client._id.toString() == objectId) {
+      const updateAttendance = await Course.findOneAndUpdate(
+        { _id: courseId, "clients.user": clientId },
+        {
+          $push: {
+            "clients.$.attendance": {
+              date: date,
+              status: status,
+              reason: reason,
+            },
+          },
+        }
+      );
+      res.json({ status: "completed" });
+    }
+
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in update client profile ...");
+  }
+};
+
 module.exports = {
   trainerRegister,
   trainerLogin,
@@ -479,4 +513,5 @@ module.exports = {
   updateProfile,
   wallet,
   transactions,
+  attendance,
 };

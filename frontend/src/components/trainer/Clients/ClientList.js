@@ -2,45 +2,60 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createConversation } from "../../../axios/services/chat/trainerChat";
-import { VideoCall } from "@material-ui/icons";
+import Attendance from "./Attendance";
 
 function ClientList({ clients }) {
   const navigate = useNavigate();
 
-  const [client, setClient] = useState([]);
+  const [clientAttendance, setClientAttendance] = useState("");
+  const [courseAttendance, setCourseAttendance] = useState("");
+  const [objectAttendance, setObjectAttendance] = useState("");
+  const [attendanceModal, setAttendanceModal] = useState(false);
+
   const clientsLength = clients.length;
 
   const Trainer = useSelector((state) => state.trainerReducer.trainer);
-  const trainerId = Trainer.trainer._id
-
-
-  function formateDate(date) {
-    const formatDate = new Date(date);
-    const formated = `${formatDate.getDate()}-${
-      formatDate.getMonth() + 1
-    }-${formatDate.getFullYear()}`;
-    return formated;
-  }
+  const trainerId = Trainer.trainer._id;
 
   function viewDetails(clientId, courseId) {
     navigate("/trainer/client/details", { state: { clientId, courseId } });
   }
 
- async function message (clientId){
-   const response = await createConversation(trainerId,clientId)
-   console.log(response,'convo create')
-    navigate('/trainer/chat',{state:{trainerId:trainerId,clientId:clientId}})
+  async function message(clientId) {
+    const response = await createConversation(trainerId, clientId);
+    navigate("/trainer/chat", {
+      state: { trainerId: trainerId, clientId: clientId },
+    });
   }
- async function videoCall (clientId){
-    navigate('/trainer/videocall',{state:{trainerId:trainerId,clientId:clientId}})
+
+  //membershipId is the objectId of the doc in the clients array of course
+
+  function markAttendance(clientId,courseId,membershipId) {
+    console.log(clientId,'clientId')
+    console.log(courseId,'courseId')
+    setAttendanceModal((state) => !state);
+    setClientAttendance(clientId)
+    setCourseAttendance(courseId)
+    setObjectAttendance(membershipId)
   }
 
   return (
     <div className="overflow-x-auto w-full">
+      {attendanceModal ? (
+        <Attendance
+          clientAttendance={clientAttendance}
+          courseAttendance={courseAttendance}
+          objectAttendance={objectAttendance}
+          setAttendanceModal={setAttendanceModal}
+        />
+      ) : (
+        <></>
+      )}
       <table className="table w-full">
         {/* head */}
         <thead>
           <tr>
+            <th className="hidden"></th>
             <th>Name</th>
             <th>Course Name</th>
             <th>joined</th>
@@ -108,7 +123,10 @@ function ClientList({ clients }) {
                   )}
                 </td>
                 <td>
-                  <button className="flex px-3 py-2 hover:bg-yellow-500 bg-yellow-400 mr-1 text-white font-semibold rounded">
+                  <button
+                    onClick={() => markAttendance(val.user._id, val.courseId,val._id)}
+                    className="flex px-3 py-2 hover:bg-yellow-500 bg-yellow-400 mr-1 text-white font-semibold rounded"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -128,10 +146,10 @@ function ClientList({ clients }) {
                   </button>
                 </td>
                 <td>
-                  <button onClick={()=>videoCall(val.user._id)} className="flex px-3 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
-                    <span className="ml-1">🎥Video Call</span>
-                  </button>
-                  <button onClick={()=>message(val.user._id)} className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded">
+                  <button
+                    onClick={() => message(val.user._id)}
+                    className="flex px-4 py-2 bg-red-500 hover:bg-red-600 mx-1 my-1 text-white font-semibold rounded"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -165,6 +183,7 @@ function ClientList({ clients }) {
         {/* foot */}
         <tfoot>
           <tr>
+            <th className="hidden"></th>
             <th></th>
             <th></th>
             <th></th>

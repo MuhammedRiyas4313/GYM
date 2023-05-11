@@ -224,3 +224,20 @@ export const getUsersCount = async () => {
     console.log(error.message, "error in getUserCount graph ......");
   }
 };
+
+export const getPresentCount = async () => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  try {
+    const response = await axiosAdminInstance.get(
+      `/presentcount`,
+      config
+    );
+    return response;
+  } catch (error) {
+    console.log(error.message, "error in presentcount graph ......");
+  }
+};

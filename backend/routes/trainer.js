@@ -20,7 +20,8 @@ const {
     updateProfileImage,
     updateProfile,
     wallet,
-    transactions
+    transactions,
+    attendance
                    
 } = require('../controllers/trainerController')
 
@@ -42,5 +43,6 @@ router.patch("/updateprofileImage", updateProfileImage);
 router.patch("/updateprofile", updateProfile);
 router.get("/wallet", wallet);
 router.get("/transactions", transactions);
+router.post("/attendance", attendance);
 
 module.exports =  router;

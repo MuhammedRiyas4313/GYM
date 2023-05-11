@@ -185,3 +185,18 @@ export const trainerRegister = async (value) => {
       console.log(error.message,'error in getTrainerDetails ......')
     }
   }
+
+  export const registerAttendance = async (data) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.post(`/attendance`,data,config)
+      return response;
+    } catch (error) {
+      console.log(error.message,'error in getTrainerDetails ......')
+    }
+  }
+

@@ -42,7 +42,7 @@ const CourseSchema = mongoose.Schema(
         ],
         attendance: [
           {
-            date: Date,
+            date: String,
             status: {
               type: String,
             },

@@ -41,6 +41,7 @@ import Wallets from "./pages/Wallet.js/Wallets";
 import Transactions from "./pages/transactions/Transactions";
 import ClientCourses from './pages/client/Course/Course'
 import Contactus from "./pages/contactUs/Contactus";
+import ClientAttendance from './pages/client/attendance/Attendanc'
 
 function App() {
   
@@ -63,6 +64,7 @@ function App() {
         <Route path="/client/chat" element={ User ? <ClientChat /> : <ClientLogin />} />
         <Route path="/client/videocall" element={ User ? <ClientVideoCall /> : <ClientLogin />} />
         <Route path="/client/courses" element={ User ? <ClientCourses /> : <ClientLogin />} />
+        <Route path="/attendance/client" element={ User ? <ClientAttendance /> : <ClientLogin />} />
 
         <Route path="/courses" element={<CourseList />} />
         <Route path="/course/details" element={<CourseDetail />} />

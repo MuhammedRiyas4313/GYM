@@ -17,8 +17,11 @@ function CourseList({ courses, userId, setCourseCancel }) {
   }
 
   function viewDetails(courseId) {
-    console.log(courseId, "view details trainer ");
     navigate("/course/details", { state: { courseId: courseId } });
+  }
+
+  function viewAttendanceDetails(courseId) {
+    navigate("/attendance/client", { state: { courseId: courseId ,clientId: userId} });
   }
 
   return (
@@ -36,6 +39,7 @@ function CourseList({ courses, userId, setCourseCancel }) {
             <th>Payment Status</th>
             <th>Status</th>
             <th>Details</th>
+            <th>Attendance</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -122,6 +126,14 @@ function CourseList({ courses, userId, setCourseCancel }) {
                     className="btn btn-ghost btn-xs bg-slate-300"
                   >
                     details
+                  </button>
+                </th>
+                <th>
+                  <button
+                    onClick={() => viewAttendanceDetails(val.course._id)}
+                    className="btn btn-ghost btn-xs bg-slate-300"
+                  >
+                    View Attendance
                   </button>
                 </th>
                 <th>

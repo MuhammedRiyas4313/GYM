@@ -9,6 +9,7 @@ const Course = require("../models/course");
 const Transaction = require("../models/transactions");
 
 const { ObjectId } = require("mongodb");
+const moment = require("moment");
 
 let transporter = nodemailer.createTransport({
   // true for 465, false for other ports
@@ -133,7 +134,7 @@ const clientList = async (req, res) => {
 const courseList = async (req, res) => {
   try {
     console.log("client list calling....");
-    const courseList = await Course.find({}).populate('trainerId');
+    const courseList = await Course.find({}).populate("trainerId");
     res.json(courseList);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -143,13 +144,14 @@ const courseList = async (req, res) => {
 
 const clientDetails = async (req, res) => {
   const { userId } = req.query;
-  const getDetails = await User.findOne({ _id: userId }).populate('courses.course');
+  const getDetails = await User.findOne({ _id: userId }).populate(
+    "courses.course"
+  );
   console.log(getDetails, "user details from the data base......");
   res.json(getDetails);
 };
 
 const createConversation = async (req, res) => {
-
   console.log("trainer conversation creation calling..");
   const { adminId, trainerId } = req.body;
   try {
@@ -232,7 +234,7 @@ const createMessage = async (req, res) => {
 
 const transactions = async (req, res) => {
   try {
-    const resp = await Transaction.find({});
+    const resp = await Transaction.find({}).sort({createdAt:-1});
     res.json(resp);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -240,104 +242,142 @@ const transactions = async (req, res) => {
   }
 };
 
-const transactionClients = async (req,res) => {
+const transactionClients = async (req, res) => {
   try {
-    const { clientId } = req.query
-    console.log(clientId,'client id from the frontend')
+    const { clientId } = req.query;
+    console.log(clientId, "client id from the frontend");
 
-    let client = {}
+    let client = {};
 
-    const admin = await Admin.findOne({_id: new ObjectId(clientId)})
-    const trainer = await Trainer.findOne({_id: new ObjectId(clientId)})
-    const user = await User.findOne({_id: new ObjectId(clientId)})
+    const admin = await Admin.findOne({ _id: new ObjectId(clientId) });
+    const trainer = await Trainer.findOne({ _id: new ObjectId(clientId) });
+    const user = await User.findOne({ _id: new ObjectId(clientId) });
 
-    if(admin){
-      client = admin
-    }else if(trainer){
-      client = trainer
-    }else if(user){
-      client = user
+    if (admin) {
+      client = admin;
+    } else if (trainer) {
+      client = trainer;
+    } else if (user) {
+      client = user;
     }
-    
-    res.json(client)
-    
+
+    res.json(client);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in transactions ...");
   }
-}
+};
 
-const transaction = async (req,res) => {
+const transaction = async (req, res) => {
   try {
-    const { transactionId } = req.query
-    const response = await Transaction.findOne({_id:new ObjectId(transactionId)})
-    res.json(response)
-    
+    const { transactionId } = req.query;
+    const response = await Transaction.findOne({
+      _id: new ObjectId(transactionId),
+    });
+    res.json(response);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in transaction ...");
   }
-}
+};
 
-const getwallet = async (req,res) => {
+const getwallet = async (req, res) => {
   try {
-    const { adminId } = req.query
-    const response = await Wallet.findOne({user: adminId})
-    res.json(response)
+    const { adminId } = req.query;
+    const response = await Wallet.findOne({ user: adminId });
+    res.json(response);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in Wallet ...");
   }
-}
+};
 
-const getUserCount = async (req,res) => {
+const getUserCount = async (req, res) => {
   try {
-
     const response = await User.aggregate([
       {
         $group: {
           _id: {
-            $dateToString: { format: "%Y-%m", date: "$createdAt" }
+            $dateToString: { format: "%Y-%m", date: "$createdAt" },
           },
-          count: { $sum: 1 }
-        }
-      }, 
+          count: { $sum: 1 },
+        },
+      },
       {
         $sort: {
-          "_id": -1
-        }
+          _id: -1,
+        },
       },
       {
         $group: {
           _id: null,
-          data: { $push: "$$ROOT" }
-        }
+          data: { $push: "$$ROOT" },
+        },
       },
       {
         $project: {
           _id: 0,
           data: {
-            $reverseArray: "$data"
-          }
-        }
+            $reverseArray: "$data",
+          },
+        },
       },
       {
-        $unwind: "$data"
+        $unwind: "$data",
       },
       {
         $replaceRoot: {
-          newRoot: "$data"
-        }
-      }
+          newRoot: "$data",
+        },
+      },
     ]);
-    res.json(response)
+    res.json(response);
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in Wallet ...");
   }
-}
+};
 
+const getPresentCount = async (req, res) => {
+  try {
+    // const today =
+    //   new Date().getDate() +
+    //   "/" +
+    //   (new Date().getMonth() + 1) +
+    //   "/" +
+    //   new Date().getFullYear();
 
+    // console.log(today, "today .....");
+
+    const present = await Course.aggregate([
+      {
+        $unwind: "$clients",
+      },
+      {
+        $unwind: "$clients.attendance",
+      },
+      {
+        $group: {
+          _id: "$clients.attendance.status",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          status: "$_id",
+          count: 1,
+        },
+      },
+    ])
+
+    res.json(present)
+
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in getPresent count ...");
+  }
+};
 
 module.exports = {
   adminLogin,
@@ -358,5 +398,6 @@ module.exports = {
   transaction,
   transactionClients,
   getwallet,
-  getUserCount
+  getUserCount,
+  getPresentCount,
 };

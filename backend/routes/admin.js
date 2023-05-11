@@ -20,7 +20,8 @@ const {
   transaction,
   transactionClients,
   getwallet,
-  getUserCount
+  getUserCount,
+  getPresentCount
 } = require("../controllers/adminController");
 const { verify } = require("jsonwebtoken");
 
@@ -44,5 +45,6 @@ router.get('/transaction',  transaction);
 router.get('/transaction/clients',  transactionClients);
 router.get('/wallet',  getwallet);
 router.get('/usercount',  getUserCount);
+router.get('/presentcount',  getPresentCount);
 
 module.exports = router;

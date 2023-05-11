@@ -31,10 +31,7 @@ function EnrollCourse() {
 
   function formateDate() {
     const formatDate = new Date();
-    const formated = `${formatDate.getDate()}-${
-      formatDate.getMonth() + 1
-    }-${formatDate.getFullYear()}`;
-
+    const formated = `${formatDate.getDate()}-${formatDate.getMonth() + 1}-${formatDate.getFullYear()}`;
     return formated;
   }
 
@@ -55,13 +52,18 @@ function EnrollCourse() {
       setCourse(res.data);
       const allSlotes = res.data.availableSlots;
       const clients = res.data.clients;
-      const trainee = clients.filter((val) => val.user === clientId && val.status === 'Active' && val.paymentStatus );
+      const traineePaid = clients?.filter((val) => val?.user === clientId && val?.status === 'Active' && val?.paymentStatus );
+      const trainee = clients?.filter((val) => val?.user === clientId && val?.status === 'Active' && !val?.paymentStatus );
+      if(traineePaid?.length) setEnrolledClient(true)
       chargeTopay(res.data.charge)
-      if (trainee.length) {
-        setEnrolledClient(true);
+      if (trainee?.length) {
+        const slotes = allSlotes.filter((val) => val.client === clientId);
+        setSlote(slotes)
+      }else{
+        const slotes = allSlotes.filter((val) => val.status === "free");
+        setSlote(slotes);
       }
-      const slotes = allSlotes.filter((val) => val.status === "free");
-      setSlote(slotes);
+      
     });
   }, []);
 
