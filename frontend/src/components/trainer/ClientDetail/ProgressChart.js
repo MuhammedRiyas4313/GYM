@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,6 +9,7 @@ import {
   Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import { getUserProgress } from '../../../axios/services/trainerServices/trainerService';
 
 ChartJS.register(
   CategoryScale,
@@ -18,7 +19,15 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-export function ProgressChart() {
+export function ProgressChart({clientId,courseId}) {
+
+  const [progress, setProgress] = useState([])
+
+  useEffect(()=>{
+    getUserProgress(clientId,courseId).then((res)=>{
+      setProgress(res.data)
+    })
+  }, [])
 
  const options = {
   responsive: true,
@@ -32,24 +41,22 @@ export function ProgressChart() {
   },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July','Auguest', 'Septemper', 'October', 'November', 'December'];
+ const labels = progress?.map(obj => obj.month)
 
  const data = {
   labels,
   datasets: [
     {
-      label: 'Dataset 1',
-      data: [1,2,3,5,1,2],
+      label: 'Weight',
+      data: progress?.map(obj => obj.weight),
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
     },
     {
-      label: 'Dataset 2',
-      data:  [1,2,3,5,1,2],
+      label: 'Height',
+      data:  progress?.map(obj => obj.height),
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
     },
   ],
 };
-
-
   return <Bar options={options} data={data} />;
 }

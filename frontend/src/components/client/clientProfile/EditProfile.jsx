@@ -3,12 +3,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useFormik } from "formik";
 import { clientProfileUpdateSchema } from "../../../validations/clientProfileUpdate";
 import { updateProfile } from "../../../axios/services/clientServices/clientServices";
+import Loading from "../../loadingSpinner/Loading";
 
 export default function EditProfile(props) {
-
   const [open, setOpen] = useState(true);
   const [updated, setUpdated] = useState(false);
   const [user, setUser] = useState("");
+  const [loader, setLoader] = useState(false);
 
   const cancelButtonRef = useRef(null);
 
@@ -17,23 +18,22 @@ export default function EditProfile(props) {
   }, []);
 
   useEffect(() => {
-    console.log('updated profile')
-  },[updated])
+    console.log("updated profile");
+  }, [updated]);
 
- async function onSubmit() {
+  async function onSubmit() {
+    setLoader(true);
     const data = {
       values,
-      clientId: user._id
-    }
-    const response = await updateProfile(data)
-    console.log(response.data,'res from the profileupdate')
-    props.setUserDetails(response.data)
-    props.setUpdateProfile(state => !state)
-    props.setUpdateProfileImage(state => !state)
-    props.setLogedName(response.data.fname)
+      clientId: user._id,
+    };
+    const response = await updateProfile(data);
+    props.setUserDetails(response.data);
+    props.setUpdateProfile((state) => !state);
+    props.setUpdateProfileImage((state) => !state);
+    props.setLogedName(response.data.fname);
+    setLoader(false);
   }
-
-
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -79,6 +79,13 @@ export default function EditProfile(props) {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                {loader ? (
+                  <div className="spinnerouter flex justify-center align-middle">
+                    <Loading />
+                  </div>
+                ) : (
+                  <></>
+                )}
                 <div className="p-10">
                   <form onSubmit={handleSubmit}>
                     <div class="relative z-0 w-full mb-6 group">
@@ -111,8 +118,8 @@ export default function EditProfile(props) {
                           value={values.email}
                         />
                         {errors.email && touched.email && (
-                        <p className="text-red-600">{errors.email}</p>
-                      )}
+                          <p className="text-red-600">{errors.email}</p>
+                        )}
                         <label
                           for="floating_first_name"
                           class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -132,8 +139,8 @@ export default function EditProfile(props) {
                           value={values.phone}
                         />
                         {errors.phone && touched.phone && (
-                        <p className="text-red-600">{errors.phone}</p>
-                      )}
+                          <p className="text-red-600">{errors.phone}</p>
+                        )}
                         <label
                           for="floating_phone"
                           class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
@@ -151,8 +158,8 @@ export default function EditProfile(props) {
                           value={values.dob}
                         />
                         {errors.dob && touched.dob && (
-                        <p className="text-red-600">{errors.dob}</p>
-                      )}
+                          <p className="text-red-600">{errors.dob}</p>
+                        )}
                         <label
                           for="floating_company"
                           class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"

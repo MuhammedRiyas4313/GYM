@@ -21,7 +21,9 @@ const {
     updateProfile,
     wallet,
     transactions,
-    attendance
+    attendance,
+    clientProgress,
+    clientAttendance
                    
 } = require('../controllers/trainerController')
 
@@ -44,5 +46,7 @@ router.patch("/updateprofile", updateProfile);
 router.get("/wallet", wallet);
 router.get("/transactions", transactions);
 router.post("/attendance", attendance);
+router.get("/clientprogress", clientProgress);
+router.get("/client/attendance", clientAttendance);
 
 module.exports =  router;

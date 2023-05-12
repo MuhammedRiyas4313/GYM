@@ -49,11 +49,9 @@ function Chat() {
     socket?.emit("setup", currentChat?._id);
     socket?.on("connection", () => {
       setSocketConnection(true);
-      console.log("trainer Connected socket");
     });
     socket?.on("connected", (Id) => {
       setSocketConnection(true);
-      console.log("trainer connected socket");
     });
   }, [currentChat]);
 
@@ -119,7 +117,7 @@ function Chat() {
 
   async function videoCall() {
     navigate("/trainer/videocall", {
-      state: { trainerId: trainerId, clientId: user._id },
+      state: { trainerId: trainerId, clientId: user._id ,conversationId: currentChat._id},
     });
   }
 
@@ -133,16 +131,11 @@ function Chat() {
                 className="bg-gray-200 flex flex-col overflow-y-scroll"
                 style={{ maxHeight: "85vh" }}
               >
-                <div className="bg-gray-200  border-b-2 py-4 px-2 absolute z-10">
-                  <input
-                    type="text"
-                    placeholder="search chatting"
-                    className="py-2 px-2 border-2 border-gray-200 rounded-2xl w-full"
-                  />
-                </div>
+               <div className="md:text-3xl text-lg font-extrabold flex justify-center items-center p-5">Chat List</div>
+               <hr/>
                 {/* <!-- end search compt -->
                  <!-- user list --> */}
-                <div className="pt-20">
+                <div className="">
                   {conversations?.map((c) => {
                     return (
                       <div

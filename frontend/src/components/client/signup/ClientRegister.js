@@ -5,21 +5,24 @@ import { userSchema } from "../../../validations/clientSignupValidation";
 import { clientRegister } from "../../../axios/services/clientServices/clientServices";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Loading from "../../loadingSpinner/Loading";
 import "./ClientRegister.css";
 
 function ClientRegister() {
+
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   async function onSubmit() {
-    console.log(values);
-    console.log("register client....form submit");
+    setLoading(true)
     const response = await clientRegister(values);
-    console.log(response);
     if (response.status === "New account Created successfully") {
       toast.success(response.status);
       navigate("/login");
+      setLoading(false)
     } else {
       toast.error(response.status);
+      setLoading(false)
     }
   }
   
@@ -40,6 +43,11 @@ function ClientRegister() {
 
   return (
     <div className="signupouter md:pl-64 md:pr-64 p-5 ">
+      {loading ? (
+        <div className="spinnerouter flex justify-center align-middle">
+          <Loading />
+        </div>
+      ) : (<></>)}
       <form className="signupform md:p-14 p-5 mt-20" onSubmit={handleSubmit}>
         <div className="space-y-12 ">
           <div className="border-b border-gray-900/10 pb-12">

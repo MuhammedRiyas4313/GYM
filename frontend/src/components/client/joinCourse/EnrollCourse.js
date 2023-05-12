@@ -9,23 +9,25 @@ import Loading from "../../loadingSpinner/Loading";
 import "./EnrollCourse.css";
 import { enrollClient, getCourseDetails } from "../../../axios/services/clientServices/clientServices";
 import Paypal from "./Paypal";
+import SuccessModal from './SuccessModal'
 
 function EnrollCourse() {
 
   const [enrollData, setEnrollData] = useState({});
-  const [successModal, setSuccessModal] = useState(false);
   const [loader, setLoader] = useState(false);
   const [payment, setPayment] = useState(false);
   const [enrolledClient, setEnrolledClient] = useState(false);
   const [feeToPay, setFeeToPay] = useState(false);
   const [slotes, setSlote] = useState([]);
   const [course, setCourse] = useState({});
+  const [success, setSuccess] = useState(false);
 
   const navigate = useNavigate();
   const Location = useLocation();
 
   const client = useSelector((state) => state.userReducer.user);
 
+  const user = client.user
   const clientId = client?.user?._id;
   const courseId = Location.state?.courseId;
 
@@ -78,15 +80,12 @@ function EnrollCourse() {
   };
 
   async function paypalpayment(paymentDetails) {
-    console.log("payment is calling..");
-    console.log(enrollData, "before payment ");
-    const data = { ...enrollData, paymentDetails };
-    console.log(data, "before payment ");
 
+    const data = { ...enrollData, paymentDetails };
     const response = await enrollClient(data);
 
     if (response) {
-      navigate("/client/profile", { state: { userId: clientId } });
+      setSuccess(true)
     } else {
       navigate("/course/details", { state: { courseId: courseId } });
     }
@@ -107,11 +106,12 @@ function EnrollCourse() {
 
   return (
     <div className="signupouter flex justify-center">
+      {success ? <SuccessModal setSuccess={setSuccess} client={user} /> : <></>}
       {loader ? (
-        <div className="w-full spinnerouter flex justify-center align-middle">
+        <div className="spinnerouter flex justify-center align-middle">
           <Loading />
         </div>
-      ) : (
+      ) : (<></>)}
         <div className="signupouter w-full h-full flex justify-center items-center mt-20">
           {!payment ? (
             <div className="md:w-1/2">
@@ -317,7 +317,7 @@ function EnrollCourse() {
             </div>
           )}
         </div>
-      )}
+     
     </div>
   );
 }

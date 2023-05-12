@@ -18,42 +18,32 @@ function socketConnection(server){
         //socket for chat 
 
         socket.on('setup',(Id)=>{
-          // const id = Id?.toString()
           socket.join(123);
-          console.log(`room joined : ${123}`)
           socket.emit('connected')
         })
 
-        socket.on('join room',(room)=>{
-          console.log('joined room ')
-
-        })
-
         socket.on('send_message',(data)=>{
-          console.log(data,'on send_message calling')
           socket.to(123).emit('recieve_message',data)
-          console.log('recieve_message emited...')
         })
 
 
         //socket for videocall
-
-        socket.emit('me',socket.id)
-
-        socket.on('join_room',(id)=>{
-          socket.join(id)
-          console.log('connected =',id)
+        socket.on('me',(conversation)=>{
+          console.log(conversation,'conversationid videocall')
+          socket.join(conversation);
+          socket.to(conversation).emit('videocall',conversation)
         })
+
         socket.on('disconnect',()=>{
           socket.broadcast.emit('callended')
         })
 
-        socket.on('callUser',({ userToCall, from , signalData, name })=>{
+        socket.on('calluser',({ userToCall, from , signalData, name })=>{
           console.log('callUser on ')
-          io.to(userToCall).emit('callUser',{ signal: signalData, from , name })
+          io.to(userToCall).emit('calluser',{ signal: signalData, from , name })
         })
 
-        socket.on('answerCall',(data)=>{
+        socket.on('answercall',(data)=>{
           console.log('answercall on')
           io.to(data.to).emit('callaccepted',data.signal)
         })

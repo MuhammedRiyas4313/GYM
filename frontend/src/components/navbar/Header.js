@@ -96,7 +96,7 @@ function NavBar() {
       )}
       <Link to="/">
         <Navbar.Brand href="">
-          <img src="/logo.png" className="md:mr-3 mr-0 md:h-7 h-2" alt="Logo" />
+          <img src="/logo.png" className="md:mr-3 mr-0 md:h-7 h-6" alt="Logo" />
         </Navbar.Brand>
       </Link>
       <div className="flex md:order-2 ">

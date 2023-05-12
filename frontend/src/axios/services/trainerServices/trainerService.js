@@ -200,3 +200,31 @@ export const trainerRegister = async (value) => {
     }
   }
 
+  export const getUserProgress = async (clientId,courseId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.get(`/clientprogress?clientId=${clientId}&courseId=${courseId}`,config)
+      return response;
+    } catch (error) {
+      console.log(error.message,'error in getUserProgress ......')
+    }
+  }
+
+  export const getClientAttendance = async (clientId,courseId) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    try {
+      const response = await axiosTrainerInstance.get(`/client/attendance?clientId=${clientId}&courseId=${courseId}`,config)
+      return response;
+    } catch (error) {
+      console.log(error.message,'error in getTrainerDetails ......')
+    }
+  }
+

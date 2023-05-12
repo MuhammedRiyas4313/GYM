@@ -20,11 +20,9 @@ function AddCourse() {
   const [filev, setFilev] = useState([]);
 
   const trainerId = useSelector((state) => state.trainerReducer.trainer);
-  console.log(trainerId,'trainer id from the useselector')
 
   const onSubmit = async (values) => {
     setLoader(true);
-    console.log("onsubmit working....");
     const response = await addCourse({
       values,
       file1: filef,
@@ -32,7 +30,6 @@ function AddCourse() {
       filev: filev,
       trainerId: trainerId.trainer._id
     });
-    console.log(response,'this is response');
     if (response.status === 'Course added successfully') {
       setLoader(false);
       toast.success(response.status);
@@ -41,7 +38,6 @@ function AddCourse() {
       setLoader(false);
       toast.error(response.status);
     }
-    console.log(response);
   };
 
   const handleImage1 = (e) => {
@@ -97,10 +93,10 @@ function AddCourse() {
   return (
     <div>
       {loader ? (
-        <div className="w-full spinnerouter flex justify-center align-middle">
+        <div className="spinnerouter flex justify-center align-middle">
           <Loading />
         </div>
-      ) : (
+      ) : (<></>)}
         <div className="signupouter md:pl-64 md:pr-64 p-5 ">
           <form
             className="signupform md:p-20 p-5 mt-20"
@@ -111,10 +107,6 @@ function AddCourse() {
                 <h1 className="text-base font-semibold leading-7 text-gray-900 md:text-3xl">
                   New Course
                 </h1>
-                {/* <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Use a permanent address where you can receive mail.
-                </p> */}
-
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                   <div className="sm:col-span-3">
                     <label
@@ -134,9 +126,9 @@ function AddCourse() {
                         autoComplete="given-name"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
-                      {/* {errors.fname && touched.fname && (
-                        <p className="text-red-600">{errors.fname}</p>
-                      )} */}
+                      {errors.coursename && touched.coursename && (
+                        <p className="text-red-600">{errors.coursename}</p>
+                      )}
                     </div>
                   </div>
                   <div className="sm:col-span-3">
@@ -157,9 +149,9 @@ function AddCourse() {
                         autoComplete="given-name"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
-                      {/* {errors.fname && touched.fname && (
-                        <p className="text-red-600">{errors.fname}</p>
-                      )} */}
+                      {errors.charge && touched.charge && (
+                        <p className="text-red-600">{errors.charge}</p>
+                      )}
                     </div>
                   </div>
                   <div className="sm:col-span-3">
@@ -222,9 +214,6 @@ function AddCourse() {
                         autoComplete="off"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                       />
-                      {/* {errors.link && touched.link && (
-                        <p className="text-red-600">{errors.link}</p>
-                      )} */}
                     </div>
                   </div>
                   <div className="sm:col-span-3 md:mt-6">
@@ -242,6 +231,9 @@ function AddCourse() {
                         onBlur={handleBlur}
                         color="blue"
                       />
+                      {errors.description && touched.description && (
+                        <p className="text-red-600">{errors.description}</p>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -257,7 +249,7 @@ function AddCourse() {
             </div>
           </form>
         </div>
-      )}
+     
     </div>
   );
 }

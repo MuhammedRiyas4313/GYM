@@ -109,7 +109,7 @@ function Chat() {
 
   async function videoCall (){
     navigate("/client/videocall", {
-      state: { trainerId: user._id, clientId:userId  },
+      state: { trainerId: user._id, clientId:userId, conversationId:currentChat._id  },
     });
  }
 

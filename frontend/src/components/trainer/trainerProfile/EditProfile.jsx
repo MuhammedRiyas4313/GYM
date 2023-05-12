@@ -3,12 +3,14 @@ import { Dialog, Transition } from "@headlessui/react";
 import { useFormik } from "formik";
 import { trainerProfileUpdateSchema } from "../../../validations/trainerProfileUpdate";
 import { updateProfile } from "../../../axios/services/trainerServices/trainerService";
+import Loading from "../../loadingSpinner/Loading";
 
 export default function EditProfile(props) {
 
   const [open, setOpen] = useState(true);
   const [updated, setUpdated] = useState(false);
   const [user, setUser] = useState("");
+  const [loader, setLoader] = useState(false);
 
   const cancelButtonRef = useRef(null);
 
@@ -21,16 +23,16 @@ export default function EditProfile(props) {
   },[updated])
 
  async function onSubmit() {
+  setLoader(true)
     const data = {
       values,
       trainerId: props.trainerDetails._id
     }
-    console.log(props.trainerDetails._id,'on submit trainer profile update...')
     const response = await updateProfile(data)
-    console.log(response.data,'res from the profileupdate')
     props.setTrainerDetails(response.data)
     props.setUpdateProfile(state => !state)
     props.setUpdateProfileImage(state => !state)
+    setLoader(false)
   }
 
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
@@ -77,6 +79,13 @@ export default function EditProfile(props) {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              {loader ? (
+                  <div className="spinnerouter flex justify-center align-middle">
+                    <Loading />
+                  </div>
+                ) : (
+                  <></>
+                )}
                 <div className="p-10">
                   <form onSubmit={handleSubmit}>
                     <div class="relative z-0 w-full mb-6 group">

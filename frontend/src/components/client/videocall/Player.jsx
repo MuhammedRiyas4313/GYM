@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, {  useEffect, useRef } from "react";
 import { Grid, Typography, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { SocketContext } from "../../../context/SocketContext";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,9 +29,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Player() {
+function Player({ name, call, myVideo, callAccepted, userVideo, stream, callEnded }) {
 
-    const { name, call, myVideo, callAccepted, userVideo, stream, callEnded } = useContext(SocketContext)
   
   const classes = useStyles();
 
@@ -50,6 +48,7 @@ function Player() {
               ref={myVideo}
               autoPlay
               controls
+              controlsList="fullscreen"
               className={classes.video}
             />
           </Grid>

@@ -25,7 +25,7 @@ function UsersList({ conversation, currentUser }) {
       </div>
       <div className="w-full">
         <div className="text-lg font-semibold">{userList?.fname}</div>
-        <span className="text-gray-500">Pick me at 9:00 Am</span>
+        <span className="text-gray-500"></span>
       </div>
     </div>
   );

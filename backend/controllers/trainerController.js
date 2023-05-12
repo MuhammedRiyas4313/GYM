@@ -134,12 +134,16 @@ const trainerLoginWithGoogle = async (req, res) => {
 };
 
 const trainerDetails = async (req, res) => {
-  console.log("trainer details..trainer route");
-  const { trainerId } = req.query;
+  try {
+    console.log("trainer details..trainer route");
+    const { trainerId } = req.query;
 
-  const getDetails = await Trainer.findOne({ _id: trainerId });
-  console.log(getDetails, "trainer details from the data base......");
-  res.json(getDetails);
+    const getDetails = await Trainer.findOne({ _id: trainerId });
+    res.json(getDetails);
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+    console.log(error);
+  }
 };
 
 const addCourse = async (req, res) => {
@@ -228,7 +232,6 @@ const addCourse = async (req, res) => {
 const trainerCourseList = async (req, res) => {
   try {
     const { trainerId } = req.query;
-    console.log(trainerId, "trainer id from the query");
     const getCourses = await Course.find({
       trainerId: new ObjectId(trainerId),
     });
@@ -281,18 +284,12 @@ const trainerClientDetails = async (req, res) => {
 
     //client details in the course collection and the  clients array of object field
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
-    const clientDetails = await Course.findOne(
-      { "clients._id": new ObjectId(clientId) },
-      { "clients.$": 1 }
-    ).populate("clients.user");
+    const clientDetails = await Course.findOne({ "clients._id": new ObjectId(clientId) },{ "clients.$": 1 }).populate("clients.user");
 
     const data = {
       clientDetails,
       course,
     };
-
-    console.log(clientDetails, "clientDetails.......");
-    console.log(course, "courseDetails.......");
 
     res.json(data);
   } catch (error) {
@@ -430,9 +427,7 @@ const updateProfile = async (req, res) => {
 const wallet = async (req, res) => {
   try {
     const { userId } = req.query;
-    const userWallet = await Wallet.findOne({
-      user: userId,
-    });
+    const userWallet = await Wallet.findOne({ user: userId });
     res.json(userWallet);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -443,7 +438,6 @@ const wallet = async (req, res) => {
 const transactions = async (req, res) => {
   try {
     const { userId } = req.query;
-    console.log(userId, "userId in transactions");
     const resp = await Transaction.find({
       $or: [
         { payee: userId },
@@ -452,8 +446,6 @@ const transactions = async (req, res) => {
         },
       ],
     });
-    console.log(resp, "transactions....");
-
     res.json(resp);
   } catch (error) {
     res.json({ status: "something went wrong" });
@@ -466,12 +458,10 @@ const attendance = async (req, res) => {
     console.log(" in the attendance registration........");
     const { clientId, courseId, objectId, status, reason, date } = req.body;
     const course = await Course.findOne({ _id: courseId });
-    const client = course.clients.find(
-      (c) => c.user.toString() === clientId.toString()
-    );
+    const client = course.clients.find((c) => c.user.toString() === clientId.toString());
     const attendan = client.attendance.find((c) => c.date === date);
 
-    if(attendan) return res.json({status:'already marked'})
+    if (attendan) return res.json({ status: "already marked" });
 
     if (client._id.toString() == objectId) {
       const updateAttendance = await Course.findOneAndUpdate(
@@ -488,12 +478,73 @@ const attendance = async (req, res) => {
       );
       res.json({ status: "completed" });
     }
-
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in update client profile ...");
   }
 };
+
+const clientProgress = async (req, res) => {
+  console.log("client Progress calling....");
+  try {
+    const { clientId, courseId } = req.query;
+
+    const progress = await Course.aggregate([
+      {
+        $match: {
+          $and: [
+            { _id: new ObjectId(courseId)},
+            { "clients._id": new ObjectId(clientId) }
+          ]
+        },
+      },
+      // Unwind the clients array to get a separate document for each client
+      {
+        $unwind: "$clients",
+      },
+      // Match the document with the given client id (object id of the client document in the course)
+      {
+        $match: {
+          "clients._id": new ObjectId(clientId),
+        },
+      },
+      // Unwind the updations array to get a separate document for each updation
+      {
+        $unwind: "$clients.updations",
+      },
+      // Project the required fields
+      {
+        $project: {
+          _id: 0,
+          client: "$clients.user",
+          month: "$clients.updations.month",
+          weight: "$clients.updations.weight",
+          height: {
+            $subtract: ["$clients.updations.height", 100],
+          },
+        },
+      },
+    ]);
+    res.json(progress)
+    console.log(progress, "client progress....");
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in clientProgress trainer ...");
+  }
+};
+
+const clientAttendance = async (req,res) => {
+  console.log('client attendance calling......')
+  try {
+
+    const { courseId, clientId } = req.query
+    console.log(courseId,clientId,'courseId , clientId') 
+    
+  } catch (error) {
+    res.json({ status: "something went wrong" });
+    console.log(error.message, "error in clientProgress trainer ...");
+  }
+}
 
 module.exports = {
   trainerRegister,
@@ -514,4 +565,6 @@ module.exports = {
   wallet,
   transactions,
   attendance,
+  clientProgress,
+  clientAttendance
 };

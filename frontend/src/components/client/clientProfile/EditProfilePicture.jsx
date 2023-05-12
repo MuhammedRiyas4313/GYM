@@ -2,32 +2,31 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { updateProfileImage } from "../../../axios/services/clientServices/clientServices";
+import Loading from "../../loadingSpinner/Loading";
 
 export default function EditProfilePicture(props) {
-
-  const [filef, setFilef] = useState([])
+  const [filef, setFilef] = useState([]);
   const [open, setOpen] = useState(true);
-  const [updated, setUpdated] = useState(false)
+  const [updated, setUpdated] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   const cancelButtonRef = useRef(null);
 
-  function logoutConfirmation() {
-    console.log("....");
-  }
-
-  useEffect(()=>{
-    console.log('re-rendering edit modal..')
-  },[updated])
+  useEffect(() => {
+    console.log("re-rendering edit modal..");
+  }, [updated]);
 
   async function uploadProfile() {
+    setLoader(true);
     const data = {
       filef,
-      clientId:props.userId
-    }
-   const response = await updateProfileImage(data)
-   props.setUserDetails(response.data)
-   props.setUpdateProfileImage(state => !state)
-   setUpdated(state => !state)
+      clientId: props.userId,
+    };
+    const response = await updateProfileImage(data);
+    props.setUserDetails(response.data);
+    props.setUpdateProfileImage((state) => !state);
+    setUpdated((state) => !state);
+    setLoader((state) => false);
   }
 
   const handleImage1 = (e) => {
@@ -75,37 +74,44 @@ export default function EditProfilePicture(props) {
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-               <div className="p-10">
-               <label
-                  class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                  for="user_avatar"
-                >
-                  Upload New Profile
-                </label>
-                <input
-                  class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  aria-describedby="user_avatar_help"
-                  id="user_avatar"
-                  type="file"
-                  onChange={handleImage1}
-                ></input>
-                <div
-                  class="mt-1 text-sm text-gray-500 dark:text-gray-300"
-                  id="user_avatar_help"
-                >
-                  A profile picture is useful to confirm your are logged into
-                  your account
-                </div>
-               <div className="flex justify-end">
-               <button
-                    type="button"
-                    className="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 sm:ml-3 sm:w-auto"
-                    onClick={uploadProfile}
+                {loader ? (
+                  <div className="spinnerouter flex justify-center align-middle">
+                    <Loading />
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <div className="p-10">
+                  <label
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="user_avatar"
                   >
-                    Upload
-                  </button>
-               </div>
-               </div>
+                    Upload New Profile
+                  </label>
+                  <input
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="user_avatar_help"
+                    id="user_avatar"
+                    type="file"
+                    onChange={handleImage1}
+                  ></input>
+                  <div
+                    class="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                    id="user_avatar_help"
+                  >
+                    A profile picture is useful to confirm your are logged into
+                    your account
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      className="inline-flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 sm:ml-3 sm:w-auto"
+                      onClick={uploadProfile}
+                    >
+                      Upload
+                    </button>
+                  </div>
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>

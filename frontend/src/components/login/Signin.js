@@ -46,19 +46,15 @@ function Signin() {
       }
     } else if (loginPerson === "trainer") {
       const response = await TrainerLogin(values);
-      console.log(response.status, "res from the trainerLogin servce");
       if (response?.status === "Login success") {
         setLoader(false);
-        console.log("trainer login success");
         dispatch(trainerLogin({ token: response.token, trainer: response.trainer }));
         toast.success(response.status);
         navigate("/");
       } else if (response?.status === "Trainer not verified") {
         setTrainerVerifyStatus(true);
         setLoader(false);
-        console.log("trainer login success");
       } else if(response?.status === "Trainer doesn't exist"){
-        console.log('trainer not exist....')
         setLoader(false);
         toast.error(response.status);
       }else{
@@ -88,10 +84,10 @@ function Signin() {
         <div></div>
       )}
       {loader ? (
-        <div className="spinnerouter bg-black flex justify-center align-middle">
+        <div className="spinnerouter flex justify-center align-middle">
           <Loading />
         </div>
-      ) : (
+      ) : (<></>)}
         <div className="login-form">
           <div className="lottie-container relative flex flex-col justify-center min-h-screen overflow-hidden outer">
             <div className="form-data w-full p-6 m-auto bg-white rounded-md shadow-xl lg:max-w-xl">
@@ -227,7 +223,7 @@ function Signin() {
             </div>
           </div>
         </div>
-      )}
+      
     </div>
   );
 }

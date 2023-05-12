@@ -54,7 +54,7 @@ function Trainers() {
     <div className="bg-black w-full h-full" ref={viewTop} >
       <TriainersHero />
       <div className="pt-20" ref={viewTrainers}></div>
-      <div className="container">
+      <div className="">
       <div className="section-title p-5 flex flex-wrap  justify-around align-middle  bg-gray-900">
           <span className="text-gray-400 text-3xl md:mb-0 mb-3">Our Team</span>
           <div className="flex items-center">

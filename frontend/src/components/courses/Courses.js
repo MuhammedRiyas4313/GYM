@@ -54,8 +54,8 @@ function Courses() {
     <div className="bg-black w-full h-full">
       <CourseHero ref={viewCourses} />
       <div className="pt-20" ref={viewCourses}></div>
-      <div className="container">
-        <div className="section-title p-5 flex flex-wrap justify-around align-middle  bg-gray-900">
+      <div className="">
+        <div className="section-title p-5 w-full flex flex-wrap justify-around align-middle  bg-gray-900">
           <span className="text-gray-400 md:text-3xl md:mb-0 mb-5">
             Top Courses
           </span>
