@@ -34,14 +34,13 @@ import TrainerClientDetails from "./pages/trainer/ClientDetails/ClientsDetail";
 import TrainerChat from "./pages/trainer/Chating/TrainerChat";
 import ClientChat from "./pages/client/Chat/ClientChat";
 import AdminChat from "./pages/admin/message/AdminChat";
-import TrainerVideoCall from "./pages/trainer/VideoCall.js/TrainerVideoCall";
-import ClientVideoCall from "./pages/client/videocall/ClientVideoCall";
 import About from "./pages/aboutUs/About";
 import Wallets from "./pages/Wallet.js/Wallets";
 import Transactions from "./pages/transactions/Transactions";
 import ClientCourses from './pages/client/Course/Course'
 import Contactus from "./pages/contactUs/Contactus";
 import ClientAttendance from './pages/client/attendance/Attendanc'
+import VideoCall from "./pages/videoCall/VideoCallPage";
 
 function App() {
   
@@ -62,7 +61,6 @@ function App() {
         <Route path="/clientregister" element={<ClientRegister />} />
         <Route path="/client/profile" element={ User ? <ClienProfile /> : <ClientLogin />} />
         <Route path="/client/chat" element={ User ? <ClientChat /> : <ClientLogin />} />
-        <Route path="/client/videocall" element={ User ? <ClientVideoCall /> : <ClientLogin />} />
         <Route path="/client/courses" element={ User ? <ClientCourses /> : <ClientLogin />} />
         <Route path="/attendance/client" element={ User ? <ClientAttendance /> : <ClientLogin />} />
 
@@ -81,7 +79,6 @@ function App() {
         <Route path="/trainer/clients" element={ Trainer ? <TrainerClients /> : <ClientLogin /> } />
         <Route path="/trainer/client/details" element={ Trainer ? <TrainerClientDetails /> : <ClientLogin /> } />
         <Route path="/trainer/chat" element={ Trainer ? <TrainerChat /> : <ClientLogin /> } />
-        <Route path="/trainer/videocall" element={ Trainer ? <TrainerVideoCall /> : <ClientLogin /> } />
 
         <Route path="/admin" element={ Admin ? <Dashboard />:<AdminLogin />} />
         <Route path="/admin/dashboard" element={ Admin ? <Dashboard /> : <AdminLogin /> } />
@@ -95,6 +92,7 @@ function App() {
         <Route path="/admin/courses" element={ Admin ? <Course />:<AdminLogin /> } />
         <Route path="/admin/chat" element={ Admin ? <AdminChat />:<AdminLogin /> } />
 
+        <Route path="/videocall" element={ Trainer|| User ? <VideoCall />:<ClientLogin /> } />
         <Route path="/wallet" element={<Wallets />} />
         <Route path="/transaction" element={<Transactions />} />
         <Route path="/aboutus" element={<About />} />

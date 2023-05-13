@@ -29,9 +29,6 @@ function Chat() {
   const UserDetails = useSelector((state) => state.userReducer.user);
   const userId = UserDetails?.user?._id;
 
-  console.log(userId,'userId from the clientChat')
-  console.log(conversations,'conversations')
-
   useEffect(() => {
     getConversation(userId).then((res) => {
       setConversations(res);
@@ -108,8 +105,8 @@ function Chat() {
   }
 
   async function videoCall (){
-    navigate("/client/videocall", {
-      state: { trainerId: user._id, clientId:userId, conversationId:currentChat._id  },
+    navigate("/videocall", {
+      state: { trainerId: user._id, clientId:userId, conversationId:currentChat._id, name: UserDetails.user.fname  },
     });
  }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   TextField,
@@ -9,8 +9,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { Person,Assignment, Phone, PhoneDisabled } from "@material-ui/icons";
-
+import { Person, Assignment, Phone, PhoneDisabled } from "@material-ui/icons";
+import { SocketContext } from "../../context/SocketContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    width: "600px",
+    width: "300px",
     margin: "35px 0",
     padding: 0,
     [theme.breakpoints.down("xs")]: {
@@ -43,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Options({   callAccepted,  name, setName, callEnded, me, callUser, leaveCall }) {
+function Options({ children }) {
+  const { callAccepted, name, setName, callEnded, me, callUser, leaveCall } =
+    useContext(SocketContext);
 
   const [idToCall, setIdToCall] = useState("");
 
@@ -54,45 +56,11 @@ function Options({   callAccepted,  name, setName, callEnded, me, callUser, leav
       <Paper elevation={10} className={classes.paper}>
         <form className={classes.root} noValidate autoComplete="off">
           <Grid container className={classes.gridContainer}>
-            <Grid item xs={12} md={6} className={classes.padding}>
-              <Typography gutterBottom variant="h6">
-                Account Info
-              </Typography>
-              <TextField label="Name" Value={name} onChange={(e) => setName(e.target.value)}/>
-              {/* <div className="mt-10">
-              <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  startIcon={<Person fontSize="large" />}
-                  onClick={()=> setName(trainer?.fname)}
-                >
-                 {client?.fname}
-                </Button>
-              </div> */}
-              <CopyToClipboard text={me} className={classes.margin}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  startIcon={<Assignment fontSize="large" />}
-                >
-                  Copy Your ID
-                </Button>
-              </CopyToClipboard>
-            </Grid>
-            <Grid item xs={12} md={6} className={classes.padding}>
+            <Grid item xs={12} md={12} className={classes.padding}>
               <Typography gutterBottom variant="h6">
                 Make a Call
               </Typography>
-              <TextField
-                label="ID to call"
-                value={idToCall}
-                onChange={(e) => setIdToCall(e.target.value)}
-                fullWidth
-                border={0}
-              />
-              { callAccepted && !callEnded ? (
+              {callAccepted && !callEnded ? (
                 <Button
                   variant="contained"
                   color="secondary"
@@ -109,7 +77,7 @@ function Options({   callAccepted,  name, setName, callEnded, me, callUser, leav
                   color="primary"
                   startIcon={<Phone fontSize="large" />}
                   fullWidth
-                  onClick={() => callUser(idToCall)}
+                  onClick={() => callUser(me)}
                   className={classes.margin}
                 >
                   Call
@@ -118,6 +86,7 @@ function Options({   callAccepted,  name, setName, callEnded, me, callUser, leav
             </Grid>
           </Grid>
         </form>
+        {children}
       </Paper>
     </Container>
   );

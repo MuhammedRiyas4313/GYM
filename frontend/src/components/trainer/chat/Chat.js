@@ -116,8 +116,8 @@ function Chat() {
   }
 
   async function videoCall() {
-    navigate("/trainer/videocall", {
-      state: { trainerId: trainerId, clientId: user._id ,conversationId: currentChat._id},
+    navigate("/videocall", {
+      state: { trainerId: trainerId, clientId: user._id ,conversationId: currentChat._id ,name: TrainerDetails.trainer.fname},
     });
   }
 

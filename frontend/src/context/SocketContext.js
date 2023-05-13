@@ -1,4 +1,5 @@
 import React, { createContext, useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { io } from "socket.io-client";
 import Peer from "simple-peer";
 
@@ -7,6 +8,14 @@ const SocketContext = createContext();
 const socket = io("http://localhost:3001");
 
 const ContextProvider = ({ children }) => {
+  const location = useLocation();
+
+  const conversation = location?.state?.conversationId;
+  const fname = location?.state?.name;
+
+  console.log(fname, "fname from context ");
+  console.log(conversation, "conversation from context ");
+
   const [stream, setStream] = useState(null);
   const [me, setMe] = useState("");
   const [call, setCall] = useState({});
@@ -19,16 +28,25 @@ const ContextProvider = ({ children }) => {
   const userVideo = useRef();
   const connectionRef = useRef();
 
+  useEffect(()=>{
+    socket.on("callended", () => {
+      console.log('call Ended')
+      setCallEnded(true);
+      connectionRef.current.destroy();
+      window.location.reload();
+    });
+  })
+
   useEffect(() => {
-    console.log(callTo,'callTo ........socketContext is working.....videocall.....')
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
       .then((currentStream) => {
         setStream(currentStream);
         myVideo.current.srcObject = currentStream;
       });
-    socket.emit("me", callTo);
-    setMe(callTo)
+    socket.emit("me", conversation);
+    setMe(conversation);
+    setName(fname);
     socket.on("calluser", ({ from, name: callerName, signal }) => {
       setCall({ isReceivedCall: true, from, name: callerName, signal });
     });
@@ -40,7 +58,6 @@ const ContextProvider = ({ children }) => {
     const peer = new Peer({ initiator: false, trickle: false, stream });
     peer.on("signal", (data) => {
       socket.emit("answercall", { signal: data, to: call.from });
-      console.log("answer call emited....");
     });
     peer.on("stream", (currentStream) => {
       userVideo.current.srcObject = currentStream;
@@ -58,7 +75,6 @@ const ContextProvider = ({ children }) => {
         from: me,
         name,
       });
-      console.log("call user emited");
     });
     peer.on("stream", (currentStream) => {
       userVideo.current.srcObject = currentStream;
@@ -74,6 +90,7 @@ const ContextProvider = ({ children }) => {
   };
   const leaveCall = () => {
     setCallEnded(true);
+    socket.emit("callended", conversation);
     connectionRef.current.destroy();
     window.location.reload();
   };

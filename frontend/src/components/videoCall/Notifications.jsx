@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Button } from '@material-ui/core'
 
-function Notifications({ call, callAccepted,  answerCall }) {
+import { SocketContext } from '../../context/SocketContext'
+
+function Notifications() {
+
+  const { call, callAccepted,  answerCall } = useContext(SocketContext)
   
   return (
     <>
