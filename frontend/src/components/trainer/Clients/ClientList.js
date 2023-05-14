@@ -16,6 +16,7 @@ function ClientList({ clients }) {
 
   const Trainer = useSelector((state) => state.trainerReducer.trainer);
   const trainerId = Trainer.trainer._id;
+  let token = Trainer.token;
 
   function viewDetails(clientId, courseId) {
     navigate("/trainer/client/details", { state: { clientId, courseId } });
@@ -31,8 +32,6 @@ function ClientList({ clients }) {
   //membershipId is the objectId of the doc in the clients array of course
 
   function markAttendance(clientId,courseId,membershipId) {
-    console.log(clientId,'clientId')
-    console.log(courseId,'courseId')
     setAttendanceModal((state) => !state);
     setClientAttendance(clientId)
     setCourseAttendance(courseId)
@@ -43,6 +42,7 @@ function ClientList({ clients }) {
     <div className="overflow-x-auto w-full">
       {attendanceModal ? (
         <Attendance
+          token={token}
           clientAttendance={clientAttendance}
           courseAttendance={courseAttendance}
           objectAttendance={objectAttendance}

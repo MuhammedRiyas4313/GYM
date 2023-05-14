@@ -4,7 +4,7 @@ import { Textarea } from "flowbite-react";
 import { registerAttendance } from "../../../axios/services/trainerServices/trainerService";
 import { toast } from "react-toastify";
 
-export default function TransactionDetails({ setAttendanceModal,objectAttendance, courseAttendance, clientAttendance}) {
+export default function TransactionDetails({ setAttendanceModal,objectAttendance, courseAttendance, clientAttendance, token}) {
 
   const cancelButtonRef = useRef(null);
   const reason = useRef(null);
@@ -30,7 +30,7 @@ function markPresent(){
     status: 'present',
     reason: ''
   }
-  registerAttendance(data).then((res)=>{
+  registerAttendance(token,data).then((res)=>{
     if(res.data.status === 'already marked'){
     toast.warn(res.data.status)
     }else{

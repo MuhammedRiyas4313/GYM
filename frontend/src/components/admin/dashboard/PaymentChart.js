@@ -2,17 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { getPresentCount } from '../../../axios/services/adminServices/adminServices';
+import { useSelector } from 'react-redux';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export function PaymentChart(){
+
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
  
   const [presentCount, setPresentCount] = useState([])
 
   useEffect(()=>{
-    getPresentCount().then((res)=>{
+    getPresentCount(token).then((res)=>{
       setPresentCount(res.data)
-      console.log(res.data,'res.data from the getpresent count')
     })
   }, [])
   

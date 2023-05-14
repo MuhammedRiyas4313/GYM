@@ -1,37 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import CourseList from "./CourseList";
 import { getTrainerCourseList } from "../../../axios/services/trainerServices/trainerService";
 
 function Courses() {
 
-  const location = useLocation();
-  const trainerId = location.state?.trainerId;
+  const trainer = useSelector((state) => state.trainerReducer.trainer);
+  let trainerId = trainer.trainer._id;
+  let token = trainer.token;
 
-  const [option, setOption] = useState(false);
-  const [trainerDetails, setTrainerDetails] = useState({});
   const [courseList, setCourseList] = useState([]);
 
-  function options() {
-    setOption((state) => !state);
-    console.log(option, "option status....");
-  }
-
-  function formateDate(date) {
-    const formatDate = new Date(date);
-    const formated = `${formatDate.getDate()}-${
-      formatDate.getMonth() + 1
-    }-${formatDate.getFullYear()}`;
-    console.log("formate date is calling.....");
-    return formated;
-  }
-
   useEffect(() => {
-    console.log("close dropdown");
-  }, [option]);
-
-  useEffect(() => {
-    getTrainerCourseList(trainerId).then((res) => {
+    getTrainerCourseList(token,trainerId).then((res) => {
       console.log(res.data, "ind trainer course list");
       setCourseList(res.data);
     });
@@ -74,7 +55,6 @@ function Courses() {
 
               <div className="bg-gray-100">
                 <CourseList courseList={courseList} />
-                {/* Course list table */}
               </div>
             </div>
           </div>

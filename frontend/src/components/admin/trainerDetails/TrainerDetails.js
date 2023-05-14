@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "./TrainerDetails.css";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { getTrainerDetails } from "../../../axios/services/adminServices/adminServices";
 import PdfViewer from "../pdfViewer/PdfViewer";
 import VerificationModal from "./VerificationModal";
@@ -8,6 +8,10 @@ import { verifyTrainer } from "../../../axios/services/adminServices/adminServic
 import { toast } from "react-toastify";
 
 function TrainerDetails() {
+
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const token = AdminDetails?.token 
+
   const location = useLocation();
   const trainerId = location.state?.trainerId;
 
@@ -18,9 +22,7 @@ function TrainerDetails() {
   const [confirmationModalShow, setConfirmationModal] = useState(false);
 
   useEffect(() => {
-    getTrainerDetails(trainerId).then((res) => {
-      console.log(res, "res from the getTrainerDetails.......");
-      console.log("res.data from the getTrainerDetails.......");
+    getTrainerDetails(token,trainerId).then((res) => {
       setTrainerDetails(res.data);
       const formatDate = new Date(res.data.createdAt);
       const formated = `${formatDate.getDate()}-${
@@ -29,27 +31,21 @@ function TrainerDetails() {
       setFormattedDate(formated);
       const url = res.data.link;
       const Url = res.data.certificate;
-      console.log(url, "url of the youtube vivdeppp");
-      console.log(Url, "url of the certificate vivdeppp");
       const yUrl = url.replace(/"/g, "");
       const pdfUrl = Url.replace(/"/g, "");
-      console.log(yUrl, "link of the yutube video converted");
-      console.log(pdfUrl, "link of the certificate converted");
       setUrlFormated(yUrl);
       setPdfFormated(pdfUrl);
     });
 
-    console.log(formattedDate, "formated date into dmy");
   }, []);
 
   function verificationTrainer() {
     setConfirmationModal(true);
-    console.log("button clicked for the confirmation");
   }
 
   async function confirmation(val) {
     if (val) {
-      const res = await verifyTrainer(trainerId);
+      const res = await verifyTrainer(token,trainerId);
       console.log(res.data.data, "verified Trainer..");
       if (res) toast.success(res.data.message);
       setTrainerDetails(res.data.data);
@@ -113,7 +109,7 @@ function TrainerDetails() {
                   <li className="flex items-center py-3">
                     <span>Status</span>
                     <span className="ml-auto">
-                      { trainerDetails.isVerified ? (
+                      {trainerDetails.isVerified ? (
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
                           Verified
                         </span>
@@ -173,15 +169,15 @@ function TrainerDetails() {
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Email.</div>
                       <div className="px-4 py-2">
-                        <a
-                          className="text-blue-800 break-words"
-                        >
+                        <a className="text-blue-800 break-words">
                           {trainerDetails.email}
                         </a>
                       </div>
                     </div>
                     <div className="grid grid-cols-2">
-                      <div className="px-4 py-2 font-semibold">Date of Birth</div>
+                      <div className="px-4 py-2 font-semibold">
+                        Date of Birth
+                      </div>
                       <div className="px-4 py-2">{trainerDetails.dob}</div>
                     </div>
                   </div>
@@ -279,7 +275,9 @@ function TrainerDetails() {
                   >
                     Verify Trainer
                   </button>
-                ) :''}
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </div>

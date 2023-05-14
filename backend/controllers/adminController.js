@@ -32,7 +32,7 @@ const adminLogin = async (req, res) => {
       return res.json({ status: "Invalid Credentials" });
 
     const toke = jwt.sign(
-      { email: oldAdmin.email, id: oldAdmin._id },
+      { email: oldAdmin.email, id: oldAdmin._id, role: "admin" },
       "admin_secret",
       { expiresIn: "5h" }
     );
@@ -245,7 +245,6 @@ const transactions = async (req, res) => {
 const transactionClients = async (req, res) => {
   try {
     const { clientId } = req.query;
-    console.log(clientId, "client id from the frontend");
 
     let client = {};
 
@@ -311,7 +310,8 @@ const getUserCount = async (req, res) => {
       {
         $group: {
           _id: null,
-          data: { $push: "$$ROOT" },
+          data: 
+          { $push: "$$ROOT" },
         },
       },
       {
@@ -334,20 +334,20 @@ const getUserCount = async (req, res) => {
     res.json(response);
   } catch (error) {
     res.json({ status: "something went wrong" });
-    console.log(error.message, "error in Wallet ...");
+    console.log(error.message, "error in getUserWallet ...");
   }
 };
 
 const getPresentCount = async (req, res) => {
   try {
-    // const today =
-    //   new Date().getDate() +
-    //   "/" +
-    //   (new Date().getMonth() + 1) +
-    //   "/" +
-    //   new Date().getFullYear();
+    const today =
+      new Date().getDate() +
+      "/" +
+      (new Date().getMonth() + 1) +
+      "/" +
+      new Date().getFullYear();
 
-    // console.log(today, "today .....");
+    console.log(today, "today .....");
 
     const present = await Course.aggregate([
       {
@@ -355,6 +355,11 @@ const getPresentCount = async (req, res) => {
       },
       {
         $unwind: "$clients.attendance",
+      },
+      {
+        $match: {
+          "clients.attendance.date": today
+        }
       },
       {
         $group: {
@@ -370,7 +375,7 @@ const getPresentCount = async (req, res) => {
         },
       },
     ])
-
+    console.log(present,'present count in admin')
     res.json(present)
 
   } catch (error) {

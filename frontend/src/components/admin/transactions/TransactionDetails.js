@@ -3,8 +3,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { getTransaction } from "../../../axios/services/adminServices/adminServices";
 import { getTransactionClients } from "../../../axios/services/adminServices/adminServices";
 import { Receipt } from "@material-ui/icons";
+import { useSelector } from "react-redux";
 
 export default function TransactionDetails({ transactionId }) {
+
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
 
   const cancelButtonRef = useRef(null);
   const [open, setOpen] = useState(true);
@@ -13,16 +18,15 @@ export default function TransactionDetails({ transactionId }) {
   const [transaction, setTransaction] = useState({});
 
   useEffect(() => {
-    getTransaction(transactionId).then((res) => {
+    getTransaction(token,transactionId).then((res) => {
       setTransaction(res.data);
       payee(res.data.payee);
       recieved(res.data.reciever);
-      console.log('transaction id')
     });
   }, []);
 
   async function payee(clientId) {
-    const res = await getTransactionClients(clientId);
+    const res = await getTransactionClients(token,clientId);
     setPaye(res.data);
   }
 

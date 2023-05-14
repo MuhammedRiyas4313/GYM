@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import avatar1 from "../../../assets/images/avatars/1.jpg";
+import { useSelector } from 'react-redux';
 import { getCourses } from '../../../axios/services/adminServices/adminServices';
 
 function Courses() {
 
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
+
   const [ courseList, setCourseList] = useState([])
 
   useEffect(()=>{
-    getCourses().then((res)=>{
+    getCourses(token).then((res)=>{
       console.log(res)
       setCourseList(res.data)
       console.log(res.data.trainerId,'trainer')

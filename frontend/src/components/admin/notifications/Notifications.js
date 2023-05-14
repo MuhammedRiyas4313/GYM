@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import avatar1 from "../../../assets/images/avatars/1.jpg";
+import { useSelector } from "react-redux";
 import { getNotifications } from "../../../axios/services/adminServices/adminServices";
-import { useLocation ,Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Notifications() {
 
     const navigate = useNavigate()
+
+    const AdminDetails = useSelector((state) => state.adminReducer.admin);
+    const token = AdminDetails?.token
 
     const [trainersToVerify, setTrainersToVerify] = useState([])
 
@@ -22,8 +25,7 @@ function Notifications() {
     }
 
     useEffect(()=>{
-        getNotifications().then((res)=>{
-            console.log(res.data,'res from the getNotifications')
+        getNotifications(token).then((res)=>{
             setTrainersToVerify(res.data)
         })
     },[])

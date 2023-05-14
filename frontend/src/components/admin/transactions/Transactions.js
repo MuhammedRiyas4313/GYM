@@ -3,14 +3,35 @@ import avatar1 from "../../../assets/images/avatars/1.jpg";
 import { getTransactions } from "../../../axios/services/adminServices/adminServices";
 import { useLocation } from "react-router-dom";
 import TransactionDetails from "./TransactionDetails";
+import { useSelector } from "react-redux";
 
 function Transactions() {
+
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
+
   const [transaction, setTransaction] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
   const [transactionId, setTransactionId] = useState("");
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(5)
+
+  const pages = []
+  for (let i = 1; i <= Math.ceil(transaction.length / itemsPerPage); i++) {  
+    pages.push(i)
+  }
+
+  const renderPageNumbers = pages.map((num)=>{
+    return (
+      <li key={num}>
+          {num}
+      </li>
+    )
+  })
 
   useEffect(() => {
-    getTransactions().then((res) => {
+    getTransactions(token).then((res) => {
       setTransaction(res.data);
     });
   }, []);
@@ -78,7 +99,7 @@ function Transactions() {
             {/* head */}
             <thead>
               <tr>
-                <th className="z-0"></th>
+                <th className="hidden"></th>
                 <th>Transaction ID</th>
                 <th>Date</th>
                 <th>Amount</th>
@@ -92,7 +113,7 @@ function Transactions() {
               {transaction?.map((transaction) => {
                 return (
                   <tr key={transaction._id}>
-                    <td></td>
+                    <td className="hidden"></td>
                     <td>{transId(transaction._id)}</td>
                     <td>{formatDate(transaction.createdAt)}</td>
                     <td>{transaction.amount}&nbsp;₹</td>

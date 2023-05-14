@@ -9,34 +9,37 @@ import { useSelector } from "react-redux";
 import BarChart, { ProgressChart } from "./ProgressChart";
 
 function ClientDetail() {
+
   const navigate = useNavigate();
+
   const [clientDetails, setClientDetails] = useState({});
   const [client, setClient] = useState({});
   const [course, setCourse] = useState({});
-  const [option, setOption] = useState(false);
+  const [attendance, setAttendance] = useState([])
 
   const Location = useLocation();
+
   const clientId = Location.state?.clientId;
   const courseId = Location.state?.courseId;
 
-  const User = useSelector((state) => state.userReducer.user);
-  const Trainer = useSelector((state) => state.trainerReducer.trainer);
+  console.log(clientId,'clientId in the client details attendance')
+  console.log(courseId,'courseId in the client details attendance')
+
+  const trainer = useSelector((state) => state.trainerReducer.trainer);
+  let token = trainer.token;
 
   useEffect(() => {
-    getClientDetails(clientId, courseId).then((res) => {
+    getClientDetails(token,clientId, courseId).then((res) => {
       setClientDetails(res.data?.clientDetails?.clients[0]);
       setClient(res.data?.clientDetails?.clients[0]?.user);
       setCourse(res.data.course);
     });
 
-    getClientAttendance(courseId, clientId).then((res) => {
-      console.log(res.data, "res from the client attendance");
+    getClientAttendance(token,clientId, courseId).then((res) => {
+      setAttendance(res.data)
     });
   }, []);
 
-  function options() {
-    setOption(!option);
-  }
 
   function formateDate(date) {
     const formatDate = new Date(date);
@@ -57,31 +60,31 @@ function ClientDetail() {
               <div className="image overflow-hidden flex align-middle justify-center mt-10">
                 <img
                   className={
-                    client.profile ? "rounded w-50 h-72 " : "rounded w-32 h-32"
+                    client?.profile ? "rounded w-50 h-72 " : "rounded w-32 h-32"
                   }
-                  src={client.profile ? client.profile : Avatar}
+                  src={client?.profile ? client?.profile : Avatar}
                   alt="Extra large avatar"
                 ></img>
               </div>
               <h1 className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase">
-                {client.fname}
+                {client?.fname}
               </h1>
               <ul className="bg-gray-100 text-gray-600 hover:text-gray-700 hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li className="flex items-center py-3">
                   <span>Member since</span>
                   <span className="ml-auto">
-                    {formateDate(client.createdAt)}
+                    {formateDate(client?.createdAt)}
                   </span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Email</span>
                   <span className="ml-auto break-words truncate">
-                    {client.email}
+                    {client?.email}
                   </span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Gender</span>
-                  <span className="ml-auto">{client.gender}</span>
+                  <span className="ml-auto">{client?.gender}</span>
                 </li>
               </ul>
             </div>
@@ -108,82 +111,34 @@ function ClientDetail() {
                   </span>
                   <span className="tracking-wide">Details</span>
                 </div>
-                <div className="dropouter">
-                  <div className="dropdown dropdown-end">
-                    <label
-                      tabIndex={0}
-                      className="btn m-1 btn-circle swap swap-rotate bg-orange-500"
-                    >
-                      <input
-                        type="checkbox"
-                        className="hidden"
-                        onClick={options}
-                      />
-
-                      <svg
-                        className="swap-off fill-current"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 512 512"
-                      >
-                        <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-                      </svg>
-
-                      <svg
-                        className="swap-on fill-current"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 512 512"
-                      >
-                        <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-                      </svg>
-                    </label>
-                    {option ? (
-                      <div className="dropdownlist">
-                        <ul
-                          tabIndex={0}
-                          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
-                        >
-                          <li>
-                            <a>Message</a>
-                          </li>
-                        </ul>
-                      </div>
-                    ) : (
-                      <div></div>
-                    )}
-                  </div>
-                </div>
               </div>
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Course Name</div>
                     <div className="px-4 py-2 truncate">
-                      {course.coursename}
+                      {course?.coursename}
                     </div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Joined</div>
-                    <div className="px-4 py-2">{clientDetails.joined}</div>
+                    <div className="px-4 py-2">{clientDetails?.joined}</div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Slote</div>
-                    <div className="px-4 py-2">{clientDetails.bookedSlote}</div>
+                    <div className="px-4 py-2">{clientDetails?.bookedSlote}</div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">
                       Emergency Contact
                     </div>
                     <div className="px-4 py-2">
-                      {clientDetails.emergencyContact}
+                      {clientDetails?.emergencyContact}
                     </div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Health info</div>
-                    <div className="px-4 py-2">{clientDetails.healthInfo}</div>
+                    <div className="px-4 py-2">{clientDetails?.healthInfo}</div>
                   </div>
                 </div>
               </div>
@@ -200,7 +155,7 @@ function ClientDetail() {
                     </div>
                   </div>
                 </div>
-                <ProgressChart clientId={clientId} courseId={courseId} />
+               <ProgressChart clientId={clientId} courseId={courseId} token={token} />
               </div>
               <div className="bg-gray-100 rounded-sm flex h-96 md:w-1/2">
                 <div className="w-full mx-2 h-96">
@@ -216,103 +171,19 @@ function ClientDetail() {
                       <table class="table table-zebra w-full border">
                         <thead>
                           <tr>
-                            <th>S.no</th>
                             <th>Date</th>
                             <th>Status</th>
                             <th>Reason</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
-                          <tr>
-                            <th>sate</th>
-                            <td>status</td>
-                            <td>res</td>
-                            <td>lkjkj</td>
-                          </tr>
+                          { attendance?.map((val)=>{
+                            return (<tr>
+                              <td>{val.date}</td>
+                              <td>{val.status}</td>
+                              <td>{val.reason}</td>
+                            </tr>)
+                          })}
                         </tbody>
                       </table>
                     </div>

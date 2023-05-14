@@ -88,8 +88,8 @@ const trainerLogin = async (req, res) => {
       return res.json({ status: "Trainer not verified" });
 
     const toke = jwt.sign(
-      { name: oldTrainer.fname, email: oldTrainer.email, id: oldTrainer._id },
-      "ClientTokenSecret",
+      { name: oldTrainer.fname, email: oldTrainer.email, id: oldTrainer._id ,role: "trainer"},
+      "trainerTokenSecret",
       { expiresIn: "5h" }
     );
 
@@ -119,8 +119,8 @@ const trainerLoginWithGoogle = async (req, res) => {
       return res.json({ status: "Trainer not verified" });
 
     const toke = jwt.sign(
-      { name: oldTrainer.fname, email: oldTrainer.email, id: oldTrainer._id },
-      "ClientTokenSecret",
+      { name: oldTrainer.fname, email: oldTrainer.email, id: oldTrainer._id,role: "trainer" },
+      "trainerTokenSecret",
       { expiresIn: "5h" }
     );
 
@@ -279,8 +279,8 @@ const trainerClientDetails = async (req, res) => {
   console.log("trainer client details is calling......");
   try {
     const { clientId, courseId } = req.query;
-    console.log("clientId = ", clientId);
-    console.log("courseId = ", courseId);
+
+    //it is the object id of specific user document inthe course
 
     //client details in the course collection and the  clients array of object field
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
@@ -526,7 +526,6 @@ const clientProgress = async (req, res) => {
       },
     ]);
     res.json(progress)
-    console.log(progress, "client progress....");
   } catch (error) {
     res.json({ status: "something went wrong" });
     console.log(error.message, "error in clientProgress trainer ...");
@@ -537,12 +536,16 @@ const clientAttendance = async (req,res) => {
   console.log('client attendance calling......')
   try {
 
-    const { courseId, clientId } = req.query
-    console.log(courseId,clientId,'courseId , clientId') 
-    
+    const { courseId, clientId } = req.query 
+    const course = await Course.findOne(
+      { _id: courseId },
+      { clients: { $elemMatch: { _id: new ObjectId(clientId) } } }
+    );
+    const userAttendance = course.clients[0]?.attendance
+    res.json(userAttendance)
   } catch (error) {
     res.json({ status: "something went wrong" });
-    console.log(error.message, "error in clientProgress trainer ...");
+    console.log(error.message, "error in clientAttendance trainer ...");
   }
 }
 

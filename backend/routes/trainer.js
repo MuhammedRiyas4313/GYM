@@ -1,6 +1,7 @@
 const Router = require('express');
 const router = Router();
-const socketConnection = require('../socketIO')
+
+const { verifyTokenTrainer } = require('../middlewares/auth')
 
 const {
     
@@ -27,26 +28,27 @@ const {
                    
 } = require('../controllers/trainerController')
 
+
 /* GET users listing. */
 router.post('/register', trainerRegister );
 router.post('/login', trainerLogin );
 router.post('/loginwithgoogle', trainerLoginWithGoogle );
-router.get('/trainerdetails', trainerDetails );
-router.post('/addcourse', addCourse );
-router.get('/courses', trainerCourseList );
-router.get('/clients', trainerClientList );
-router.get('/client/details', trainerClientDetails );
+router.get('/trainerdetails',verifyTokenTrainer, trainerDetails );
+router.post('/addcourse',verifyTokenTrainer, addCourse );
+router.get('/courses',verifyTokenTrainer, trainerCourseList );
+router.get('/clients',verifyTokenTrainer, trainerClientList );
+router.get('/client/details',verifyTokenTrainer, trainerClientDetails );
 router.post('/chat',  createConversation);
 router.get('/chat',  getConversation);
 router.get('/chat/user',  getUser);
 router.get('/chat/messages',  getMessages);
 router.post('/chat/message',  createMessage);
-router.patch("/updateprofileImage", updateProfileImage);
-router.patch("/updateprofile", updateProfile);
+router.patch("/updateprofileImage",verifyTokenTrainer, updateProfileImage);
+router.patch("/updateprofile",verifyTokenTrainer, updateProfile);
 router.get("/wallet", wallet);
 router.get("/transactions", transactions);
-router.post("/attendance", attendance);
-router.get("/clientprogress", clientProgress);
-router.get("/client/attendance", clientAttendance);
+router.post("/attendance",verifyTokenTrainer, attendance);
+router.get("/clientprogress",verifyTokenTrainer, clientProgress);
+router.get("/client/attendance",verifyTokenTrainer, clientAttendance);
 
 module.exports =  router;

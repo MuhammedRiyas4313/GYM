@@ -19,12 +19,12 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-export function ProgressChart({clientId,courseId}) {
+export function ProgressChart({token,clientId,courseId}) {
 
   const [progress, setProgress] = useState([])
 
   useEffect(()=>{
-    getUserProgress(clientId,courseId).then((res)=>{
+    getUserProgress(token,clientId,courseId).then((res)=>{
       setProgress(res.data)
     })
   }, [])

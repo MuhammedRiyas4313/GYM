@@ -1,38 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { getTrainerClientList } from "../../../axios/services/trainerServices/trainerService";
 import ClientList from "./ClientList";
+import { useSelector } from "react-redux";
 
 function Clients() {
 
-  const location = useLocation();
-  const trainerId = location.state?.trainerId;
+  const trainer = useSelector((state) => state.trainerReducer.trainer);
+  let trainerId = trainer.trainer._id;
+  let token = trainer.token;
 
-  const [option, setOption] = useState(false);
-  const [trainerDetails, setTrainerDetails] = useState({});
   const [clients, setClients] = useState([]);
 
-  function options() {
-    setOption((state) => !state);
-    console.log(option, "option status....");
-  }
-
-  function formateDate(date) {
-    const formatDate = new Date(date);
-    const formated = `${formatDate.getDate()}-${
-      formatDate.getMonth() + 1
-    }-${formatDate.getFullYear()}`;
-    console.log("formate date is calling.....");
-    return formated;
-  }
-
   useEffect(() => {
-    console.log("close dropdown");
-  }, [option]);
-
-  useEffect(() => {
-    getTrainerClientList(trainerId).then((res) => {
-      console.log(res.data, "ind trainer client list")
+    getTrainerClientList(token,trainerId).then((res) => {
       setClients(res.data);
     });
   }, []);
@@ -73,7 +53,7 @@ function Clients() {
               <div className="my-4"></div>
 
               <div className="bg-gray-100">
-                <ClientList clients={clients} />
+                <ClientList clients={clients} token={token} />
                 {/* Course list table */}
               </div>
             </div>

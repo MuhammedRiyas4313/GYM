@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { getTransactions } from "../../axios/services/trainerServices/trainerService";
 
 function Transaction() {
+  
   const location = useLocation();
   const userId = location?.state?.userId;
 
@@ -10,7 +11,6 @@ function Transaction() {
 
   useEffect(() => {
     getTransactions(userId).then((res) => {
-        console.log(res.data,'transactions...')
       setTransaction(res.data);
     });
   }, []);

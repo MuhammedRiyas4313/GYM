@@ -13,7 +13,6 @@ function TrainerRegister(props) {
 
   const navigate = useNavigate();
 
-
   const [filef, setFilef] = useState([]);
   const [fileb, setFileb] = useState([]);
 

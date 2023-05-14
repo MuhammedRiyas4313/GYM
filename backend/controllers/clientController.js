@@ -54,7 +54,7 @@ const clientLogin = async (req, res) => {
         return res.json({ status: "Invalid Credentials" });
 
       const toke = jwt.sign(
-        { name: oldUser.fname, email: oldUser.email, id: oldUser._id },
+        { name: oldUser.fname, email: oldUser.email, id: oldUser._id, role: "client" },
         "ClientTokenSecret",
         { expiresIn: "5h" }
       );
@@ -82,7 +82,7 @@ const clientLoginWithGoogle = async (req, res) => {
         return res.json({ status: "User is blocked" });
 
       const toke = jwt.sign(
-        { name: oldUser.fname, email: oldUser.email, id: oldUser._id },
+        { name: oldUser.fname, email: oldUser.email, id: oldUser._id ,role: "client" },
         "ClientTokenSecret",
         { expiresIn: "5h" }
       );
@@ -842,6 +842,7 @@ const attendanceDetails = async (req, res) => {
       { clients: { $elemMatch: { user: new ObjectId(clientId) } } }
     );
     const userAttendance = course.clients[0].attendance
+    console.log(userAttendance,'userAttendance')
     res.json(userAttendance)
   } catch (error) {
     res.json({ status: "something went wrong" });

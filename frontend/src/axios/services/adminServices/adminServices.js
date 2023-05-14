@@ -14,9 +14,11 @@ export const AdminLogin = async (values) => {
   }
 };
 
-export const getTrainers = async () => {
+export const getTrainers = async (token) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -28,13 +30,15 @@ export const getTrainers = async () => {
   }
 };
 
-export const changeBlockStatus = async (currentStatus, trainerId) => {
+export const changeBlockStatus = async (token,currentStatus, trainerId) => {
   const values = {
     currentStatus,
     trainerId,
   };
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -50,9 +54,11 @@ export const changeBlockStatus = async (currentStatus, trainerId) => {
   }
 };
 
-export const getNotifications = async () => {
+export const getNotifications = async (token) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -64,9 +70,11 @@ export const getNotifications = async () => {
   }
 };
 
-export const getTrainerDetails = async (trainerId) => {
+export const getTrainerDetails = async (token,trainerId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -81,9 +89,11 @@ export const getTrainerDetails = async (trainerId) => {
   }
 };
 
-export const verifyTrainer = async (trainerId) => {
+export const verifyTrainer = async (token,trainerId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -98,9 +108,11 @@ export const verifyTrainer = async (trainerId) => {
   }
 };
 
-export const getClients = async () => {
+export const getClients = async (token) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -112,9 +124,11 @@ export const getClients = async () => {
   }
 };
 
-export const getUserDetails = async (userId) => {
+export const getUserDetails = async (token,userId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -129,9 +143,11 @@ export const getUserDetails = async (userId) => {
   }
 };
 
-export const getCourses = async () => {
+export const getCourses = async (token) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -143,9 +159,11 @@ export const getCourses = async () => {
   }
 };
 
-export const getTransactions = async () => {
+export const getTransactions = async (token) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -157,9 +175,11 @@ export const getTransactions = async () => {
   }
 };
 
-export const getTransactionClients = async (clientId) => {
+export const getTransactionClients = async (token,clientId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -174,9 +194,11 @@ export const getTransactionClients = async (clientId) => {
   }
 };
 
-export const getTransaction = async (transactionId) => {
+export const getTransaction = async (token,transactionId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -191,9 +213,11 @@ export const getTransaction = async (transactionId) => {
   }
 };
 
-export const getWallet = async (adminId) => {
+export const getWallet = async (token,adminId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -208,9 +232,11 @@ export const getWallet = async (adminId) => {
   }
 };
 
-export const getUsersCount = async () => {
+export const getUsersCount = async (token) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -225,9 +251,11 @@ export const getUsersCount = async () => {
   }
 };
 
-export const getPresentCount = async () => {
+export const getPresentCount = async (token) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };

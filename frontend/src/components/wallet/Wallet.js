@@ -10,7 +10,6 @@ function Wallet() {
     const location = useLocation()
 
     const [wallet, setWallet] = useState({})
-
     const userId = location?.state?.userId
 
     useEffect(()=>{

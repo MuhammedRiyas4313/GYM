@@ -9,6 +9,7 @@ export default function EditProfilePicture({
   trainerDetails,
   setTrainerDetails,
   setUpdateProfileImage,
+  token
 }) {
   const [filef, setFilef] = useState([]);
   const [open, setOpen] = useState(true);
@@ -16,10 +17,6 @@ export default function EditProfilePicture({
   const [loader, setLoader] = useState(false);
 
   const cancelButtonRef = useRef(null);
-
-  function logoutConfirmation() {
-    console.log("....");
-  }
 
   useEffect(() => {
     console.log("re-rendering edit modal..");
@@ -31,7 +28,7 @@ export default function EditProfilePicture({
       filef,
       trainerId: trainerId,
     };
-    const response = await updateProfileImage(data);
+    const response = await updateProfileImage(token,data);
     setTrainerDetails(response.data);
     setUpdateProfileImage((state) => !state);
     setUpdated((state) => !state);

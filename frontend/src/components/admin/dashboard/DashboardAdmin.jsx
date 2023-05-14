@@ -12,15 +12,16 @@ function DashboardAdmin() {
 
   const AdminDetails = useSelector((state) => state.adminReducer.admin);
   const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
 
   useEffect(()=>{
-    getWallet(adminId).then((res)=>{
+    getWallet(token,adminId).then((res)=>{
       setWallet(res.data)
     })
-    getClients().then((res)=>{
+    getClients(token).then((res)=>{
       setClients(res.data)
     })
-    getTrainers().then((res)=>{
+    getTrainers(token).then((res)=>{
       setTrainers(res.data)
     })
   }, [])

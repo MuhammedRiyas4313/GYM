@@ -20,10 +20,11 @@ function AddCourse() {
   const [filev, setFilev] = useState([]);
 
   const trainerId = useSelector((state) => state.trainerReducer.trainer);
+  const token = trainerId.token
 
   const onSubmit = async (values) => {
     setLoader(true);
-    const response = await addCourse({
+    const response = await addCourse(token,{
       values,
       file1: filef,
       file2: fileb,

@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import avatar1 from "../../../assets/images/profileLogo.png";
 import { getClients } from "../../../axios/services/adminServices/adminServices";
 import { useNavigate } from "react-router-dom";
 
 function UsersList() {
+
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
+
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getClients().then((res) => {
-      console.log(res.data, "users list.....");
+    getClients(token).then((res) => {
       setUsers(res.data);
     });
   }, []);
@@ -19,13 +24,10 @@ function UsersList() {
     const formated = `${formatDate.getDate()}-${
       formatDate.getMonth() + 1
     }-${formatDate.getFullYear()}`;
-    console.log("formate date is calling.....");
     return formated;
   }
 
   function viewDetails(userId) {
-    console.log("user view details");
-    console.log(userId, "view details trainer ");
     navigate("/admin/userdetails", { state: { userId: userId } });
   }
 

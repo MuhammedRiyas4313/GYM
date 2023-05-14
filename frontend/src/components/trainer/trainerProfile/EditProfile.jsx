@@ -9,7 +9,6 @@ export default function EditProfile(props) {
 
   const [open, setOpen] = useState(true);
   const [updated, setUpdated] = useState(false);
-  const [user, setUser] = useState("");
   const [loader, setLoader] = useState(false);
 
   const cancelButtonRef = useRef(null);
@@ -28,7 +27,7 @@ export default function EditProfile(props) {
       values,
       trainerId: props.trainerDetails._id
     }
-    const response = await updateProfile(data)
+    const response = await updateProfile(props.token,data)
     props.setTrainerDetails(response.data)
     props.setUpdateProfile(state => !state)
     props.setUpdateProfileImage(state => !state)

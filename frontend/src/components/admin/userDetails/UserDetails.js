@@ -3,22 +3,23 @@ import { useLocation } from "react-router-dom";
 import { getUserDetails } from "../../../axios/services/adminServices/adminServices";
 import avatar from "../../../assets/images/profileLogo.png";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 function UserDetails() {
+
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
+  
   const location = useLocation();
   const userId = location.state?.userId;
 
   const [userDetails, setUserDetails] = useState({});
   const [formattedDate, setFormattedDate] = useState("");
-  const [ courses, setCourses] = useState([])
-
-
-  // const [urlFormated, setUrlFormated] = useState("");
-  // const [pdfFormated, setPdfFormated] = useState("");
-  // const [confirmationModalShow, setConfirmationModal] = useState(false);
+  const [ courses, setCourses] = useState([]);
 
   useEffect(() => {
-    getUserDetails(userId).then((res) => {
+    getUserDetails(token,userId).then((res) => {
       setUserDetails(res.data);
      setCourses(res.data?.courses)
     });
@@ -32,10 +33,6 @@ function UserDetails() {
             User Details
           </h3>
         </div>
-        {/* { confirmationModalShow ? <VerificationModal
-      modalShow ={setConfirmationModal}
-      confirmation = {confirmation}
-      />:<div></div>} */}
         <div className="container mx-auto my-5 p-5">
           <div className="md:flex no-wrap md:-mx-2 ">
             <div className="w-full md:w-3/12 md:mx-2 md:mb-2">

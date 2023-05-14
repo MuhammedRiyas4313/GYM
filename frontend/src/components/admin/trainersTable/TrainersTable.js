@@ -14,9 +14,11 @@ function TrainersTable() {
 
   const AdminDetails = useSelector((state) => state.adminReducer.admin);
   const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
+  console.log(token,'admin token')
 
   useEffect(() => {
-   getTrainers().then((response)=>{
+   getTrainers(token).then((response)=>{
     setTrainersList(response.data)
    })
   }, [trainerBlockStatus]);

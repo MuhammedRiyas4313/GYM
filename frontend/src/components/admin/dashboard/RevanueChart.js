@@ -10,6 +10,7 @@ import {
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { getUsersCount } from '../../../axios/services/adminServices/adminServices';
+import { useSelector } from 'react-redux';
 
 ChartJS.register(
   CategoryScale,
@@ -23,9 +24,12 @@ export function RevanueChart() {
 
   const [userCount, setUserCount] = useState([])
 
+  const AdminDetails = useSelector((state) => state.adminReducer.admin);
+  const adminId = AdminDetails?.admin?._id
+  const token = AdminDetails?.token
 
   useEffect(()=>{
-    getUsersCount().then((res)=>{
+    getUsersCount(token).then((res)=>{
       setUserCount(res.data)
       })
     
@@ -56,12 +60,7 @@ const labels = userCount.map((val)=>{
         return val.count
       }),
       backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-    // {
-    //   label: 'Dataset 2',
-    //   data:  [1,2,3,5,1,2],
-    //   backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    // },
+    }
   ],
 };
 

@@ -32,10 +32,13 @@ function TrianerProfile() {
 
   const trainer = useSelector((state) => state.trainerReducer.trainer);
   let trainerId = trainer.trainer._id;
-  // let train =  location.state?.trainerId;
+  let token = trainer.token;
+
+  console.log(trainerId, "trainerId");
+  console.log(trainer.token, "trainer token");
 
   useEffect(() => {
-    getTrainerDetails(trainerId).then((res) => {
+    getTrainerDetails(token, trainerId).then((res) => {
       setTrainerDetails(res.data);
     });
   }, []);
@@ -53,13 +56,14 @@ function TrianerProfile() {
   }
 
   function wallet() {
-    navigate('/wallet', { state: { userId: trainerId } })
+    navigate("/wallet", { state: { userId: trainerId } });
   }
 
   return (
     <div className="bg-white">
       {updateProfile ? (
         <EditProfile
+          token={token}
           setTrainerDetails={setTrainerDetails}
           setUpdateProfile={setUpdateProfile}
           trainerDetails={trainerDetails}
@@ -69,6 +73,7 @@ function TrianerProfile() {
       )}
       {updateProfileImage ? (
         <EditProfilePicture
+          token={token}
           trainerId={trainerId}
           trainerDetails={trainerDetails}
           setTrainerDetails={setTrainerDetails}
@@ -207,9 +212,7 @@ function TrianerProfile() {
                             <li>
                               <Link to="/trainer/addcourse">Add course</Link>
                             </li>
-                            <li
-                            onClick={wallet}
-                            >
+                            <li onClick={wallet}>
                               <a>My wallet</a>
                             </li>
                           </ul>
@@ -232,7 +235,9 @@ function TrianerProfile() {
                   </li>
                   <li className="flex items-center py-3">
                     <span>Email</span>
-                    <span className="ml-auto truncate">{trainerDetails.email}</span>
+                    <span className="ml-auto truncate">
+                      {trainerDetails.email}
+                    </span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Phone</span>

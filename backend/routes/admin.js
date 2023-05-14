@@ -1,4 +1,5 @@
 const Router = require("express");
+const { verifyTokenAdmin } = require('../middlewares/auth')
 var router = Router();
 
 const {
@@ -27,24 +28,24 @@ const { verify } = require("jsonwebtoken");
 
 /* GET users listing. */
 router.post("/login", adminLogin);
-router.get("/trainerslist", trainersList);
-router.patch("/trainerblockstatus", trainerBlockstatus);
-router.get("/notifications", notifications);
-router.get("/trainerdetails", trainerDetails);
-router.patch("/verifytrainer", verifyTrainer);
-router.get("/clients", clientList);
-router.get("/courses", courseList);
-router.get("/clientdetails", clientDetails);
+router.get("/trainerslist",verifyTokenAdmin, trainersList);
+router.patch("/trainerblockstatus",verifyTokenAdmin, trainerBlockstatus);
+router.get("/notifications",verifyTokenAdmin, notifications);
+router.get("/trainerdetails",verifyTokenAdmin, trainerDetails);
+router.patch("/verifytrainer",verifyTokenAdmin, verifyTrainer);
+router.get("/clients",verifyTokenAdmin, clientList);
+router.get("/courses",verifyTokenAdmin, courseList);
+router.get("/clientdetails",verifyTokenAdmin, clientDetails);
 router.post('/chat',  createConversation);
 router.get('/chat',  getConversation);
 router.get('/chat/user',  getUser);
 router.get('/chat/messages',  getMessages);
 router.post('/chat/message',  createMessage);
-router.get('/transactions',  transactions);
-router.get('/transaction',  transaction);
-router.get('/transaction/clients',  transactionClients);
-router.get('/wallet',  getwallet);
-router.get('/usercount',  getUserCount);
-router.get('/presentcount',  getPresentCount);
+router.get('/transactions', verifyTokenAdmin, transactions);
+router.get('/transaction',verifyTokenAdmin,  transaction);
+router.get('/transaction/clients', verifyTokenAdmin, transactionClients);
+router.get('/wallet', verifyTokenAdmin, getwallet);
+router.get('/usercount',verifyTokenAdmin,  getUserCount);
+router.get('/presentcount',verifyTokenAdmin,  getPresentCount);
 
 module.exports = router;
