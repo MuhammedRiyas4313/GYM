@@ -25,7 +25,7 @@ export function ProgressChart({token,clientId,courseId}) {
 
   useEffect(()=>{
     getUserProgress(token,clientId,courseId).then((res)=>{
-      setProgress(res.data)
+      setProgress(res?.data)
     })
   }, [])
 

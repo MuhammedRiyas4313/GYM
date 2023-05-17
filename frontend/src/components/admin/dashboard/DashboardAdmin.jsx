@@ -16,13 +16,13 @@ function DashboardAdmin() {
 
   useEffect(()=>{
     getWallet(token,adminId).then((res)=>{
-      setWallet(res.data)
+      setWallet(res?.data)
     })
     getClients(token).then((res)=>{
-      setClients(res.data)
+      setClients(res?.data)
     })
     getTrainers(token).then((res)=>{
-      setTrainers(res.data)
+      setTrainers(res?.data)
     })
   }, [])
 

@@ -22,8 +22,8 @@ export default function EditProfilePicture(props) {
       filef,
       clientId: props.userId,
     };
-    const response = await updateProfileImage(data);
-    props.setUserDetails(response.data);
+    const response = await updateProfileImage(props.token,data);
+    props.setUserDetails(response?.data);
     props.setUpdateProfileImage((state) => !state);
     setUpdated((state) => !state);
     setLoader((state) => false);

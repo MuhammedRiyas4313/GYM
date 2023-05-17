@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import CourseList from "./CourseList";
 import { getUserCourseList } from "../../../axios/services/clientServices/clientServices";
 
 function Courses() {
 
-  const location = useLocation();
-  const userId = location.state?.userId;
+  const User = useSelector((state) => state.userReducer.user);
+  const userId = User?.user._id;
+  const token = User?.token;
 
   const [courses, setCourses] = useState([]);
   const [cancelCourse, setCourseCancel] = useState(false)
   
   useEffect(() => {
-    getUserCourseList(userId).then((res) => {
-      console.log(res.data.courses, "ind user course list");
-      setCourses(res.data.courses);
+    getUserCourseList(token,userId).then((res) => {
+      setCourses(res?.data?.courses);
     });
   }, [cancelCourse]);
 
@@ -56,7 +56,7 @@ function Courses() {
 
               <div className="bg-gray-100">
                 
-                <CourseList setCourseCancel={setCourseCancel} courses={courses} userId={userId} />
+                <CourseList token={token} setCourseCancel={setCourseCancel} courses={courses} userId={userId} />
                 {/* Course list table */}
               </div>
             </div>

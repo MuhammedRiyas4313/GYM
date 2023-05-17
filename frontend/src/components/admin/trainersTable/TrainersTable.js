@@ -15,19 +15,17 @@ function TrainersTable() {
   const AdminDetails = useSelector((state) => state.adminReducer.admin);
   const adminId = AdminDetails?.admin?._id
   const token = AdminDetails?.token
-  console.log(token,'admin token')
 
   useEffect(() => {
    getTrainers(token).then((response)=>{
-    setTrainersList(response.data)
+    setTrainersList(response?.data)
    })
   }, [trainerBlockStatus]);
 
   async function blockStatus(currentStatus,trainerId){
     
     const response = await changeBlockStatus(currentStatus,trainerId)
-    console.log(response.data.message,' blocked status response')
-    toast.success(response.data.message)
+    toast.success(response?.data?.message)
     setTrainerBlockStatus(!trainerBlockStatus)
 
   }
@@ -46,7 +44,6 @@ function TrainersTable() {
 
   async function message (trainerId){
     const response = await createConversation(adminId,trainerId)
-    console.log(response,'convo create')
      navigate('/admin/chat',{state:{trainerId:trainerId,adminId:adminId}})
    }
 
@@ -110,7 +107,7 @@ function TrainersTable() {
           </thead>
           <tbody>
             {trainersList ? (
-              trainersList.map((val) => {
+              trainersList?.map((val) => {
                 return (
                   <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th

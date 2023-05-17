@@ -11,7 +11,7 @@ function Transaction() {
 
   useEffect(() => {
     getTransactions(userId).then((res) => {
-      setTransaction(res.data);
+      setTransaction(res?.data);
     });
   }, []);
 

@@ -14,7 +14,7 @@ function Wallet() {
 
     useEffect(()=>{
         getWallet(userId).then((res)=>{
-            setWallet(res.data)
+            setWallet(res?.data)
         })
     }, [])
 

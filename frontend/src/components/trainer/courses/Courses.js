@@ -6,15 +6,14 @@ import { getTrainerCourseList } from "../../../axios/services/trainerServices/tr
 function Courses() {
 
   const trainer = useSelector((state) => state.trainerReducer.trainer);
-  let trainerId = trainer.trainer._id;
-  let token = trainer.token;
+  let trainerId = trainer?.trainer._id;
+  let token = trainer?.token;
 
   const [courseList, setCourseList] = useState([]);
 
   useEffect(() => {
     getTrainerCourseList(token,trainerId).then((res) => {
-      console.log(res.data, "ind trainer course list");
-      setCourseList(res.data);
+      setCourseList(res?.data);
     });
   }, []);
 

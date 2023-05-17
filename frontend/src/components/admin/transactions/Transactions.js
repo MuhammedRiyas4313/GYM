@@ -32,7 +32,7 @@ function Transactions() {
 
   useEffect(() => {
     getTransactions(token).then((res) => {
-      setTransaction(res.data);
+      setTransaction(res?.data);
     });
   }, []);
 
@@ -112,27 +112,27 @@ function Transactions() {
             <tbody>
               {transaction?.map((transaction) => {
                 return (
-                  <tr key={transaction._id}>
+                  <tr key={transaction?._id}>
                     <td className="hidden"></td>
-                    <td>{transId(transaction._id)}</td>
-                    <td>{formatDate(transaction.createdAt)}</td>
-                    <td>{transaction.amount}&nbsp;₹</td>
-                    <td>{transaction.payee}</td>
-                    <td>{transaction.reciever}</td>
+                    <td>{transId(transaction?._id)}</td>
+                    <td>{formatDate(transaction?.createdAt)}</td>
+                    <td>{transaction?.amount}&nbsp;₹</td>
+                    <td>{transaction?.payee}</td>
+                    <td>{transaction?.reciever}</td>
                     <th>
                       <div
                         className={
-                          transaction.payee === "64300ee00b649a2abb940de1"
+                          transaction?.payee === "64300ee00b649a2abb940de1"
                             ? "badge badge-error"
                             : "badge badge-success"
                         }
                       >
-                        {transaction.status}
+                        {transaction?.status}
                       </div>
                     </th>
                     <td>
                       <button
-                        onClick={() => viewDetails(transaction._id)}
+                        onClick={() => viewDetails(transaction?._id)}
                         className="btn btn-ghost btn-xs bg-slate-300"
                       >
                         details

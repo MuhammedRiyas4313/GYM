@@ -16,7 +16,7 @@ export function PaymentChart(){
 
   useEffect(()=>{
     getPresentCount(token).then((res)=>{
-      setPresentCount(res.data)
+      setPresentCount(res?.data)
     })
   }, [])
   
@@ -25,7 +25,7 @@ export function PaymentChart(){
   datasets: [
     {
       label: '# of Votes',
-      data: presentCount.map((val)=>{
+      data: presentCount?.map((val)=>{
         return val.count
       }),
       backgroundColor: [

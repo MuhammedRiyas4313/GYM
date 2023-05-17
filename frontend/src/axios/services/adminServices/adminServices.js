@@ -90,21 +90,23 @@ export const getTrainerDetails = async (token,trainerId) => {
 };
 
 export const verifyTrainer = async (token,trainerId) => {
-  const config = {
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    },
-  };
+  console.log(token,'token in admin service verify trainer........')
+  
   try {
-    const response = await axiosAdminInstance.patch(
-      `/verifytrainer?trainerId=${trainerId}`,
-      config
-    );
+    const userDummy = {
+      user: true
+    }
+    const config = {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const response = await axiosAdminInstance.patch(`/verifytrainer?trainerId=${trainerId}`,userDummy,config);
     return response;
   } catch (error) {
-    console.log("error in client login......");
+    console.log(error.message,"error verify trainer....");
   }
 };
 

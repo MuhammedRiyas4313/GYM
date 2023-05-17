@@ -16,7 +16,7 @@ function Courses() {
 
   useEffect(() => {
     getCourses().then((res) => {
-      const courseList = res.data.filter((obj) => obj.status === "Active");
+      const courseList = res?.data?.filter((obj) => obj?.status === "Active");
       setCourses(courseList);
       setAllCourseList(courseList);
     });

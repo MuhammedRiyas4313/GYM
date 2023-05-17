@@ -29,6 +29,7 @@ function EnrollCourse() {
 
   const user = client.user
   const clientId = client?.user?._id;
+  const token = client.token
   const courseId = Location.state?.courseId;
 
   function formateDate() {
@@ -51,18 +52,18 @@ function EnrollCourse() {
 
   useEffect(() => {
     getCourseDetails(courseId).then((res) => {
-      setCourse(res.data);
-      const allSlotes = res.data.availableSlots;
-      const clients = res.data.clients;
+      setCourse(res?.data);
+      const allSlotes = res?.data?.availableSlots;
+      const clients = res?.data?.clients;
       const traineePaid = clients?.filter((val) => val?.user === clientId && val?.status === 'Active' && val?.paymentStatus );
       const trainee = clients?.filter((val) => val?.user === clientId && val?.status === 'Active' && !val?.paymentStatus );
       if(traineePaid?.length) setEnrolledClient(true)
-      chargeTopay(res.data.charge)
+      chargeTopay(res?.data?.charge)
       if (trainee?.length) {
-        const slotes = allSlotes.filter((val) => val.client === clientId);
+        const slotes = allSlotes.filter((val) => val?.client === clientId);
         setSlote(slotes)
       }else{
-        const slotes = allSlotes.filter((val) => val.status === "free");
+        const slotes = allSlotes?.filter((val) => val?.status === "free");
         setSlote(slotes);
       }
       
@@ -82,7 +83,7 @@ function EnrollCourse() {
   async function paypalpayment(paymentDetails) {
 
     const data = { ...enrollData, paymentDetails };
-    const response = await enrollClient(data);
+    const response = await enrollClient(token,data);
 
     if (response) {
       setSuccess(true)
@@ -141,7 +142,6 @@ function EnrollCourse() {
                         <div className="mt-2">
                           <div className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm bg-gray-100  sm:text-sm sm:leading-6 p-2">
                             { feeToPay }&nbsp;₹
-                            {console.log(feeToPay)}
                           </div>
                         </div>
                       </div>

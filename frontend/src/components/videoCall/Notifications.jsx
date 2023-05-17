@@ -9,7 +9,7 @@ function Notifications() {
   
   return (
     <>
-     {call.isReceivedCall && !callAccepted && (
+     {call?.isReceivedCall && !callAccepted && (
       <div style={{display:'flex', justifyContent:'center'}}>
         <h1><span className='font-extrabold uppercase'>{call.name} </span>is calling: </h1>
         <Button variant='contained' color='primary' onClick={answerCall}>

@@ -19,20 +19,21 @@ export default function TransactionDetails({ transactionId }) {
 
   useEffect(() => {
     getTransaction(token,transactionId).then((res) => {
-      setTransaction(res.data);
-      payee(res.data.payee);
-      recieved(res.data.reciever);
+      setTransaction(res?.data);
+      payee(res?.data?.payee);
+      console.log(res?.data?.reciever,'reciever in admin transaction.....')
+      recieved(res?.data?.reciever);
     });
   }, []);
 
   async function payee(clientId) {
     const res = await getTransactionClients(token,clientId);
-    setPaye(res.data);
+    setPaye(res?.data);
   }
 
   async function recieved(clientId) {
-    const res = await getTransactionClients(clientId);
-    setReciever(res.data);
+    const res = await getTransactionClients(token,clientId);
+    setReciever(res?.data);
   }
 
   function formateDate(date) {
@@ -79,11 +80,11 @@ export default function TransactionDetails({ transactionId }) {
               <div className="text-gray-700 p-5 md:p-14 pt-0 pb-0">
                   <div className="text-sm">
                     <div className="">
-                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Payee</div>:<div>{paye.fname}</div></div>
-                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Reciever</div>:<div>{reciever.fname}</div></div>
-                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Amount</div>:<div>{transaction.amount}&nbsp;₹</div></div>
-                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Status</div>:<div>{transaction.status}</div></div>
-                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Date</div>:<div>{formateDate(transaction.createdAt)}</div></div>
+                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Payee</div>:<div>{paye?.fname}</div></div>
+                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Reciever</div>:<div>{reciever?.fname}</div></div>
+                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Amount</div>:<div>{transaction?.amount}&nbsp;₹</div></div>
+                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Status</div>:<div>{transaction?.status}</div></div>
+                      <div className="px-4 py-2 font-semibold flex justify-between"><div>Date</div>:<div>{formateDate(transaction?.createdAt)}</div></div>
                     </div>
                   </div>
                 </div>

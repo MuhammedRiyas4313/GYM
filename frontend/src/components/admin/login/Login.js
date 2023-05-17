@@ -15,15 +15,14 @@ function Login() {
   async function onSubmit() {
     const response = await AdminLogin(values);
 
-    if (response.data.status === "Login success") {
-      console.log(response.data.status, "status in if condition......");
+    if (response?.data?.status === "Login success") {
       dispatch(
         adminLogin({ token: response.data.token, admin: response.data.admin })
       );
-      toast.success(response.data.status);
+      toast.success(response?.data?.status);
       navigate("/admin/dashboard");
     } else {
-      toast.error(response.data.status);
+      toast.error(response?.data?.status);
     }
   }
 
@@ -60,7 +59,7 @@ function Login() {
                 type="email"
                 name="email"
                 onChange={handleChange}
-                value={values.email}
+                value={values?.email}
                 onBlur={handleBlur}
                 className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
               />

@@ -8,6 +8,7 @@ import EditProfile from "./EditProfile";
 import EditProfilePicture from "./EditProfilePicture";
 
 function TrianerProfile() {
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -15,6 +16,10 @@ function TrianerProfile() {
   const [trainerDetails, setTrainerDetails] = useState({});
   const [updateProfileImage, setUpdateProfileImage] = useState(false);
   const [updateProfile, setUpdateProfile] = useState(false);
+
+  const trainer = useSelector((state) => state.trainerReducer.trainer);
+  let trainerId = trainer?.trainer._id;
+  let token = trainer?.token;
 
   function options() {
     setOption((state) => !state);
@@ -28,18 +33,14 @@ function TrianerProfile() {
     return formated;
   }
 
-  useEffect(() => {}, [option]);
+  useEffect(() => {
 
-  const trainer = useSelector((state) => state.trainerReducer.trainer);
-  let trainerId = trainer.trainer._id;
-  let token = trainer.token;
+  }, [option]);
 
-  console.log(trainerId, "trainerId");
-  console.log(trainer.token, "trainer token");
 
   useEffect(() => {
     getTrainerDetails(token, trainerId).then((res) => {
-      setTrainerDetails(res.data);
+      setTrainerDetails(res?.data);
     });
   }, []);
 
@@ -236,12 +237,12 @@ function TrianerProfile() {
                   <li className="flex items-center py-3">
                     <span>Email</span>
                     <span className="ml-auto truncate">
-                      {trainerDetails.email}
+                      {trainerDetails?.email}
                     </span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Phone</span>
-                    <span className="ml-auto">{trainerDetails.phone}</span>
+                    <span className="ml-auto">{trainerDetails?.phone}</span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Designation</span>
@@ -250,7 +251,7 @@ function TrianerProfile() {
                   <li className="flex items-center py-3">
                     <span>Member since</span>
                     <span className="ml-auto">
-                      {formateDate(trainerDetails.createdAt)}
+                      {formateDate(trainerDetails?.createdAt)}
                     </span>
                   </li>
                 </ul>

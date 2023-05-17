@@ -13,20 +13,18 @@ function Notifications() {
     const [trainersToVerify, setTrainersToVerify] = useState([])
 
     function viewDetails(trainerId){
-      console.log(trainerId,'view details trainer ')
       navigate('/admin/trainerdetails', { state: { trainerId: trainerId } });
     }
 
     function formateDate(date){
       const formatDate = new Date(date)
       const formated = `${formatDate.getDate()}-${formatDate.getMonth() + 1}-${formatDate.getFullYear()}`
-      console.log('formate date is calling.....')
       return formated
     }
 
     useEffect(()=>{
         getNotifications(token).then((res)=>{
-            setTrainersToVerify(res.data)
+            setTrainersToVerify(res?.data)
         })
     },[])
 
@@ -92,7 +90,7 @@ function Notifications() {
             </tr>
           </thead>
           <tbody>
-            { trainersToVerify ? trainersToVerify.map((val)=>{
+            { trainersToVerify ? trainersToVerify?.map((val)=>{
                 return(
                 <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                 <th
@@ -101,21 +99,21 @@ function Notifications() {
                 >
                   <img
                     className="w-10 h-10 rounded-full"
-                    src={val.profile}
+                    src={val?.profile}
                     alt="Jese image"
                   ></img>
                   <div className="pl-3">
-                    <div className="text-base font-semibold">{val.fname}</div>
+                    <div className="text-base font-semibold">{val?.fname}</div>
                     <div className="font-normal text-gray-500">
-                      {val.email}
+                      {val?.email}
                     </div>
                   </div>
                 </th>
-                <td className="px-6 py-4">{formateDate(val.createdAt)}</td>
-                <td className="px-6 py-4">{val.gender}</td>
-                <td className="px-6 py-4">{val.phone}</td>
+                <td className="px-6 py-4">{formateDate(val?.createdAt)}</td>
+                <td className="px-6 py-4">{val?.gender}</td>
+                <td className="px-6 py-4">{val?.phone}</td>
                 <td className=" text-center">
-                      {val.isVerified ? (
+                      {val?.isVerified ? (
                         <div>
                           <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
                             Verified
@@ -130,7 +128,7 @@ function Notifications() {
                       )}
                     </td>
                 <td className="px-6 py-4">
-                   <button type="button" onClick={()=>{viewDetails(val._id)}} class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0">View Details</button>
+                   <button type="button" onClick={()=>{viewDetails(val?._id)}} class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0">View Details</button>
                 </td>
               </tr>)
             }):<div></div>}

@@ -13,8 +13,7 @@ function Courses() {
   useEffect(()=>{
     getCourses(token).then((res)=>{
       console.log(res)
-      setCourseList(res.data)
-      console.log(res.data.trainerId,'trainer')
+      setCourseList(res?.data)
     })
   },[])
 
@@ -92,21 +91,21 @@ function Courses() {
               >
                 <img
                   className="w-10 h-10 rounded-full"
-                  src={val.cover1}
+                  src={val?.cover1}
                   alt="Jese image"
                 ></img>
                 <div className="pl-3">
-                  <div className="text-base font-semibold">{val.coursename}</div>
+                  <div className="text-base font-semibold">{val?.coursename}</div>
                   <div className="font-normal text-gray-500">
-                    {val.trainerId?.fname}
+                    {val?.trainerId?.fname}
                   </div>
                 </div>
               </th>
-              <td className="px-6 py-4">{val.charge} &nbsp; ₹</td>
-              <td className="px-6 py-4">{formatDate(val.createdAt)}</td>
-              <td className="px-6 py-4">{val.status}</td>
+              <td className="px-6 py-4">{val?.charge} &nbsp; ₹</td>
+              <td className="px-6 py-4">{formatDate(val?.createdAt)}</td>
+              <td className="px-6 py-4">{val?.status}</td>
               <td className="px-6 py-4 text-center">
-                0{val.clients?.length}
+                0{val?.clients?.length}
               </td>
               <td><button>Details</button></td>
             </tr>

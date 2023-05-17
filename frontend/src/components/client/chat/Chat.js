@@ -8,8 +8,8 @@ import Picker from "emoji-picker-react";
 import {io} from 'socket.io-client'
 import { useNavigate } from "react-router-dom";
 
-const END_POINT = 'http://localhost:3001'
-var socket,selectedChatCompare
+const END_POINT = 'https://gym-trainers-management.onrender.com'
+var socket, selectedChatCompare
 
 function Chat() {
 
@@ -58,6 +58,7 @@ function Chat() {
 
   useEffect(()=>{
     socket.on('recieve_message',(data)=>{
+      console.log('recieve message on')
       if(data?.conversationId === currentChat?._id){
         const message = [...messages,data]
         setMessages(message);
@@ -70,7 +71,7 @@ function Chat() {
   },[messages])
 
   async function setChat(conversation) {
-    const friendId = conversation.members.find((m) => m !== userId);
+    const friendId = conversation?.members?.find((m) => m !== userId);
     const findUser = async () => {
       const friend = await getUser(friendId);
       setUser(friend);
@@ -88,7 +89,7 @@ function Chat() {
 
   function sendMessage(){
     const data = {
-      conversationId:currentChat._id,
+      conversationId:currentChat?._id,
       sender:userId,
       text:newMessage,
     }
@@ -106,7 +107,7 @@ function Chat() {
 
   async function videoCall (){
     navigate("/videocall", {
-      state: { trainerId: user._id, clientId:userId, conversationId:currentChat._id, name: UserDetails.user.fname  },
+      state: { trainerId: user?._id, clientId:userId, conversationId:currentChat?._id, name: UserDetails.user?.fname  },
     });
  }
 

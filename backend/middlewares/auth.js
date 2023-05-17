@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const verifyTokenAdmin = async (req, res, next) => {
   try {
     let token = req.headers["authorization"];
+    console.log('admin token = ', token)
+    console.log(token,'admin')
     if (!token) {
       return res.status(403).send("Access Denied");
     }
@@ -20,6 +22,7 @@ const verifyTokenAdmin = async (req, res, next) => {
       return res.status(403).send("Access Denied");
     }
   } catch (err) {
+    console.log(err.message,'error in auth middleware')
     res.status(500).json({ message: err.message });
   }
 };
@@ -27,6 +30,7 @@ const verifyTokenAdmin = async (req, res, next) => {
 const verifyTokenClient = async (req, res, next) => {
   try {
     let token = req.headers["authorization"];
+    console.log(token,'client token')
     if (!token) {
       return res.status(403).send("Access Denied");
     }
@@ -43,6 +47,7 @@ const verifyTokenClient = async (req, res, next) => {
       return res.status(403).send("Access Denied");
     }
   } catch (err) {
+    console.log(err.message,'error in client auth middleware...')
     res.status(500).json({ message: err.message });
   }
 };
@@ -50,6 +55,7 @@ const verifyTokenClient = async (req, res, next) => {
 const verifyTokenTrainer = async (req, res, next) => {
   try {
     let token = req.headers["authorization"];
+    console.log(token,'trainer token')
     if (!token) {
       return res.status(403).send("Access Denied");
     }
@@ -66,6 +72,7 @@ const verifyTokenTrainer = async (req, res, next) => {
       return res.status(403).send("Access Denied");
     }
   } catch (err) {
+    console.log(err.message,'error message in trainer auth middleware')
     res.status(500).json({ message: err.message });
   }
 };

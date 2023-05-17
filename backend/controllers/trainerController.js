@@ -107,6 +107,7 @@ const trainerLoginWithGoogle = async (req, res) => {
 
   try {
     const { email, password } = req.body;
+    
     const oldTrainer = await Trainer.findOne({ email });
     console.log(oldTrainer, "oldTrainer.....");
 
@@ -137,12 +138,13 @@ const trainerDetails = async (req, res) => {
   try {
     console.log("trainer details..trainer route");
     const { trainerId } = req.query;
+    console.log(trainerId,"= trainerId details..trainer route");
 
-    const getDetails = await Trainer.findOne({ _id: trainerId });
+    const getDetails = await Trainer.findOne({ _id: new ObjectId(trainerId) });
     res.json(getDetails);
   } catch (error) {
+    console.log(error.message,'error in trainerDetails trainerController');
     res.status(500).json({ message: "Something went wrong" });
-    console.log(error);
   }
 };
 

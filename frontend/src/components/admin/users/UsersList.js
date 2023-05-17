@@ -15,7 +15,7 @@ function UsersList() {
 
   useEffect(() => {
     getClients(token).then((res) => {
-      setUsers(res.data);
+      setUsers(res?.data);
     });
   }, []);
 
@@ -95,7 +95,7 @@ function UsersList() {
           </thead>
           <tbody>
             {users ? (
-              users.map((val) => {
+              users?.map((val) => {
                 return (
                   <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                     <th
@@ -104,24 +104,24 @@ function UsersList() {
                     >
                       <div class="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
                         <img
-                          src={val.profile ? val.profile : avatar1}
+                          src={val?.profile ? val?.profile : avatar1}
                           className="object-cover h-12 w-12 rounded-full"
                           alt=""
                         />
                       </div>
                       <div className="pl-3">
                         <div className="text-base font-semibold">
-                          {val.fname}
+                          {val?.fname}
                         </div>
                         <div className="font-normal text-gray-500">
-                          {val.email}
+                          {val?.email}
                         </div>
                       </div>
                     </th>
-                    <td className="px-6 py-4">{formateDate(val.createdAt)}</td>
-                    <td className="px-6 py-4">{val.gender}</td>
+                    <td className="px-6 py-4">{formateDate(val?.createdAt)}</td>
+                    <td className="px-6 py-4">{val?.gender}</td>
                     <td className=" text-center">
-                      {val.isVerified ? (
+                      {val?.isVerified ? (
                         <div>
                           <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
                             Verified
@@ -136,7 +136,7 @@ function UsersList() {
                       )}
                     </td>
                     <td className=" text-center">
-                      {!val.isBlocked ? (
+                      {!val?.isBlocked ? (
                         <div>
                           <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
                             Active
@@ -151,12 +151,12 @@ function UsersList() {
                       )}
                     </td>
                     <td className="px-6 py-4">
-                      {val.isBlocked ? (
+                      {val?.isBlocked ? (
                         <button
                           type="button"
                           className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                           onClick={() => {
-                            blockStatus(val.isBlocked, val._id);
+                            blockStatus(val?.isBlocked, val?._id);
                           }}
                         >
                           Unblock
@@ -166,7 +166,7 @@ function UsersList() {
                           type="button"
                           className="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                           onClick={() => {
-                            blockStatus(val.isBlocked, val._id);
+                            blockStatus(val?.isBlocked, val?._id);
                           }}
                         >
                           Block
@@ -177,7 +177,7 @@ function UsersList() {
                       <button
                         type="button"
                         onClick={() => {
-                          viewDetails(val._id);
+                          viewDetails(val?._id);
                         }}
                         class="font-medium text-blue-600 dark:text-blue-500 hover:underline border-0"
                       >

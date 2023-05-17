@@ -30,7 +30,7 @@ export function RevanueChart() {
 
   useEffect(()=>{
     getUsersCount(token).then((res)=>{
-      setUserCount(res.data)
+      setUserCount(res?.data)
       })
     
   }, [])
@@ -47,7 +47,7 @@ export function RevanueChart() {
   },
 };
 
-const labels = userCount.map((val)=>{
+const labels = userCount?.map((val)=>{
   return val._id
 })
 
@@ -56,7 +56,7 @@ const labels = userCount.map((val)=>{
   datasets: [
     {
       label: 'Monthly Admissions',
-      data: userCount.map((val)=>{
+      data: userCount?.map((val)=>{
         return val.count
       }),
       backgroundColor: 'rgba(53, 162, 235, 0.5)',

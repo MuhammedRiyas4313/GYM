@@ -4,7 +4,7 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { cancelCourse } from '../../../axios/services/clientServices/clientServices'
 import { toast } from 'react-toastify'
 
-export default function CancelationModal({setCancelation,courseId,userId,setCourseCancel}) {
+export default function CancelationModal({token, setCancelation,courseId,userId,setCourseCancel}) {
 
   const [open, setOpen] = useState(true)
 
@@ -13,9 +13,9 @@ export default function CancelationModal({setCancelation,courseId,userId,setCour
   function cancelationConfirmation(){
 
     setCancelation(state => !state)
-    cancelCourse(courseId,userId).then((res)=>{
+    cancelCourse(token, courseId, userId).then((res)=>{
       setCourseCancel(state => !state)
-      toast.warn(res.data.status)
+      toast.warn(res?.data?.status)
     })
 
   }

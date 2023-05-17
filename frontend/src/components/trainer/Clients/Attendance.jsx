@@ -15,12 +15,6 @@ export default function TransactionDetails({ setAttendanceModal,objectAttendance
     setCurrentDate( new Date().getDate()+'/'+(new Date().getMonth()+1)+'/'+new Date().getFullYear())
   }, [])
   
-  function formateDate(date) {
-    const formatDate = new Date(date);
-    const formated = `${formatDate.getDate()}-${
-    formatDate.getMonth() + 1 }-${formatDate.getFullYear()}`;
-    return formated;
-  }
 function markPresent(){
   const data = { 
     courseId: courseAttendance,
@@ -32,9 +26,9 @@ function markPresent(){
   }
   registerAttendance(token,data).then((res)=>{
     if(res.data.status === 'already marked'){
-    toast.warn(res.data.status)
+    toast.warn(res?.data?.status)
     }else{
-      toast.success(res.data.status)
+      toast.success(res?.data?.status)
     }
   })
   setAttendanceModal(state => !state)
@@ -51,10 +45,10 @@ function markAbsent(){
       reason: reason.current.value
     }
     registerAttendance(data).then((res)=>{
-      if(res.data.status === 'already marked'){
-        toast.warn(res.data.status)
+      if(res?.data?.status === 'already marked'){
+        toast.warn(res?.data?.status)
         }else{
-          toast.success(res.data.status)
+          toast.success(res?.data?.status)
         }
     })
     setAttendanceModal(state => !state)

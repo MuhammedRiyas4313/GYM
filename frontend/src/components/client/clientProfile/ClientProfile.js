@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "./ClientProfile.css";
-import { getUserDetails } from "../../../axios/services/clientServices/clientServices";
-import { useLocation, useNavigate } from "react-router-dom";
-import userAvatar from "../../../assets/images/profileLogo.png";
 import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getUserDetails } from "../../../axios/services/clientServices/clientServices";
+import userAvatar from "../../../assets/images/profileLogo.png";
 import EditProfilePicture from "./EditProfilePicture";
 import EditProfile from "./EditProfile";
+import "./ClientProfile.css";
 
 function ClientProfile() {
   const location = useLocation();
@@ -13,6 +13,7 @@ function ClientProfile() {
 
   const User = useSelector((state) => state.userReducer.user);
   const userId = User.user._id;
+  const token = User.token;
 
   const [option, setOption] = useState(false);
   const [userDetails, setUserDetails] = useState({});
@@ -36,8 +37,8 @@ function ClientProfile() {
   }, [option, updateProfileImage, userDetails, updateProfile]);
 
   useEffect(() => {
-    getUserDetails(userId).then((res) => {
-      setUserDetails(res.data);
+    getUserDetails(token,userId).then((res) => {
+      setUserDetails(res?.data);
     });
   }, []);
 
@@ -56,6 +57,7 @@ function ClientProfile() {
     <div className="bg-white">
       {updateProfile ? (
         <EditProfile
+          token={token}
           setUserDetails={setUserDetails}
           setUpdateProfile={setUpdateProfile}
           userDetails={userDetails}
@@ -65,6 +67,7 @@ function ClientProfile() {
       )}
       {updateProfileImage ? (
         <EditProfilePicture
+          token={token}
           userId={userId}
           userDetails={userDetails}
           setUserDetails={setUserDetails}
@@ -88,7 +91,7 @@ function ClientProfile() {
                   >
                     <img
                       src={
-                        userDetails?.profile ? userDetails.profile : userAvatar
+                        userDetails?.profile ? userDetails?.profile : userAvatar
                       }
                       alt="trainer profile"
                       className="hover:tooltip-bottom"
@@ -193,11 +196,11 @@ function ClientProfile() {
                   </li>
                   <li className="flex items-center py-3">
                     <span>Email</span>
-                    <span className="ml-auto">{userDetails.email}</span>
+                    <span className="ml-auto">{userDetails?.email}</span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Phone</span>
-                    <span className="ml-auto">{userDetails.phone}</span>
+                    <span className="ml-auto">{userDetails?.phone}</span>
                   </li>
                   {/* <li className="flex items-center py-3">
                   <span>Status</span>
@@ -216,7 +219,7 @@ function ClientProfile() {
                   <li className="flex items-center py-3">
                     <span>Member since</span>
                     <span className="ml-auto">
-                      {formateDate(userDetails.createdAt)}
+                      {formateDate(userDetails?.createdAt)}
                     </span>
                   </li>
                   {/* <li className="flex items-center py-3">

@@ -11,12 +11,12 @@ export default function Modal(props) {
   function verificationConfirm(){
 
     props.modalShow(false)
-    props.confirmation(true)
+    props.confirmation(true,props.token)
   }
 
   function verificationDenied(){
     props.modalShow(false)
-    props.confirmation(false)
+    props.confirmation(false,props.token)
   }
 
   return (

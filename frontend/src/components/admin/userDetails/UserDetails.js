@@ -20,8 +20,8 @@ function UserDetails() {
 
   useEffect(() => {
     getUserDetails(token,userId).then((res) => {
-      setUserDetails(res.data);
-     setCourses(res.data?.courses)
+      setUserDetails(res?.data);
+     setCourses(res?.data?.courses)
     });
   }, []);
 
@@ -46,7 +46,7 @@ function UserDetails() {
                   </div>
                 </div>
                 <h1 className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase">
-                  {userDetails.fname}
+                  {userDetails?.fname}
                 </h1>
                 <h3 className="text-gray-600 font-lg text-semibold leading-6">
                   User at GYM FITNESS Company Inc.
@@ -60,7 +60,7 @@ function UserDetails() {
                   <li className="flex items-center py-3">
                     <span>Status</span>
                     <span className="ml-auto">
-                      {!userDetails.isBlocked ? (
+                      {!userDetails?.isBlocked ? (
                         <span className="bg-green-500 py-1 px-2 rounded text-white text-sm">
                           Active
                         </span>
@@ -103,19 +103,19 @@ function UserDetails() {
                   <div className="grid md:grid-cols-2 text-sm">
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">First Name</div>
-                      <div className="px-4 py-2">{userDetails.fname}</div>
+                      <div className="px-4 py-2">{userDetails?.fname}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Gender</div>
-                      <div className="px-4 py-2">{userDetails.gender}</div>
+                      <div className="px-4 py-2">{userDetails?.gender}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Contact No.</div>
-                      <div className="px-4 py-2">{userDetails.phone}</div>
+                      <div className="px-4 py-2">{userDetails?.phone}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Birthday</div>
-                      <div className="px-4 py-2">{userDetails.dob}</div>
+                      <div className="px-4 py-2">{userDetails?.dob}</div>
                     </div>
                     <div className="grid grid-cols-2">
                       <div className="px-4 py-2 font-semibold">Email.</div>
@@ -124,7 +124,7 @@ function UserDetails() {
                           className="text-blue-800 truncate"
                           href="mailto:jane@example.com"
                         >
-                          {userDetails.email}
+                          {userDetails?.email}
                         </a>
                       </div>
                     </div>
@@ -173,7 +173,7 @@ function UserDetails() {
                           >
                             <div className="pl-3">
                               <div className="text-base font-semibold">
-                                {course.coursename}
+                                {course?.coursename}
                               </div>
                             </div>
                           </th>
@@ -181,7 +181,7 @@ function UserDetails() {
                           <td className="px-6 py-4">08-05-2023</td>
                           <td className=" text-center">jhon wick</td>
                           <td className=" text-center">
-                            {!userDetails.isBlocked ? (
+                            {!userDetails?.isBlocked ? (
                               <div>
                                 <span class="bg-green-600 text-white text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-500">
                                   Completed
@@ -212,7 +212,7 @@ function UserDetails() {
                         }
                       </tbody>
                     </table>
-                    { courses.length === 0 && <div className="text-gray-600 md:text-3xl text-sm md:p-5 p-2 flex justify-center bg-gray-400 font-extrabold"> No courses </div>}
+                    { courses?.length === 0 && <div className="text-gray-600 md:text-3xl text-sm md:p-5 p-2 flex justify-center bg-gray-400 font-extrabold"> No courses </div>}
                   </div>
                 </div>
               </div>

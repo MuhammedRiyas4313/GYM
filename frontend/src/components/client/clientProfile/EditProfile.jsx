@@ -27,11 +27,11 @@ export default function EditProfile(props) {
       values,
       clientId: user._id,
     };
-    const response = await updateProfile(data);
-    props.setUserDetails(response.data);
+    const response = await updateProfile(props.token,data);
+    props.setUserDetails(response?.data);
     props.setUpdateProfile((state) => !state);
     props.setUpdateProfileImage((state) => !state);
-    props.setLogedName(response.data.fname);
+    props.setLogedName(response?.data?.fname);
     setLoader(false);
   }
 
@@ -95,7 +95,7 @@ export default function EditProfile(props) {
                         class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        value={values.fname}
+                        value={values?.fname}
                       />
                       {errors.fname && touched.fname && (
                         <p className="text-red-600">{errors.fname}</p>

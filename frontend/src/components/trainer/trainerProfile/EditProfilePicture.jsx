@@ -29,7 +29,7 @@ export default function EditProfilePicture({
       trainerId: trainerId,
     };
     const response = await updateProfileImage(token,data);
-    setTrainerDetails(response.data);
+    setTrainerDetails(response?.data);
     setUpdateProfileImage((state) => !state);
     setUpdated((state) => !state);
     setLoader(false); 

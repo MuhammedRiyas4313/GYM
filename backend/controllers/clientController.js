@@ -35,6 +35,7 @@ const clientLogin = async (req, res) => {
   console.log("client login calling for sent email.......");
   try {
     const { email, password } = req.body;
+
     const oldUser = await User.findOne({ email });
 
     if (!oldUser) return res.json({ status: "User doesn't exist" });
@@ -98,8 +99,7 @@ const clientLoginWithGoogle = async (req, res) => {
 const clientRegister = async (req, res) => {
   console.log("client register page  calling.......");
 
-  const { fname, dob, gender, email, phone, password, weight, height } =
-    req.body;
+  const { fname, dob, gender, email, phone, password, weight, height } = req.body;
   try {
     const oldUser = await User.findOne({ email });
 
@@ -326,6 +326,7 @@ const trainerDetails = async (req, res) => {
 };
 
 const trainerCourseList = async (req, res) => {
+  
   console.log("ind trainer course list ........");
   try {
     const { trainerId } = req.query;
@@ -342,6 +343,7 @@ const trainerCourseList = async (req, res) => {
 };
 
 const enrollCLient = async (req, res) => {
+
   const today = new Date();
   const currMonth = today.getMonth() + 1;
   const monthName = new Date(Date.UTC(0, currMonth - 1, 1)).toLocaleString(
@@ -351,16 +353,7 @@ const enrollCLient = async (req, res) => {
   const formattedDate = today.toISOString().slice(0, 10);
 
   try {
-    const {
-      weight,
-      height,
-      emergencycontact,
-      slote,
-      healthinfo,
-      clientId,
-      courseId,
-      paymentDetails,
-    } = req.body;
+    const { weight, height, emergencycontact, slote, healthinfo, clientId, courseId, paymentDetails } = req.body;
 
     const course = await Course.findOne({ _id: new ObjectId(courseId) });
 

@@ -1,12 +1,12 @@
 import { axiosClientInstance } from "../../axios";
 
 export const clientRegister = async (value) => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
   try {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
     const response = await axiosClientInstance.post("/register", value, config);
     return response.data;
   } catch (error) {
@@ -85,9 +85,11 @@ export const ClientResendOtp = async (values, id) => {
   }
 };
 
-export const getUserDetails = async (userId) => {
+export const getUserDetails = async (token,userId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -181,9 +183,11 @@ export const getTrainerCourseList = async (trainerId) => {
   }
 };
 
-export const enrollClient = async (values) => {
+export const enrollClient = async (token,values) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -195,9 +199,11 @@ export const enrollClient = async (values) => {
   }
 };
 
-export const updateProfileImage = async (values) => {
+export const updateProfileImage = async (token,values) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -213,10 +219,11 @@ export const updateProfileImage = async (values) => {
   }
 };
 
-export const updateProfile = async (values) => {
-  console.log(values,'values from the updateProfile')
+export const updateProfile = async (token,values) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -261,9 +268,11 @@ export const searchTrainers = async (search) => {
   }
 };
 
-export const getUserCourseList = async (userId) => {
+export const getUserCourseList = async (token,userId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -275,9 +284,11 @@ export const getUserCourseList = async (userId) => {
   }
 };
 
-export const cancelCourse = async (courseId,userId) => {
+export const cancelCourse = async (token,courseId,userId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };
@@ -290,9 +301,11 @@ export const cancelCourse = async (courseId,userId) => {
 };
 
 
-export const getAttendanceDetails = async (courseId,clientId) => {
+export const getAttendanceDetails = async (token,courseId,clientId) => {
   const config = {
     headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
   };

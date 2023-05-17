@@ -1,5 +1,8 @@
 const Router = require("express");
 const router = Router();
+
+const { verifyTokenClient } = require('../middlewares/auth')
+
 const {
   clientLogin,
   clientRegister,
@@ -30,22 +33,22 @@ router.post("/login", clientLogin);
 router.post("/loginwithgoogle", clientLoginWithGoogle);
 router.post("/verifyotp", clientVerifyOTP);
 router.post("/resendotp", clientResendOTP);
-router.get("/details", clientDetails);
+router.get("/details", verifyTokenClient, clientDetails);
 router.get("/courses", courses);
 router.get("/course/details", courseDetails);
 router.get("/trainers", trainers);
 router.get("/trainer/details", trainerDetails);
 router.get("/trainer/courses", trainerCourseList);
-router.post("/enroll", enrollCLient);
+router.post("/enroll", verifyTokenClient, enrollCLient);
 router.post("/chat", createConversation);
 router.get("/chat", getConversation);
 router.get("/chat/user", getUser);
 router.get("/chat/messages", getMessages);
 router.post("/chat/message", createMessage);
-router.patch("/updateprofileImage", updateProfileImage);
-router.patch("/updateprofile", updateProfile);
-router.get("/courselist", courseList);
-router.delete("/cancel/course", cancelCourse);
-router.get("/attendance", attendanceDetails);
+router.patch("/updateprofileImage", verifyTokenClient, updateProfileImage);
+router.patch("/updateprofile", verifyTokenClient, updateProfile);
+router.get("/courselist", verifyTokenClient, courseList);
+router.delete("/cancel/course", verifyTokenClient, cancelCourse);
+router.get("/attendance", verifyTokenClient, attendanceDetails);
 
 module.exports = router;

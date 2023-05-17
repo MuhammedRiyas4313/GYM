@@ -7,19 +7,16 @@ function TrainerCourseList(props) {
 
   const courseList = props.courseList;
   const courseLength = courseList.length
-  console.log(courseList,courseLength, "from the trainerCourseList and length table comp");
 
   function formateDate(date) {
     const formatDate = new Date(date);
     const formated = `${formatDate.getDate()}-${
       formatDate.getMonth() + 1
     }-${formatDate.getFullYear()}`;
-    console.log(formated, "formate date is calling.....");
     return formated;
   }
 
   function viewDetails(courseId) {
-    console.log(courseId, "view details trainer ");
     navigate("/course/details", { state: { courseId: courseId } });
   }
 
@@ -39,7 +36,7 @@ function TrainerCourseList(props) {
         </thead>
         <tbody>
         { courseLength === 0 && <tr><td></td><td className="flex justify-center text-bold w-full">NO COURSES ADDED YET</td><td></td><td></td><td></td></tr> }
-          { courseList.map((val) => {
+          { courseList?.map((val) => {
             return (
               <tr>
                 <td>

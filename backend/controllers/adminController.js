@@ -87,42 +87,21 @@ const trainerDetails = async (req, res) => {
 };
 
 const verifyTrainer = async (req, res) => {
+  
   const { trainerId } = req.query;
-  console.log("verify Trainer........");
+  
   const updatedTrainer = await Trainer.findOneAndUpdate(
     { _id: trainerId },
     { isVerified: true },
     { new: true }
   );
 
-  console.log(updatedTrainer, "vrified trainer");
-  const mailOptions = {
-    from: "gymtrainersonline@gmail.com", // sender address
-    to: updatedTrainer.email, // list of receivers
-    subject: "GYM Fitness Center Account Verification", // Subject line
-    html: `<p>Hello ${updatedTrainer.fname},</p>
-
-        <p>We are pleased to inform you that your account has been successfully verified.</p> <p>You can now log in and access all the features and benefits of our platform.</p>
-        
-        <p>Thank you for your patience during the verification process.</p>
-        
-        <p>Best regards,</p>
-        <p>GYM TRAINERS MANAGEMENT TEAM</p>`,
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("error", error);
-      res.json({ status: "Email not send" });
-    } else {
-      console.log(info, "info from otpmailer");
-      res.json({
-        status: "Verification email has been sent",
-        message: `Verification Email has been sent to ${info.accepted[0]} !`,
-        data: updatedTrainer,
-      });
-    }
+  res.json({
+    status: "Verification email has been sent",
+    message: `Verification Email has been sent !`,
+    data: updatedTrainer,
   });
+
 };
 
 const clientList = async (req, res) => {

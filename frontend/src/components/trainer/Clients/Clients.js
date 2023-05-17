@@ -6,14 +6,14 @@ import { useSelector } from "react-redux";
 function Clients() {
 
   const trainer = useSelector((state) => state.trainerReducer.trainer);
-  let trainerId = trainer.trainer._id;
-  let token = trainer.token;
+  let trainerId = trainer?.trainer?._id;
+  let token = trainer?.token;
 
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
     getTrainerClientList(token,trainerId).then((res) => {
-      setClients(res.data);
+      setClients(res?.data);
     });
   }, []);
 

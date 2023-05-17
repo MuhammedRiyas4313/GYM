@@ -24,24 +24,20 @@ function CourseDetails() {
 
 
   function enroll (){
-    console.log('enroll fn calling.....')
     navigate('/enroll',{ state: { courseId: courseId } })
   }
 
   useEffect(() => {
     getCourseDetails(courseId).then((res) => {
-      console.log(res, "res from the getcourseDetails api");
-      setCourseDetails(res.data);
-      setTrainer(res.data.trainerId);
-      const allSlotes = res.data.availableSlots
-      const slotes = allSlotes.filter((val)=> val.status === 'free')
+      setCourseDetails(res?.data);
+      setTrainer(res?.data?.trainerId);
+      const allSlotes = res?.data?.availableSlots
+      const slotes = allSlotes?.filter((val)=> val.status === 'free')
       setSlote(slotes)
     });
     if (Trainer?.trainer) {
       setLoged('trainer');
-      console.log(Trainer.trainer,"trainer loged");
     } else if (User?.user) {
-      console.log(User.user,"user loged");
       setLoged('user');
     }
     viewTop?.current?.scrollIntoView()
@@ -75,12 +71,12 @@ function CourseDetails() {
                 <img
                   onClick={viewTrainerDetails}
                   className="rounded w-50 h-72 "
-                  src={trainer.profile}
+                  src={trainer?.profile}
                   alt="Extra large avatar"
                 ></img>
               </div>
               <h1 onClick={viewTrainerDetails} className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase cursor-pointer">
-                {trainer.fname}
+                {trainer?.fname}
               </h1>
               <h3 className="text-gray-600 font-lg text-center text-semibold leading-6">
                 Trainer at GYM FITNESS Company Inc.
@@ -108,16 +104,16 @@ function CourseDetails() {
                 <li className="flex items-center py-3">
                   <span>Member since</span>
                   <span className="ml-auto">
-                    {formateDate(trainer.createdAt)}
+                    {formateDate(trainer?.createdAt)}
                   </span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Email</span>
-                  <span className="ml-3 truncate">{trainer.email}ghvhghghgh</span>
+                  <span className="ml-3 truncate">{trainer?.email}</span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Gender</span>
-                  <span className="ml-auto">{trainer.gender}</span>
+                  <span className="ml-auto">{trainer?.gender}</span>
                 </li>
               </ul>
             </div>
@@ -200,18 +196,18 @@ function CourseDetails() {
                 <div className="grid md:grid-cols-2 text-sm">
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Course Name</div>
-                    <div className="px-4 py-2">{courseDetails.coursename}</div>
+                    <div className="px-4 py-2">{courseDetails?.coursename}</div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Start Date</div>
                     <div className="px-4 py-2">
-                      {formateDate(courseDetails.createdAt)}
+                      {formateDate(courseDetails?.createdAt)}
                     </div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">No.of Clients</div>
                     <div className="px-4 py-2">
-                      {courseDetails.clients?.length}
+                      {courseDetails?.clients?.length}
                     </div>
                   </div>
                   {/* <div className="grid grid-cols-2">
@@ -222,7 +218,7 @@ function CourseDetails() {
                     <div className="px-4 py-2 font-semibold">
                       Charge / Month
                     </div>
-                    <div className="px-4 py-2">{courseDetails.charge} ₹</div>
+                    <div className="px-4 py-2">{courseDetails?.charge} ₹</div>
                   </div>
 
                   {/* <div className="grid grid-cols-2">
@@ -248,14 +244,14 @@ function CourseDetails() {
                 <div className="image overflow-hidden flex align-middle justify-center">
                   <img
                     className="rounded w-96 h-96 object-cover"
-                    src={courseDetails.cover1}
+                    src={courseDetails?.cover1}
                     alt="Extra large avatar"
                   ></img>
                 </div>
                 <div className="image overflow-hidden flex align-middle justify-center">
                   <img
                     className="rounded w-96 h-96 object-cover"
-                    src={courseDetails.cover2}
+                    src={courseDetails?.cover2}
                     alt="Extra large avatar"
                   ></img>
                 </div>
@@ -289,7 +285,7 @@ function CourseDetails() {
                   <ul className="list-inside space-y-2">
                     <li>
                       <video
-                        src={courseDetails.introVideo}
+                        src={courseDetails?.introVideo}
                         loop
                         muted
                         controls
@@ -333,9 +329,9 @@ function CourseDetails() {
            {
             loged === 'user' ?  <div className="flex justify-end mt-5 mb-5 bg-gray-100 p-10">
             {
-              slote.length === 0 ? <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" disabled>
+              slote?.length === 0 ? <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" disabled>
               No more Slotes available for this month
-            </button>: courseDetails.status === 'Active' ? <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
+            </button>: courseDetails?.status === 'Active' ? <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={enroll}>
               Enroll Now
             </button>:<div className="badge-warning md:p-5 rounded break-words text-black">
                   Thank you for your interest in our course. We're sorry to hear that you were unable to enroll at this time. &nbsp;&nbsp;➡️

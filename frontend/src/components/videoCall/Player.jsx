@@ -46,10 +46,8 @@ function Player() {
             </Typography>
             <video
               playsInline
-              muted
               ref={myVideo}
               autoPlay
-              controls
               controlsList="fullscreen"
               className={classes.video}
             />
@@ -64,10 +62,8 @@ function Player() {
             </Typography>
             <video
               playsInline
-              muted
               ref={userVideo}
               autoPlay
-              controls
               className={classes.video}
             />
           </Grid>

@@ -49,15 +49,13 @@ function TrainerDetail() {
 
   useEffect(() => {
     getTrainerDetails(trainerId).then((res) => {
-      setTrainerDetails(res.data);
+      setTrainerDetails(res?.data);
     });
     getTrainerCourseList(trainerId).then((res) => {
-      setCourseList(res.data);
+      setCourseList(res?.data);
     });
   }, []);
   
-  console.log(Trainer,'Trainer......')
-
   async function message() {
     console.log("message calling");
     const response = await createConversation(trainerId,clientId)
@@ -77,12 +75,12 @@ function TrainerDetail() {
                 <div className="image overflow-hidden flex align-middle justify-center mt-10">
                   <img
                     className="rounded w-64 h-72 "
-                    src={trainerDetails.profile}
+                    src={trainerDetails?.profile}
                     alt="Extra large avatar"
                   ></img>
                 </div>
                 <h1 className="text-gray-900 font-bold text-xl leading-8 mt-3 mb-3 flex justify-center uppercase">
-                  {trainerDetails.fname}&nbsp;
+                  {trainerDetails?.fname}&nbsp;
                 </h1>
                 <h3 className="text-gray-600 font-lg text-center text-semibold leading-6">
                   Trainer at GYM FITNESS Company Inc.
@@ -108,18 +106,18 @@ function TrainerDetail() {
                   <li className="flex items-center py-3">
                     <span>Member since</span>
                     <span className="ml-auto">
-                      {formateDate(trainerDetails.createdAt)}
+                      {formateDate(trainerDetails?.createdAt)}
                     </span>
                   </li>
                   <li className="flex items-center py-3">
                     <span className="mr-5">Email</span>
                     <span className="ml-auto break-words">
-                      {trainerDetails.email}
+                      {trainerDetails?.email}
                     </span>
                   </li>
                   <li className="flex items-center py-3">
                     <span>Gender</span>
-                    <span className="ml-auto">{trainerDetails.gender}</span>
+                    <span className="ml-auto">{trainerDetails?.gender}</span>
                   </li>
                 </ul>
               </div>
@@ -187,51 +185,8 @@ function TrainerDetail() {
                 <div className="flex justify-between align-middle font-bold text-3xl p-8">
                   Courses
                 </div>
-
                 <TrainerCourseList courseList={courseList} />
-                {/* Course list table */}
               </div>
-
-              {/* <div className="bg-gray-100 p-10 shadow-sm rounded-sm flex flex-wrap justify-around mt-5">
-                <div className="flex flex-wrap justify-between">
-                  <div className="">
-                    <div className="space-x-2 font-semibold text-gray-900 leading-8 mb-3 flex flex-wrap">
-                      <h1>More details........</h1>
-                    </div>
-                    <ul className="list-inside space-y-2">
-                      <p>Loading......</p>
-                    </ul>
-                  </div>
-                </div>
-                <div className="flex flex-wrap justify-between mt-5">
-                  <div className="">
-                    <div className="space-x-2 font-semibold text-gray-900 leading-8 mb-3 flex flex-wrap">
-                      <span clas="text-green-500">
-                        <svg
-                          className="h-5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                          />
-                        </svg>
-                      </span>
-                      <span className="tracking-wide">Description</span>
-                    </div>
-                    <ul className="list-inside space-y-2">
-                      <li>
-                        <div className="px-4 py-2">description</div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

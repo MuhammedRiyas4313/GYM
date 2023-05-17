@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CancelationModal from "./CancelationModal";
 
-function CourseList({ courses, userId, setCourseCancel }) {
+function CourseList({token, courses, userId, setCourseCancel }) {
 
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ function CourseList({ courses, userId, setCourseCancel }) {
   return (
     <div className="overflow-x-auto w-full">
         {
-            cancelation ? <CancelationModal setCourseCancel={setCourseCancel} userId={userId} courseId={courseId} setCancelation={setCancelation} />:<></>
+            cancelation ? <CancelationModal token={token} setCourseCancel={setCourseCancel} userId={userId} courseId={courseId} setCancelation={setCancelation} />:<></>
         }
       <table className="table w-full">
         <thead>

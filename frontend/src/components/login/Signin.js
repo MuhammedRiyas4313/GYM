@@ -29,37 +29,38 @@ function Signin() {
 
     if (loginPerson === "user") {
       const response = await ClientLogin(values);
-      if (response.data.status === "Login success") {
+      if (response?.data?.status === "Login success") {
         setLoader(false);
         dispatch(
-          userLogin({ token: response.data.token, user: response.data.user })
+          userLogin({ token: response?.data?.token, user: response?.data?.user })
         );
-        toast.success(response.data.status);
+        toast.success(response?.data?.status);
         navigate("/");
-      } else if (response?.data.status === "User is not verified") {
+      } else if (response?.data?.status === "User is not verified") {
         setLoader(false);
-        toast.error(response.data.message);
-        navigate(`/verification/${response.data.data.userId}`);
+        toast.error(response?.data?.message);
+        navigate(`/verification/${response?.data?.data?.userId}`);
       } else {
         setLoader(false);
-        toast.error(response.data.status);
+        toast.error(response?.data?.status);
       }
     } else if (loginPerson === "trainer") {
+      console.log(values,'values in trainer login.......')
       const response = await TrainerLogin(values);
       if (response?.status === "Login success") {
         setLoader(false);
-        dispatch(trainerLogin({ token: response.token, trainer: response.trainer }));
-        toast.success(response.status);
+        dispatch(trainerLogin({ token: response?.token, trainer: response?.trainer }));
+        toast.success(response?.status);
         navigate("/");
       } else if (response?.status === "Trainer not verified") {
         setTrainerVerifyStatus(true);
         setLoader(false);
       } else if(response?.status === "Trainer doesn't exist"){
         setLoader(false);
-        toast.error(response.status);
+        toast.error(response?.status);
       }else{
         setLoader(false);
-        toast.error(response.status);
+        toast.error(response?.status);
       }
     }
   }

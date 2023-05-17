@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { getAttendanceDetails } from "../../../axios/services/clientServices/clientServices";
 
@@ -10,9 +11,13 @@ function Attendance() {
   const clientId = location?.state.clientId;
   const courseId = location?.state.courseId;
 
+  const User = useSelector((state) => state.userReducer.user);
+  const userId = User.user._id;
+  const token = User.token;
+
   useEffect(() => {
-    getAttendanceDetails(courseId, clientId).then((res) => {
-      setAttdnce(res.data);
+    getAttendanceDetails(token, courseId, clientId).then((res) => {
+      setAttdnce(res?.data);
     });
   }, []);
 
@@ -45,13 +50,13 @@ function Attendance() {
                         </tr>
                       </thead>
                       <tbody>
-                        {attdnce.map((val,ind) => {
+                        {attdnce?.map((val,ind) => {
                           return (
                             <tr>
                               <th>{ind + 1}</th> 
-                              <td>{val.date}</td>
-                              <td>{val.status}</td>
-                              <td>{val.reason}</td>
+                              <td>{val?.date}</td>
+                              <td>{val?.status}</td>
+                              <td>{val?.reason}</td>
                             </tr>
                           );
                         })}

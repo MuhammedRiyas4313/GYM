@@ -13,8 +13,8 @@ import Picker from "emoji-picker-react";
 import { io } from "socket.io-client";
 import { useNavigate } from "react-router-dom";
 
-const END_POINT = "http://localhost:3001";
-var socket, selectedChatCompare;
+const END_POINT = "https://gym-trainers-management.onrender.com";
+var socket, selectedChatCompare
 
 function Chat() {
 
@@ -64,8 +64,8 @@ function Chat() {
 
   useEffect(() => {
     socket.on("recieve_message", (data) => {
-      console.log(data.conversationId, "on recieve_message trainer");
       if (data?.conversationId === currentChat?._id) {
+        console.log('recieve message on trainer')
         const message = [...messages, data];
         setMessages(message);
       }
@@ -77,7 +77,7 @@ function Chat() {
   }, [messages]);
 
   async function setChat(conversation) {
-    const friendId = conversation.members.find((m) => m !== trainerId);
+    const friendId = conversation?.members.find((m) => m !== trainerId);
     const findUser = async () => {
       const friend = await getUser(friendId);
       setUser(friend);
@@ -94,7 +94,6 @@ function Chat() {
   };
 
   function sendMessage() {
-    console.log(newMessage);
     const data = {
       conversationId: currentChat._id,
       sender: trainerId,
@@ -117,7 +116,7 @@ function Chat() {
 
   async function videoCall() {
     navigate("/videocall", {
-      state: { trainerId: trainerId, clientId: user._id ,conversationId: currentChat._id ,name: TrainerDetails.trainer.fname},
+      state: { trainerId: trainerId, clientId: user?._id ,conversationId: currentChat?._id ,name: TrainerDetails?.trainer?.fname},
     });
   }
 
@@ -185,7 +184,7 @@ function Chat() {
                                 </svg>
                               </span>
                               <img
-                                src={user?.profile ? user.profile : Avatar}
+                                src={user?.profile ? user?.profile : Avatar}
                                 alt=""
                                 className="w-10 sm:w-16 h-10 sm:h-16 rounded-full"
                               ></img>

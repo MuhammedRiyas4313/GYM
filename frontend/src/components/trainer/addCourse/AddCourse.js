@@ -20,7 +20,7 @@ function AddCourse() {
   const [filev, setFilev] = useState([]);
 
   const trainerId = useSelector((state) => state.trainerReducer.trainer);
-  const token = trainerId.token
+  const token = trainerId?.token
 
   const onSubmit = async (values) => {
     setLoader(true);
@@ -33,11 +33,11 @@ function AddCourse() {
     });
     if (response.status === 'Course added successfully') {
       setLoader(false);
-      toast.success(response.status);
+      toast.success(response?.status);
       navigate("/trainer/profile", { state: { trainerId: trainerId.trainer._id } });
     } else {
       setLoader(false);
-      toast.error(response.status);
+      toast.error(response?.status);
     }
   };
 

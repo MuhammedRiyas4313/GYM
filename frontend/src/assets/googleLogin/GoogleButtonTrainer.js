@@ -1,61 +1,62 @@
-import React, { useEffect } from "react";
+import React from "react";
 import jwt_decode from "jwt-decode";
-import { TrainerLoginWithGoogle } from "../../axios/services/trainerServices/trainerService";
-import { trainerLogin } from "../../redux/trainerSlice";
-import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
+
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
-// const CLIENT_ID = "230039992190-7tpf0eapq82majvk7r7uj7c72fqnqtau.apps.googleusercontent.com";
-// const CLIENT_PASSWORD = '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';
+import { TrainerLoginWithGoogle } from "../../axios/services/trainerServices/trainerService";
+import { trainerLogin } from "../../redux/trainerSlice";
 
 function GoogleButtonTrainer(props) {
+  
 
-  console.log(props.loginPerson,'login person')
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    google.accounts.id.initialize({
-      client_id:
-        "230039992190-7tpf0eapq82majvk7r7uj7c72fqnqtau.apps.googleusercontent.com",
-      callback: handleCallbackResponse,
-    });
-
-    google.accounts.id.renderButton(document.getElementById("signInButton"), {
-      theme: "outline",
-      size: "large",
-    });
-  }, []);
-
-  async function handleCallbackResponse(res) {
+  const dispatch = useDispatch()
+  const responseMessage = async (res) => {
     props.setLoader(true);
-    console.log(res.credential, "credential");
-    const user = jwt_decode(res.credential);
-    console.log(user, "user from the google sign in");
-   
-      const response = await TrainerLoginWithGoogle(user.email);
-      console.log(response, "response from the TrainerLoginWithGoogle");
-      if (response.status === "Login success") {
-        props.setLoader(true);
-        dispatch(trainerLogin({ token: response.token, trainer: response.trainer }));
-        toast.success(response.status);
-        navigate("/");
-      } else if (response?.status === "Trainer not verified") {
+        const user = jwt_decode(res.credential);
+    
+        const response = await TrainerLoginWithGoogle(user.email);
+        if (response.status === "Login success") {
+          props.setLoader(false);
+          dispatch(
+            trainerLogin({ token: response.token, trainer: response.trainer })
+          );
+          toast.success(response.status);
+          navigate("/");
+        } else if (response?.status === "Trainer not verified") {
           props.setLoader(false);
           props.setTrainerVerifyStatus(true);
-        console.log("trainer not verified");
-      } else {
-        props.setLoader(false);
-        toast.error(response.status);
-      }
-    
-  }
+          console.log("trainer not verified");
+        } else {
+          props.setLoader(false);
+          toast.error(response.status);
+        }
+  };
 
- 
+  const errorMessage = (error) => {
+    console.log(error);
+  };
 
-  return <div id="signInButton"></div>;
+  return (
+    <>
+      <GoogleOAuthProvider clientId="230039992190-7tpf0eapq82majvk7r7uj7c72fqnqtau.apps.googleusercontent.com">
+        <button className="flex items-center  justify-center flex-none px-3 py-2 md:px-4 md:py-3  rounded-lg font-medium  relative">
+          <span className="absolute left-4"></span>
+          <span className="flex items-center text-black">
+            <GoogleLogin
+              className="text-black"
+              onSuccess={responseMessage}
+              onError={errorMessage}
+            />
+          </span>
+        </button>
+      </GoogleOAuthProvider>
+    </>
+  );
 }
 
 export default GoogleButtonTrainer;

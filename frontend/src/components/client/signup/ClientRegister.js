@@ -16,12 +16,12 @@ function ClientRegister() {
   async function onSubmit() {
     setLoading(true)
     const response = await clientRegister(values);
-    if (response.status === "New account Created successfully") {
-      toast.success(response.status);
+    if (response?.status === "New account Created successfully") {
+      toast.success(response?.status);
       navigate("/login");
       setLoading(false)
     } else {
-      toast.error(response.status);
+      toast.error(response?.status);
       setLoading(false)
     }
   }

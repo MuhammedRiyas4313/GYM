@@ -15,7 +15,6 @@ function Verification() {
   const navigate = useNavigate()
 
   const { id } = useParams()
-  console.log(id,'id from the params in verification .........')
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -30,15 +29,13 @@ function Verification() {
 
   async function onSubmit() {
 
-    console.log(values, "otp submit");
     const response = await ClientOtpConfirmation(values,id)
     
-    console.log(response.data,'response of otp verification in verification onsubmit')
-    if(response.data.status === "User email verified successfully"){
-      toast.success(response.data.status)
+    if(response?.data?.status === "User email verified successfully"){
+      toast.success(response?.data?.status)
       navigate('/login')
     }else{
-      toast.error(response.data.status)
+      toast.error(response?.data?.status)
     }
 
   }
@@ -47,12 +44,12 @@ function Verification() {
     console.log('resend otp')
     setLoader(true)
     const response = await ClientResendOtp(values,id)
-    if(response.data.status === 'User is not verified'){
+    if(response?.data?.status === 'User is not verified'){
       setLoader(false)
-      toast.success(response.data.message)
+      toast.success(response?.data?.message)
     }else{
       setLoader(false)
-      toast.error(response.data.status)
+      toast.error(response?.data?.status)
     }
 
   }
@@ -63,16 +60,11 @@ function Verification() {
   const input4Ref = useRef();
 
   const handleKeyUp = (e) => {
-    console.log("first");
-
-    console.log("first");
-    console.log(e.target.value);
 
     switch (e.target.name) {
       case "otp1":
         input2Ref.current.focus();
         if (!e.target.value) {
-          console.log("ent");
           input1Ref.current.focus();
         } else {
           input2Ref.current.focus();
@@ -80,7 +72,6 @@ function Verification() {
         break;
       case "otp2":
         if (!e.target.value) {
-          console.log("ent");
           input1Ref.current.focus();
         } else {
           input3Ref.current.focus();
@@ -88,7 +79,6 @@ function Verification() {
         break;
       case "otp3":
         if (!e.target.value) {
-          console.log("ent");
           input2Ref.current.focus();
         } else {
           input4Ref.current.focus();
@@ -96,7 +86,6 @@ function Verification() {
         break;
       case "otp4":
         if (!e.target.value) {
-          console.log("ent");
           input3Ref.current.focus();
         } else {
           input4Ref.current.focus();

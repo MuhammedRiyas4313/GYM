@@ -22,21 +22,18 @@ function ClientDetail() {
   const clientId = Location.state?.clientId;
   const courseId = Location.state?.courseId;
 
-  console.log(clientId,'clientId in the client details attendance')
-  console.log(courseId,'courseId in the client details attendance')
-
   const trainer = useSelector((state) => state.trainerReducer.trainer);
-  let token = trainer.token;
+  let token = trainer?.token;
 
   useEffect(() => {
     getClientDetails(token,clientId, courseId).then((res) => {
-      setClientDetails(res.data?.clientDetails?.clients[0]);
-      setClient(res.data?.clientDetails?.clients[0]?.user);
-      setCourse(res.data.course);
+      setClientDetails(res?.data?.clientDetails?.clients[0]);
+      setClient(res?.data?.clientDetails?.clients[0]?.user);
+      setCourse(res?.data?.course);
     });
 
     getClientAttendance(token,clientId, courseId).then((res) => {
-      setAttendance(res.data)
+      setAttendance(res?.data)
     });
   }, []);
 

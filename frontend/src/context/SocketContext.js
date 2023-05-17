@@ -5,16 +5,13 @@ import Peer from "simple-peer";
 
 const SocketContext = createContext();
 
-const socket = io("http://localhost:3001");
+const socket = io("https://gym-trainers-management.onrender.com");
 
 const ContextProvider = ({ children }) => {
   const location = useLocation();
 
   const conversation = location?.state?.conversationId;
   const fname = location?.state?.name;
-
-  console.log(fname, "fname from context ");
-  console.log(conversation, "conversation from context ");
 
   const [stream, setStream] = useState(null);
   const [me, setMe] = useState("");
@@ -49,6 +46,7 @@ const ContextProvider = ({ children }) => {
     setName(fname);
     socket.on("calluser", ({ from, name: callerName, signal }) => {
       setCall({ isReceivedCall: true, from, name: callerName, signal });
+      myVideo.current.srcObject = stream;
     });
   }, []);
 
@@ -61,6 +59,7 @@ const ContextProvider = ({ children }) => {
     });
     peer.on("stream", (currentStream) => {
       userVideo.current.srcObject = currentStream;
+      myVideo.current.srcObject = stream
     });
     peer.signal(call.signal);
     connectionRef.current = peer;
@@ -96,23 +95,7 @@ const ContextProvider = ({ children }) => {
   };
   return (
     <SocketContext.Provider
-      value={{
-        call,
-        callAccepted,
-        myVideo,
-        userVideo,
-        stream,
-        setCallTo,
-        callTo,
-        name,
-        setName,
-        callEnded,
-        me,
-        callUser,
-        leaveCall,
-        answerCall,
-      }}
-    >
+      value={{ call, callAccepted, myVideo, userVideo, stream, setCallTo, callTo, name, setName, callEnded, me, callUser, leaveCall, answerCall,}} >
       {children}
     </SocketContext.Provider>
   );
